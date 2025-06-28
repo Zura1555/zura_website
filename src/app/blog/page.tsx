@@ -26,8 +26,8 @@ export default async function BlogPage() {
                   <Image
                     src={post.image}
                     alt={post.title}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    className="object-cover"
                     data-ai-hint={post.aiHint}
                   />
                 </div>

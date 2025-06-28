@@ -44,8 +44,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <Image
           src={post.image}
           alt={post.title}
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           data-ai-hint={post.aiHint}
           priority
         />
