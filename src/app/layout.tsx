@@ -6,8 +6,8 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'Personal Canvas',
-  description: 'A personal website and blog built with Next.js.',
+  title: "Zura's Portfolio",
+  description: "With a technologist's curiosity, I love managing diverse projects.",
 };
 
 export default function RootLayout({
@@ -16,13 +16,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn('min-h-screen font-body antialiased')}>
+      <body className={cn('min-h-screen font-body antialiased bg-background')}>
         <div className="relative flex min-h-screen flex-col">
           <Header />
           <main className="flex-1">{children}</main>
