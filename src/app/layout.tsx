@@ -6,8 +6,8 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: "Zura's Portfolio",
-  description: "With a technologist's curiosity, I love managing diverse projects.",
+  title: "Jane Doe | Product Designer",
+  description: "Passionate product designer creating intuitive and beautiful digital experiences.",
 };
 
 export default function RootLayout({

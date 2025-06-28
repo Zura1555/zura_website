@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Dribbble, Facebook, Instagram, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const services = [
@@ -34,44 +34,51 @@ const featuredWorks = [
 export default function Home() {
   return (
     <div className="overflow-x-hidden animate-in fade-in duration-700">
-      <section id="home" className="container mx-auto max-w-7xl py-16 md:py-24">
+      <section id="home" className="container mx-auto max-w-7xl py-24 sm:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col items-start text-left">
-            <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tight relative">
-              I&apos;m Zura, 
-              <br />
-              Product Designer
-              <svg width="86" height="11" viewBox="0 0 86 11" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-2 -right-10 text-primary hidden md:block">
-                <path d="M2.39999 5.09998C10.3794 2.87241 46.4897 -2.49998 83.5 6.49997" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-              </svg>
+            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
+              I'm Jane Doe
             </h1>
-            <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
+            <h2 className="font-headline text-3xl md:text-4xl font-semibold text-primary tracking-tight mt-2">
+              A Product Designer <br />& UI/UX Designer
+            </h2>
+            <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+              I'm a passionate and creative product designer with a strong background in user experience and interface design. I specialize in creating intuitive, engaging, and beautiful digital products.
             </p>
-            <div className="mt-8 flex items-center gap-4">
-              <Button asChild size="lg" variant="secondary" className="px-8 py-6 text-base rounded-full">
-                <Link href="/about">About</Link>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Button asChild size="lg" className="px-8 py-3 rounded-full">
+                <Link href="/contact">Let's Talk</Link>
               </Button>
-              <Button size="lg" variant="default" className="px-8 py-6 text-base rounded-full">Download CV</Button>
+              <Button asChild size="lg" variant="outline" className="px-8 py-3 rounded-full">
+                <Link href="/gallery">Portfolio</Link>
+              </Button>
+            </div>
+            <div className="mt-8 flex items-center gap-6">
+              <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
+                <Facebook className="h-6 w-6" />
+              </Link>
+              <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
+                <Twitter className="h-6 w-6" />
+              </Link>
+              <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
+                <Instagram className="h-6 w-6" />
+              </Link>
+              <Link href="#" aria-label="Dribbble" className="text-muted-foreground hover:text-primary transition-colors">
+                <Dribbble className="h-6 w-6" />
+              </Link>
             </div>
           </div>
-          <div className="relative flex justify-center mt-12 md:mt-0">
-            <div className="relative bg-primary rounded-3xl p-4 w-[400px] h-[500px]">
-                <Image
-                  src="https://placehold.co/400x500"
-                  alt="Portrait of Zura"
-                  width={400}
-                  height={500}
-                  data-ai-hint="man portrait professional"
-                  className="rounded-2xl object-cover h-full w-full"
-                  priority
-                />
-              <Button size="icon" className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-primary text-primary-foreground border-8 border-background hover:bg-primary/90">
-                <ArrowUpRight className="h-8 w-8" />
-              </Button>
-            </div>
-            <div className="absolute right-[-4rem] top-0 bottom-0 flex items-center justify-center text-muted-foreground text-sm tracking-widest uppercase [writing-mode:vertical-rl] transform rotate-180">
-              Follow me on FB - TW - IG
+          <div className="relative flex justify-center items-center mt-12 md:mt-0">
+            <div className="relative w-full max-w-[400px] aspect-[4/5]">
+              <Image
+                src="https://placehold.co/400x500"
+                alt="Portrait of Jane Doe"
+                fill
+                data-ai-hint="woman portrait professional"
+                className="rounded-xl object-cover"
+                priority
+              />
             </div>
           </div>
         </div>
