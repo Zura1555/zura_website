@@ -1,125 +1,132 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Lightbulb, BrainCircuit, Palette, PenTool, Code, Mic } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
+const services = [
+  {
+    title: "Service 1",
+    image: "https://placehold.co/600x400",
+    aiHint: "mobile app screen",
+  },
+  {
+    title: "Service 2",
+    image: "https://placehold.co/600x400",
+    aiHint: "design sticker sheet",
+  },
+  {
+    title: "Service 3",
+    image: "https://placehold.co/600x400",
+    aiHint: "person working laptop",
+  },
+];
 
-const ToolItem = ({ icon, name }: { icon: React.ReactNode, name: string }) => (
-  <div className="flex flex-col items-center text-center gap-4">
-    <div className="h-20 w-20 bg-secondary rounded-2xl flex items-center justify-center text-primary transform transition-transform hover:-translate-y-1">
-      {icon}
-    </div>
-    <div className="text-center">
-      <h4 className="font-bold">{name.split(' ')[0]}</h4>
-      {name.split(' ').length > 1 && <h4 className="font-bold">{name.split(' ').slice(1).join(' ')}</h4>}
-    </div>
-  </div>
-);
-
+const featuredWorks = [
+  { src: "https://placehold.co/500x500", alt: "Project 1", aiHint: "dashboard ui" },
+  { src: "https://placehold.co/500x500", alt: "Project 2", aiHint: "mobile app design" },
+  { src: "https://placehold.co/500x500", alt: "Project 3", aiHint: "branding design" },
+  { src: "https://placehold.co/500x500", alt: "Project 4", aiHint: "website design" },
+  { src: "https://placehold.co/500x500", alt: "Project 5", aiHint: "logo design" },
+  { src: "https://placehold.co/500x500", alt: "Project 6", aiHint: "social media graphics" },
+];
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden">
-      <section id="home" className="container mx-auto max-w-7xl py-16 md:py-24 animate-in fade-in duration-700">
+    <div className="overflow-x-hidden animate-in fade-in duration-700">
+      <section id="home" className="container mx-auto max-w-7xl py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col items-start text-left">
-            <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tight">
-              I&apos;m Zura, <br />
-              <span className="relative inline-block mt-2">
-                <span className="absolute inset-0 bg-primary -skew-y-2 transform" aria-hidden="true"></span>
-                <span className="relative text-primary-foreground px-2">Project Delivery</span>
-              </span>
+            <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tight relative">
+              I&apos;m Zura, 
+              <br />
+              Product Designer
+              <svg width="86" height="11" viewBox="0 0 86 11" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-2 -right-10 text-primary hidden md:block">
+                <path d="M2.39999 5.09998C10.3794 2.87241 46.4897 -2.49998 83.5 6.49997" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+              </svg>
             </h1>
-            <p className="mt-8 max-w-lg text-lg text-muted-foreground">
-              With a technologist&apos;s curiosity, I love managing diverse projects. My passion is for continuous learning and exploring new tech. I thrive on this variety, building the versatile skillset required to be a true &apos;Swiss army knife&apos; for any challenge.
+            <p className="mt-6 max-w-lg text-lg text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
             </p>
             <div className="mt-8 flex items-center gap-4">
-              <Button size="lg" variant="secondary" className="px-8 py-6 text-base">About</Button>
-              <Button size="lg" variant="default" className="px-8 py-6 text-base">Download CV</Button>
+              <Button asChild size="lg" variant="secondary" className="px-8 py-6 text-base rounded-full">
+                <Link href="/about">About</Link>
+              </Button>
+              <Button size="lg" variant="default" className="px-8 py-6 text-base rounded-full">Download CV</Button>
             </div>
           </div>
           <div className="relative flex justify-center mt-12 md:mt-0">
-            <div className="p-2 border-2 border-primary rounded-3xl shadow-2xl shadow-primary/20">
-              <div className="relative h-[500px] w-[400px]">
+            <div className="relative bg-primary rounded-3xl p-4 w-[400px] h-[500px]">
                 <Image
                   src="https://placehold.co/400x500"
                   alt="Portrait of Zura"
                   width={400}
                   height={500}
-                  data-ai-hint="woman portrait professional"
-                  className="rounded-2xl object-cover"
+                  data-ai-hint="man portrait professional"
+                  className="rounded-2xl object-cover h-full w-full"
                   priority
                 />
-              </div>
+              <Button size="icon" className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-primary text-primary-foreground border-8 border-background hover:bg-primary/90">
+                <ArrowUpRight className="h-8 w-8" />
+              </Button>
             </div>
-            <div className="absolute -bottom-6 -right-1 md:-right-6 h-16 w-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground transform transition-transform hover:scale-110 cursor-pointer">
-              <ArrowRight className="h-8 w-8" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="about" className="container mx-auto max-w-7xl py-16 md:py-24">
-        <div className="text-center mb-16">
-          <h2 className="font-headline text-4xl md:text-5xl font-bold">My Achievements</h2>
-          <p className="mt-4 text-lg text-muted-foreground">A showcase of my professional journey and key skills.</p>
-        </div>
-        <div className="grid md:grid-cols-5 gap-16 items-center">
-          <div className="md:col-span-3">
-            <Card className="bg-card border-none p-0 rounded-3xl overflow-hidden">
-              <CardContent className="p-0 relative h-[400px] w-full">
-                <Image
-                  src="https://placehold.co/600x400"
-                  alt="Achievements"
-                  fill
-                  data-ai-hint="office laptop"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 text-white">
-                   <h3 className="text-3xl font-bold">Achievements in my professional life.</h3>
-                   <p className="mt-2 max-w-md text-gray-300">Since beginning my journey nearly 8 years ago, I've consulted for startups and collaborated with talented people to create digital products.</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="md:col-span-2 space-y-6">
-            <div className="flex items-start gap-4">
-                <Lightbulb className="h-8 w-8 text-primary mt-1"/>
-              <div>
-                <h3 className="text-2xl font-bold">Fueled by Creativity & Purpose</h3>
-                <p className="mt-2 text-muted-foreground">I am driven to contribute to innovative projects that challenge me to learn and grow with emerging technologies.</p>
-              </div>
+            <div className="absolute right-[-4rem] top-0 bottom-0 flex items-center justify-center text-muted-foreground text-sm tracking-widest uppercase [writing-mode:vertical-rl] transform rotate-180">
+              Follow me on FB - TW - IG
             </div>
           </div>
         </div>
       </section>
 
       <section id="service" className="container mx-auto max-w-7xl py-16 md:py-24">
-        <div className="text-center mb-20">
-          <h2 className="font-headline text-4xl md:text-5xl font-bold">The Tools I Use</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">I work with a variety of tools to bring my designs to life – from wireframing and prototyping to visual storytelling.</p>
+        <div className="text-center mb-16">
+          <p className="text-primary font-semibold tracking-wider">MY EXPERTISE</p>
+          <h2 className="font-headline text-4xl md:text-5xl font-bold mt-2">Innovative Solutions</h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
-        <div className="relative max-w-4xl mx-auto">
-            <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                 <div className="w-full h-px bg-border rotate-[60deg] absolute"></div>
-                 <div className="w-full h-px bg-border rotate-[-60deg] absolute"></div>
-                 <div className="w-2/3 h-px bg-border absolute"></div>
-            </div>
-            <div className="relative grid grid-cols-2 md:grid-cols-3 gap-y-24 gap-x-12">
-              <div className="md:col-start-2 flex justify-center"><ToolItem icon={<BrainCircuit size={32}/>} name="Artificial Intelligence"/></div>
-              <div className="flex justify-center"><ToolItem icon={<Palette size={32}/>} name="Canva"/></div>
-              <div className="flex justify-center"><ToolItem icon={<PenTool size={32}/>} name="Figma"/></div>
-              <div className="flex justify-center"><ToolItem icon={<Code size={32}/>} name="rigjam"/></div>
-              <div className="md:col-start-2 flex justify-center"><ToolItem icon={<Mic size={32}/>} name="Photoshop"/></div>
-              <div className="flex justify-center"><ToolItem icon={<Palette size={32}/>} name="Illustrator"/></div>
-            </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <Card key={service.title} className="bg-card border-none rounded-3xl overflow-hidden group">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
+                <div className="relative aspect-video rounded-2xl overflow-hidden">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    data-ai-hint={service.aiHint}
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <Button size="icon" className="absolute bottom-4 right-4 h-14 w-14 rounded-full bg-primary text-primary-foreground transition-transform duration-300 group-hover:scale-110">
+                    <ArrowUpRight className="h-6 w-6" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
-      <section id="portfolio" className="container mx-auto max-w-7xl py-16 md:py-24 text-center">
-        <h2 className="font-headline text-4xl md:text-5xl font-bold">Let&apos;s take a look at some of my work</h2>
+      <section id="works" className="container mx-auto max-w-7xl py-16 md:py-24">
+        <div className="text-center mb-16">
+          <h2 className="font-headline text-4xl md:text-5xl font-bold">Featured Works</h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">A selection of my projects that showcase my skills and creativity.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredWorks.map((work, index) => (
+             <div key={index} className="group relative aspect-square overflow-hidden rounded-2xl">
+              <Image
+                src={work.src}
+                alt={work.alt}
+                fill
+                data-ai-hint={work.aiHint}
+                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <p className="text-white text-lg font-bold">{work.alt}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );
