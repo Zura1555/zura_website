@@ -44,10 +44,10 @@ export default function AboutPage() {
             <div className="relative h-80 w-64">
               <Image 
                 src="https://placehold.co/400x600"
-                alt="Jane Doe in a professional setting"
+                alt="Jon Dawson in a professional setting"
                 width={400}
                 height={600}
-                data-ai-hint="woman professional"
+                data-ai-hint="man professional"
                 className="rounded-lg object-cover shadow-lg"
               />
             </div>
