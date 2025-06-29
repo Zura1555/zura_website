@@ -46,7 +46,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full py-4">
       <div className="container mx-auto flex h-16 items-center justify-center px-4">
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center justify-center gap-2 bg-secondary p-2 rounded-full w-full max-w-xl mx-auto">
+        <nav className="hidden md:flex items-center justify-center gap-2 bg-background/80 backdrop-blur-sm p-2 rounded-full w-full max-w-xl mx-auto border">
           <div className="flex items-center gap-2">
             {navLinksLeft.map((link) => <NavLink key={link.href} {...link} />)}
           </div>
