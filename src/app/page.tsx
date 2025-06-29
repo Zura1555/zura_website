@@ -41,7 +41,7 @@ export default async function Home() {
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
       <section id="home" className="container mx-auto max-w-7xl py-16 sm:py-24">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Column */}
           <div className="flex flex-col items-start text-left">
             <div className="relative mb-4">
@@ -205,7 +205,7 @@ export default async function Home() {
               ))
             ) : (
               <p className="col-span-full text-center text-muted-foreground">
-                No blog posts found. Check your Firestore database and ensure your security rules allow read access to the 'blogPosts' collection.
+                No blog posts found. Check your Firestore database and ensure your security rules allow read access to the 'blog' collection.
               </p>
             )}
           </div>
