@@ -33,7 +33,7 @@ export default function Header() {
         className={cn(
           "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
           isActive
-            ? 'bg-primary text-primary-foreground'
+            ? 'bg-primary/90 text-primary-foreground border'
             : 'text-muted-foreground hover:text-foreground',
         )}
       >
