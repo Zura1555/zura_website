@@ -40,7 +40,7 @@ export default async function Home() {
   
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
-      <section id="home" className="container mx-auto max-w-7xl py-16 sm:py-24">
+      <section id="home" className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Column */}
           <div className="flex flex-col items-start text-left">
@@ -75,7 +75,7 @@ export default async function Home() {
                         src="https://placehold.co/400x500"
                         alt="Portrait of Jon Dawson"
                         fill
-                        sizes="380px"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         data-ai-hint="man portrait professional"
                         className="rounded-t-2xl rounded-bl-2xl rounded-br-[100px] object-cover"
                         priority
