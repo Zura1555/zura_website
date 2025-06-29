@@ -70,7 +70,7 @@ export default async function Home() {
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
       <section id="home" className="px-4">
-        <div className="container mx-auto max-w-7xl py-16 sm:py-24">
+        <div className="container mx-auto max-w-5xl py-16 sm:py-24">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left Column */}
             <div className="flex flex-col items-start text-left">
@@ -193,7 +193,7 @@ export default async function Home() {
 
       {/* Blog Section */}
       <section id="blog" className="bg-background px-4">
-        <div className="container mx-auto max-w-7xl py-16 sm:py-24">
+        <div className="container mx-auto max-w-5xl py-16 sm:py-24">
           <div className="grid md:grid-cols-2 gap-8 items-center mb-20">
             <div>
               <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
