@@ -40,12 +40,12 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
   try {
     const postsCollection = collection(db, 'blogPosts');
     // Note: Firestore's orderBy requires a matching index. 
-    // If your posts don't appear, check the Firestore console for an index creation link in the error logs.
-    // Also, documents without a 'date' field will be excluded from this query.
-    const q = query(postsCollection, orderBy('date', 'desc'));
+    // If your posts don't appear, check the Firestore console for an index creation link in the error logs. 
+    // Also, documents without a 'publish_date' field will be excluded from this query.
+    const q = query(postsCollection, orderBy('publish_date', 'desc'));
     const querySnapshot = await getDocs(q);
 
-    console.log(`Found ${querySnapshot.docs.length} blog post(s).`);
+    console.log(`Found ${querySnapshot.docs.length} blog post(s) matching query.`);
 
     if (querySnapshot.docs.length === 0) {
       console.log("If you have posts in Firestore, check the following:");

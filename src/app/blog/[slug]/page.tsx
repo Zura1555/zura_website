@@ -32,7 +32,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mt-6 flex justify-center items-center gap-4 text-muted-foreground">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={post.author.avatar} alt={post.author.name} data-ai-hint={post.author.aiHint} />
+              <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} data-ai-hint={post.author.aiHint} />
               <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <span>{post.author.name}</span>
@@ -45,7 +45,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="relative my-12 h-80 w-full overflow-hidden rounded-lg shadow-lg">
         <Image
           src={post.image}
-          alt={post.title}
+          alt={post.title || 'Blog post image'}
           fill
           className="object-cover"
           data-ai-hint={post.aiHint}

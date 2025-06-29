@@ -27,7 +27,7 @@ export default async function BlogPage() {
                 <div className="relative h-48 w-full">
                   <Image
                     src={post.image}
-                    alt={post.title}
+                    alt={post.title || 'Blog post image'}
                     fill
                     className="object-cover"
                     data-ai-hint={post.aiHint}
@@ -44,7 +44,7 @@ export default async function BlogPage() {
               <CardFooter>
                 <div className="flex items-center gap-3">
                   <Avatar>
-                    <AvatarImage src={post.author.avatar} alt={post.author.name} data-ai-hint={post.author.aiHint} />
+                    <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} data-ai-hint={post.author.aiHint} />
                     <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
