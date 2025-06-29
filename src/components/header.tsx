@@ -31,9 +31,9 @@ export default function Header() {
       <Link
         href={href}
         className={cn(
-          "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+          "px-4 py-2 rounded-full text-sm font-medium transition-colors",
           isActive
-            ? 'bg-primary/90 text-primary-foreground border'
+            ? 'bg-primary text-primary-foreground'
             : 'text-muted-foreground hover:text-foreground',
         )}
       >
