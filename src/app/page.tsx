@@ -75,13 +75,13 @@ export default async function Home() {
             {/* Left Column */}
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
-                  <h1 className="font-headline text-6xl md:text-7xl font-bold tracking-tight">
+                  <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
                       I'm Jon Dawson, <br />Product Designer
                   </h1>
                   <Squiggle />
               </div>
               
-              <p className="mt-6 max-w-md text-xl text-muted-foreground">
+              <p className="mt-6 max-w-md text-lg text-muted-foreground">
                 I'm a passionate and creative product designer specializing in creating intuitive, engaging, and beautiful digital products that users love and businesses need.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
