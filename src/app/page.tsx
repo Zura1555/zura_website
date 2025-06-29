@@ -89,18 +89,6 @@ export default async function Home() {
                       <ArrowUpRight className="h-8 w-8" />
                     </Link>
                   </Button>
-
-                  {/* Vertical Social Bar */}
-                  <div className="absolute top-1/2 -right-2 -translate-y-1/2 translate-x-full flex items-center gap-4">
-                    <div className="[writing-mode:vertical-rl] transform rotate-180 whitespace-nowrap text-sm text-muted-foreground tracking-widest">
-                        Follow me on
-                    </div>
-                    <div className="flex flex-col gap-3">
-                        <a href="#" aria-label="Social Media 1" className="block h-2 w-2 rounded-full bg-muted-foreground hover:bg-primary-foreground transition-colors" />
-                        <a href="#" aria-label="Social Media 2" className="block h-2 w-2 rounded-full bg-muted-foreground hover:bg-primary-foreground transition-colors" />
-                        <a href="#" aria-label="Social Media 3" className="block h-2 w-2 rounded-full bg-muted-foreground hover:bg-primary-foreground transition-colors" />
-                    </div>
-                  </div>
               </div>
             </div>
           </div>
