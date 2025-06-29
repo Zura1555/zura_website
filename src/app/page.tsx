@@ -10,6 +10,26 @@ const Squiggle = () => (
     </svg>
 );
 
+const services = [
+  {
+    title: "Service 1",
+    image: "https://placehold.co/600x400",
+    aiHint: "app interface",
+    link: "#",
+  },
+  {
+    title: "Service 2",
+    image: "https://placehold.co/600x400",
+    aiHint: "brand stickers",
+    link: "#",
+  },
+  {
+    title: "Service 3",
+    image: "https://placehold.co/600x400",
+    aiHint: "business laptop",
+    link: "#",
+  },
+];
 
 export default function Home() {
   return (
@@ -74,6 +94,54 @@ export default function Home() {
                   </div>
                 </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* New Services Section */}
+      <section id="services" className="bg-background">
+        <div className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
+          <div className="text-center">
+            <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
+              My Expertise
+            </h2>
+            <p className="mt-4 font-headline text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              Innovative Solutions
+            </p>
+            <p className="mt-6 mx-auto max-w-3xl text-lg text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
+            </p>
+          </div>
+
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <div key={index} className="bg-primary rounded-3xl p-8 h-[480px] flex flex-col relative group">
+                <h3 className="font-headline text-3xl font-semibold text-primary-foreground">
+                  {service.title}
+                </h3>
+                <div className="flex-grow" />
+                <div className="absolute bottom-0 left-0 right-0 h-[340px] [transform:translateZ(0)]">
+                  <div className="absolute inset-x-0 -top-8 h-full bg-card rounded-t-3xl rounded-b-[60px] shadow-2xl overflow-hidden">
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                      data-ai-hint={service.aiHint}
+                    />
+                    <div className="absolute top-0 left-0 right-0 h-2/5 bg-gradient-to-b from-white/10 via-white/5 to-transparent backdrop-blur-sm rounded-t-3xl" />
+                  </div>
+                </div>
+                <Link
+                  href={service.link}
+                  className="absolute bottom-8 right-8 z-10"
+                >
+                  <div className="bg-background/80 backdrop-blur-sm text-foreground rounded-full h-16 w-16 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-background">
+                    <ArrowUpRight className="h-8 w-8 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
