@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const navLinksLeft = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/#service", label: "Service" },
+  { href: "/#services", label: "Services" },
 ];
 const navLinksRight = [
   { href: "/gallery", label: "Portfolio" },
@@ -26,7 +26,7 @@ export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
 
   const NavLink = ({ href, label }: { href: string; label: string; }) => {
-    const isActive = href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#service";
+    const isActive = href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#services";
     return (
       <Link
         href={href}
