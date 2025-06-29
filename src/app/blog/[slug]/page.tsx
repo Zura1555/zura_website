@@ -24,6 +24,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     notFound();
   }
+  
+  const author = post.author || { name: 'Author', avatar: 'https://placehold.co/100x100.png', aiHint: 'person avatar' };
+  const authorName = author.name || 'Author';
 
   return (
     <article className="container mx-auto max-w-3xl py-12 px-4 animate-in fade-in duration-500">
@@ -32,10 +35,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mt-6 flex justify-center items-center gap-4 text-muted-foreground">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} data-ai-hint={post.author.aiHint} />
-              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={author.avatar} alt={authorName} data-ai-hint={author.aiHint} />
+              <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span>{post.author.name}</span>
+            <span>{authorName}</span>
           </div>
           <span>•</span>
           <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
@@ -44,11 +47,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       
       <div className="relative my-12 h-80 w-full overflow-hidden rounded-lg shadow-lg">
         <Image
-          src={post.image}
+          src={post.image || 'https://placehold.co/800x600.png'}
           alt={post.title || 'Blog post image'}
           fill
           className="object-cover"
-          data-ai-hint={post.aiHint}
+          data-ai-hint={post.aiHint || 'blog post'}
           priority
         />
       </div>

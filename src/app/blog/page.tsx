@@ -20,42 +20,47 @@ export default async function BlogPage() {
       </section>
 
       <section className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <Link href={`/blog/${post.slug}`} key={post.slug}>
-            <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
-              <CardHeader className="p-0">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={post.image}
-                    alt={post.title || 'Blog post image'}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={post.aiHint}
-                  />
-                </div>
-                <div className="p-6">
-                  <Badge variant="secondary" className="mb-2">Development</Badge>
-                  <CardTitle className="font-headline text-xl leading-snug">{post.title}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <CardDescription>{post.summary}</CardDescription>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={post.author.avatar} alt={post.author.name || 'Author'} data-ai-hint={post.author.aiHint} />
-                    <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{post.author.name}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        {posts.map((post) => {
+          const author = post.author || { name: 'Author', avatar: 'https://placehold.co/100x100.png', aiHint: 'person avatar' };
+          const authorName = author.name || 'Author';
+
+          return (
+            <Link href={`/blog/${post.slug}`} key={post.slug}>
+              <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
+                <CardHeader className="p-0">
+                  <div className="relative h-48 w-full">
+                    <Image
+                      src={post.image || 'https://placehold.co/600x400.png'}
+                      alt={post.title || 'Blog post image'}
+                      fill
+                      className="object-cover"
+                      data-ai-hint={post.aiHint || 'blog post'}
+                    />
                   </div>
-                </div>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
+                  <div className="p-6">
+                    <Badge variant="secondary" className="mb-2">Development</Badge>
+                    <CardTitle className="font-headline text-xl leading-snug">{post.title}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <CardDescription>{post.summary}</CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarImage src={author.avatar} alt={authorName} data-ai-hint={author.aiHint} />
+                      <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{authorName}</p>
+                      <p className="text-xs text-muted-foreground">{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    </div>
+                  </div>
+                </CardFooter>
+              </Card>
+            </Link>
+          );
+        })}
       </section>
     </div>
   );
