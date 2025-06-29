@@ -75,6 +75,7 @@ export default async function Home() {
                         src="https://placehold.co/400x500"
                         alt="Portrait of Jon Dawson"
                         fill
+                        sizes="380px"
                         data-ai-hint="man portrait professional"
                         className="rounded-t-2xl rounded-bl-2xl rounded-br-[100px] object-cover"
                         priority
