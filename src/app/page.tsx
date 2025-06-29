@@ -40,19 +40,19 @@ export default async function Home() {
   
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
-      <section id="home">
-        <div className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
+      <section id="home" className="px-4">
+        <div className="container mx-auto max-w-7xl py-16 sm:py-24">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left Column */}
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
-                  <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
+                  <h1 className="font-headline text-6xl md:text-7xl font-bold tracking-tight">
                       I'm Jon Dawson, <br />Product Designer
                   </h1>
                   <Squiggle />
               </div>
               
-              <p className="mt-6 max-w-md text-lg text-muted-foreground">
+              <p className="mt-6 max-w-md text-xl text-muted-foreground">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -96,8 +96,8 @@ export default async function Home() {
       </section>
 
       {/* New Services Section */}
-      <section id="services" className="bg-background">
-        <div className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
+      <section id="services" className="bg-background px-4">
+        <div className="container mx-auto max-w-7xl py-16 sm:py-24">
           <div className="text-center">
             <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
               My Expertise
@@ -144,8 +144,8 @@ export default async function Home() {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="bg-background">
-        <div className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
+      <section id="blog" className="bg-background px-4">
+        <div className="container mx-auto max-w-7xl py-16 sm:py-24">
           <div className="grid md:grid-cols-2 gap-8 items-center mb-20">
             <div>
               <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
