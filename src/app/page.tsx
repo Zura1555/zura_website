@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Download } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 
+export const dynamic = 'force-dynamic';
+
 const Squiggle = () => (
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-4 -left-4 text-primary opacity-70">
         <path d="M20.2435 2.15552C20.2435 2.15552 35.8475 4.81852 42.1555 17.5875" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
