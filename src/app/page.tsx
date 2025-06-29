@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Download } from "lucide-react";
+import { getBlogPosts } from "@/lib/cms";
 
 const Squiggle = () => (
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-4 -left-4 text-primary opacity-70">
@@ -31,7 +32,10 @@ const services = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const posts = await getBlogPosts();
+  const latestPosts = posts.slice(0, 3);
+  
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
       <section id="home" className="container mx-auto max-w-7xl py-16 sm:py-24">
@@ -141,6 +145,59 @@ export default function Home() {
                   </div>
                 </Link>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="bg-background">
+        <div className="container mx-auto max-w-7xl py-16 sm:py-24 px-4">
+          <div className="grid md:grid-cols-2 gap-8 items-center mb-20">
+            <div>
+              <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
+                Stories
+              </h2>
+              <p className="mt-4 font-headline text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                Blog Update
+              </p>
+            </div>
+            <p className="text-lg text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {latestPosts.map((post) => (
+              <Link href={`/blog/${post.slug}`} key={post.slug} className="group block">
+                <div className="relative transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:-translate-y-1">
+                  <div className="relative h-56 w-full rounded-t-3xl overflow-hidden">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                      data-ai-hint={post.aiHint}
+                    />
+                    <div className="absolute top-4 right-4 z-10 h-12 w-12 rounded-full bg-primary flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                      <ArrowUpRight className="h-6 w-6 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div className="bg-primary p-6 rounded-b-3xl text-primary-foreground">
+                    <h3 className="font-headline text-xl font-semibold">
+                      {post.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-primary-foreground/80 line-clamp-2">{post.summary}</p>
+                    <time className="mt-4 block text-xs font-medium text-primary-foreground/70">
+                      {new Date(post.date).toLocaleDateString("en-US", {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </time>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
