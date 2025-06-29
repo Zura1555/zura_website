@@ -2,13 +2,14 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyBOYz8DLxA99nLioLXHpF2EZ8RuVmGF364",
+  authDomain: "zura-website-20ebe.firebaseapp.com",
+  projectId: "zura-website-20ebe",
+  storageBucket: "zura-website-20ebe.appspot.com",
+  messagingSenderId: "364581222646",
+  appId: "1:364581222646:web:284a28af8e505a18c714d7"
 };
+
 
 // Initialize Firebase
 let app;
