@@ -5,7 +5,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, Download, X } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export const dynamic = 'force-dynamic';
 
@@ -213,31 +212,28 @@ export default async function Home() {
           </p>
         </div>
         <div className="container mx-auto max-w-5xl px-4">
-          <ScrollArea className="w-full whitespace-nowrap rounded-lg border">
-            <div className="flex w-max space-x-8 p-4">
-              {experiences.map((exp, index) => (
-                <figure key={index} className="w-80 shrink-0">
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg group mb-4">
-                    <Image
-                      src={exp.image}
-                      alt={exp.title}
-                      fill
-                      className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                      data-ai-hint={exp.aiHint}
-                    />
-                  </div>
-                  <figcaption className="mt-2 text-left whitespace-normal">
-                    <p className="text-primary font-semibold">{exp.date}</p>
-                    <p className="mt-1 text-foreground font-semibold">
-                      {exp.title} - {exp.company}
-                    </p>
-                    <p className="mt-1 text-muted-foreground text-sm">{exp.description}</p>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {experiences.map((exp, index) => (
+              <figure key={index} className="group">
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-4">
+                  <Image
+                    src={exp.image}
+                    alt={exp.title}
+                    fill
+                    className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                    data-ai-hint={exp.aiHint}
+                  />
+                </div>
+                <figcaption className="mt-2 text-left">
+                  <p className="text-primary font-semibold">{exp.date}</p>
+                  <p className="mt-1 text-foreground font-semibold">
+                    {exp.title} - {exp.company}
+                  </p>
+                  <p className="mt-1 text-muted-foreground text-sm">{exp.description}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
