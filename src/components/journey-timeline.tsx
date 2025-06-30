@@ -13,9 +13,6 @@ interface JourneyTimelineProps {
   experiences: Experience[];
 }
 
-const START_YEAR = 2023;
-const END_YEAR = 2035;
-
 export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
   const [progress, setProgress] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -26,17 +23,17 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
         if (entry.isIntersecting) {
           observer.unobserve(entry.target); // Animate only once
 
-          const years = experiences.map(exp => parseInt(exp.date)).sort();
-          if (years.length === 0) return;
+          const sortedExperiences = [...experiences].sort((a, b) => parseInt(a.date) - parseInt(b.date));
+          const numExperiences = sortedExperiences.length;
+          if (numExperiences === 0) return;
 
           const timeouts: NodeJS.Timeout[] = [];
           
-          // Animate progress in stages for each year in the experience list
-          years.forEach((year, index) => {
+          // Animate progress in stages for each experience
+          sortedExperiences.forEach((exp, index) => {
             const timeout = setTimeout(() => {
-              // Calculate progress up to the end of the current year
-              const targetProgress = ((year - START_YEAR + 1) / (END_YEAR - START_YEAR)) * 100;
-              setProgress(targetProgress > 0 ? targetProgress : 0);
+              const targetProgress = ((index + 1) / numExperiences) * 100;
+              setProgress(targetProgress);
             }, index * 800); // Stagger the animation for each step
             timeouts.push(timeout);
           });
