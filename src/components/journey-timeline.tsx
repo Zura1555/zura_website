@@ -19,19 +19,32 @@ const END_YEAR = 2035;
 export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
   const [progress, setProgress] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-
-  // Using 2025 as the target year for progress, as per the last data entry.
-  const TARGET_YEAR = 2025;
-
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const finalProgress = ((TARGET_YEAR - START_YEAR) / (END_YEAR - START_YEAR)) * 100;
-          // Animate the progress bar when it becomes visible
-          const timer = setTimeout(() => setProgress(finalProgress > 0 ? finalProgress : 0), 500);
-          observer.unobserve(entry.target); // Ensure animation only happens once
-          return () => clearTimeout(timer);
+          observer.unobserve(entry.target); // Animate only once
+
+          const years = experiences.map(exp => parseInt(exp.date)).sort();
+          if (years.length === 0) return;
+
+          const timeouts: NodeJS.Timeout[] = [];
+          
+          // Animate progress in stages for each year in the experience list
+          years.forEach((year, index) => {
+            const timeout = setTimeout(() => {
+              // Calculate progress up to the end of the current year
+              const targetProgress = ((year - START_YEAR + 1) / (END_YEAR - START_YEAR)) * 100;
+              setProgress(targetProgress > 0 ? targetProgress : 0);
+            }, index * 800); // Stagger the animation for each step
+            timeouts.push(timeout);
+          });
+          
+          // Cleanup timeouts on component unmount
+          return () => {
+            timeouts.forEach(clearTimeout);
+          };
         }
       },
       { threshold: 0.2 } // Start animation when 20% of the section is visible
@@ -47,7 +60,7 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [experiences]);
 
   return (
     <div ref={ref} className="w-full space-y-8">
@@ -61,7 +74,6 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
         ))}
       </div>
         
-      {/* Part 3: Single Progress Bar at the bottom */}
       <div className="pt-4">
           <Progress value={progress} className="h-2" />
       </div>
