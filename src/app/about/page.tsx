@@ -7,24 +7,24 @@ const skills = ["React", "Next.js", "TypeScript", "Node.js", "GraphQL", "Figma",
 const experiences = [
   {
     icon: <Briefcase className="h-5 w-5"/>,
-    title: "Senior Frontend Developer",
-    company: "Tech Solutions Inc.",
-    date: "2020 - Present",
-    description: "Leading the development of scalable web applications using React and Next.js. Collaborating with UI/UX designers to create intuitive and engaging user interfaces.",
+    title: "Business Support Assistant",
+    company: "CPA Australia",
+    date: "2023",
+    description: "My career journey began as a Business Support Assistant.",
   },
   {
     icon: <Briefcase className="h-5 w-5"/>,
-    title: "Frontend Developer",
-    company: "Digital Innovations",
-    date: "2018 - 2020",
-    description: "Developed and maintained responsive websites and web applications for various clients. Specialized in creating pixel-perfect UIs from design mockups.",
+    title: "First Tech Project",
+    company: "OplaCRM",
+    date: "2024",
+    description: "This was my very first project and where my passion for technology was ignited.",
   },
   {
-    icon: <GraduationCap className="h-5 w-5"/>,
-    title: "B.S. in Computer Science",
-    company: "University of Technology",
-    date: "2014 - 2018",
-    description: "Focused on software engineering principles, data structures, and algorithms. Graduated with honors.",
+    icon: <Briefcase className="h-5 w-5"/>,
+    title: "Digital Transformation",
+    company: "Maison RMI",
+    date: "2025",
+    description: "I immersed myself in various digital transformation projects, applying AI and automation.",
   },
 ];
 
@@ -73,7 +73,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mt-20">
-        <h2 className="text-center font-headline text-3xl font-semibold">Experience & Education</h2>
+        <h2 className="text-center font-headline text-3xl font-semibold">My Career Journey</h2>
         <div className="relative mt-12">
             <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border" aria-hidden="true"></div>
             <div className="space-y-12">
