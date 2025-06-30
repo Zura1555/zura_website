@@ -1,32 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Briefcase, GraduationCap } from "lucide-react";
 
 const skills = ["React", "Next.js", "TypeScript", "Node.js", "GraphQL", "Figma", "UI/UX Design", "Agile Methodologies"];
-const experiences = [
-  {
-    icon: <Briefcase className="h-5 w-5"/>,
-    title: "Business Support Assistant",
-    company: "CPA Australia",
-    date: "2023",
-    description: "My career journey began as a Business Support Assistant.",
-  },
-  {
-    icon: <Briefcase className="h-5 w-5"/>,
-    title: "First Tech Project",
-    company: "OplaCRM",
-    date: "2024",
-    description: "This was my very first project and where my passion for technology was ignited.",
-  },
-  {
-    icon: <Briefcase className="h-5 w-5"/>,
-    title: "Digital Transformation",
-    company: "Maison RMI",
-    date: "2025",
-    description: "I immersed myself in various digital transformation projects, applying AI and automation.",
-  },
-];
 
 export default function AboutPage() {
   return (
@@ -69,36 +44,6 @@ export default function AboutPage() {
           {skills.map((skill) => (
             <Badge key={skill} variant="secondary" className="px-4 py-2 text-sm">{skill}</Badge>
           ))}
-        </div>
-      </section>
-
-      <section className="mt-20">
-        <h2 className="text-center font-headline text-3xl font-semibold">My Career Journey</h2>
-        <div className="relative mt-12">
-            <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border" aria-hidden="true"></div>
-            <div className="space-y-12">
-                {experiences.map((exp, index) => (
-                    <div key={index} className="relative flex items-center md:justify-normal">
-                        <div className={`flex w-full items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                            <div className="hidden md:flex md:w-1/2"></div>
-                            <div className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background border-2 border-primary text-primary">
-                                {exp.icon}
-                            </div>
-                            <div className="w-full md:w-1/2 md:px-6">
-                                <Card className="ml-4 md:ml-0">
-                                    <CardHeader>
-                                        <CardTitle className="font-headline text-xl">{exp.title}</CardTitle>
-                                        <CardDescription>{exp.company} / {exp.date}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-muted-foreground">{exp.description}</p>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
         </div>
       </section>
     </div>

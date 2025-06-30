@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, Download, X } from "lucide-react";
+import { ArrowUpRight, Download, X, Briefcase } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +45,30 @@ const services = [
     description: "Specializing in creating visually stunning and cohesive user interfaces. My work ensures brand consistency and a polished final product that stands out from the competition.",
     image: "https://placehold.co/600x400",
     aiHint: "ui components library"
+  },
+];
+
+const experiences = [
+  {
+    icon: <Briefcase className="h-5 w-5"/>,
+    title: "Business Support Assistant",
+    company: "CPA Australia",
+    date: "2023",
+    description: "My career journey began as a Business Support Assistant.",
+  },
+  {
+    icon: <Briefcase className="h-5 w-5"/>,
+    title: "First Tech Project",
+    company: "OplaCRM",
+    date: "2024",
+    description: "This was my very first project and where my passion for technology was ignited.",
+  },
+  {
+    icon: <Briefcase className="h-5 w-5"/>,
+    title: "Digital Transformation",
+    company: "Maison RMI",
+    date: "2025",
+    description: "I immersed myself in various digital transformation projects, applying AI and automation.",
   },
 ];
 
@@ -171,6 +196,46 @@ export default async function Home() {
             </Button>
           </div>
 
+        </div>
+      </section>
+
+      {/* Journey Section */}
+      <section id="journey" className="px-4">
+        <div className="container mx-auto max-w-5xl py-16 sm:py-24">
+          <div className="text-center mb-20">
+            <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">
+              My Path
+            </h2>
+            <p className="mt-4 font-headline text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              Career Journey
+            </p>
+          </div>
+          <div className="relative">
+              <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border" aria-hidden="true"></div>
+              <div className="space-y-12">
+                  {experiences.map((exp, index) => (
+                      <div key={index} className="relative flex items-center md:justify-normal">
+                          <div className={`flex w-full items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                              <div className="hidden md:flex md:w-1/2"></div>
+                              <div className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background border-2 border-primary text-primary">
+                                  {exp.icon}
+                              </div>
+                              <div className="w-full md:w-1/2 md:px-6">
+                                  <Card className="ml-4 md:ml-0">
+                                      <CardHeader>
+                                          <CardTitle className="font-headline text-xl">{exp.title}</CardTitle>
+                                          <CardDescription>{exp.company} / {exp.date}</CardDescription>
+                                      </CardHeader>
+                                      <CardContent>
+                                          <p className="text-muted-foreground">{exp.description}</p>
+                                      </CardContent>
+                                  </Card>
+                              </div>
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </div>
         </div>
       </section>
 
