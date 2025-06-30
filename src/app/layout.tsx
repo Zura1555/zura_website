@@ -6,8 +6,8 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: "Jon Dawson | Product Designer",
-  description: "I'm a passionate and creative product designer specializing in creating intuitive, engaging, and beautiful digital products.",
+  title: "Zura | Project Delivery",
+  description: "I specialize in delivering high-quality projects on time and within budget, ensuring seamless execution from start to finish.",
 };
 
 export default function RootLayout({

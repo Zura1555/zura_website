@@ -76,20 +76,20 @@ export default async function Home() {
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
                   <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
-                      I'm Jon Dawson, <br />Product Designer
+                      I'm Zura, <br />Project Delivery
                   </h1>
                   <Squiggle />
               </div>
               
               <p className="mt-6 max-w-md text-lg text-muted-foreground">
-                I'm a passionate and creative product designer specializing in creating intuitive, engaging, and beautiful digital products that users love and businesses need.
+                I specialize in delivering high-quality projects on time and within budget, ensuring seamless execution from start to finish.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Button asChild size="lg" variant="outline" className="rounded-lg px-8 py-3">
                   <Link href="/about">About</Link>
                 </Button>
                 <Button asChild size="lg" className="rounded-lg px-8 py-3">
-                  <a href="/jon_dawson_cv.pdf" download>Download CV <Download className="ml-2" /></a>
+                  <a href="/zura_cv.pdf" download>Download CV <Download className="ml-2" /></a>
                 </Button>
               </div>
             </div>
@@ -103,10 +103,10 @@ export default async function Home() {
                   <div className="absolute inset-5">
                       <Image
                           src="https://placehold.co/400x500"
-                          alt="Portrait of Jon Dawson"
+                          alt="Portrait of Zura"
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          data-ai-hint="man portrait professional"
+                          data-ai-hint="woman portrait professional"
                           className="rounded-t-2xl rounded-bl-2xl rounded-br-[100px] object-cover"
                           priority
                       />

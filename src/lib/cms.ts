@@ -62,7 +62,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
         summary: summary,
         content: fullContentHtml,
         author: {
-            name: 'Jon Dawson',
+            name: 'Zura',
             avatar: 'https://placehold.co/100x100.png',
             aiHint: 'person avatar'
         },

@@ -51,7 +51,7 @@ export default function Header() {
             {navLinksLeft.map((link) => <NavLink key={link.href} {...link} />)}
           </div>
           <Link href="/" className="mx-4 text-2xl font-bold text-foreground hover:text-primary transition-colors">
-            JD
+            Z
           </Link>
           <div className="flex items-center gap-2">
             {navLinksRight.map((link) => <NavLink key={link.href} {...link} />)}
@@ -83,7 +83,7 @@ export default function Header() {
               </SheetContent>
             </Sheet>
           <Link href="/" className="text-2xl font-bold text-foreground">
-            JD
+            Z
           </Link>
           <div className="w-10" /> {/* Spacer */}
         </div>
