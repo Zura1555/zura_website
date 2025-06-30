@@ -45,15 +45,6 @@ const services = [
     image: "https://placehold.co/600x400",
     aiHint: "ui components library"
   },
-  {
-    number: "05",
-    title: "Design System",
-    slug: "design-system",
-    tags: ["Component Documentation", "Style Guides", "Design Tokens", "Governance"],
-    description: "Building and maintaining comprehensive design systems that improve consistency, scalability, and efficiency in the product development lifecycle, empowering teams to build better products faster.",
-    image: "https://placehold.co/600x400",
-    aiHint: "design system components"
-  },
 ];
 
 export default async function Home() {
