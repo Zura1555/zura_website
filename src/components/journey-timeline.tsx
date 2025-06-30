@@ -13,18 +13,30 @@ interface JourneyTimelineProps {
   experiences: Experience[];
 }
 
+const ANIMATION_DURATION = 1500; // Must match the transition duration in the Progress component
+const INITIAL_DELAY = 100;
+
 export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
   const [progress, setProgress] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    const timeouts: NodeJS.Timeout[] = [];
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           observer.unobserve(entry.target);
-          // Set progress to 100% to trigger a single, smooth animation
-          const timer = setTimeout(() => setProgress(100), 100); // Small delay
-          return () => clearTimeout(timer);
+          
+          if (experiences.length > 0) {
+            const progressPerStep = 100 / experiences.length;
+
+            experiences.forEach((_, index) => {
+              const timeout = setTimeout(() => {
+                setProgress(progressPerStep * (index + 1));
+              }, INITIAL_DELAY + (index * ANIMATION_DURATION));
+              timeouts.push(timeout);
+            });
+          }
         }
       },
       { threshold: 0.2 }
@@ -39,8 +51,9 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
       if (currentRef) {
         observer.unobserve(currentRef);
       }
+      timeouts.forEach(clearTimeout);
     };
-  }, []); // Empty dependency array to run only once
+  }, [experiences]);
 
   return (
     <div ref={ref} className="w-full space-y-8">
