@@ -21,30 +21,13 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          observer.unobserve(entry.target); // Animate only once
-
-          const sortedExperiences = [...experiences].sort((a, b) => parseInt(a.date) - parseInt(b.date));
-          const numExperiences = sortedExperiences.length;
-          if (numExperiences === 0) return;
-
-          const timeouts: NodeJS.Timeout[] = [];
-          
-          // Animate progress in stages for each experience
-          sortedExperiences.forEach((exp, index) => {
-            const timeout = setTimeout(() => {
-              const targetProgress = ((index + 1) / numExperiences) * 100;
-              setProgress(targetProgress);
-            }, index * 800); // Stagger the animation for each step
-            timeouts.push(timeout);
-          });
-          
-          // Cleanup timeouts on component unmount
-          return () => {
-            timeouts.forEach(clearTimeout);
-          };
+          observer.unobserve(entry.target);
+          // Set progress to 100% to trigger a single, smooth animation
+          const timer = setTimeout(() => setProgress(100), 100); // Small delay
+          return () => clearTimeout(timer);
         }
       },
-      { threshold: 0.2 } // Start animation when 20% of the section is visible
+      { threshold: 0.2 }
     );
 
     const currentRef = ref.current;
@@ -57,7 +40,7 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
         observer.unobserve(currentRef);
       }
     };
-  }, [experiences]);
+  }, []); // Empty dependency array to run only once
 
   return (
     <div ref={ref} className="w-full space-y-8">
