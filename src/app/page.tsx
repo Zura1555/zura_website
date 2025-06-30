@@ -8,13 +8,6 @@ import { getBlogPosts } from "@/lib/cms";
 
 export const dynamic = 'force-dynamic';
 
-const Squiggle = () => (
-    <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-4 -left-4 text-primary opacity-70">
-        <path d="M20.2435 2.15552C20.2435 2.15552 35.8475 4.81852 42.1555 17.5875" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-        <path d="M2.15527 20.2435C2.15527 20.2435 4.81827 35.8475 17.5873 42.1555" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-    </svg>
-);
-
 const services = [
   {
     number: "01",
@@ -78,7 +71,6 @@ export default async function Home() {
                   <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
                       I'm Tuan (Zura), <br />Project Delivery
                   </h1>
-                  <Squiggle />
               </div>
               
               <p className="mt-6 max-w-md text-lg text-muted-foreground">
