@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, Download, X } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
+import { JourneyTimeline } from "@/components/journey-timeline";
 
 export const dynamic = 'force-dynamic';
 
@@ -51,26 +52,17 @@ const experiences = [
   {
     company: "CPA Australia",
     date: "2023",
-    title: "Business Support Assistant",
     description: "My career journey began as a Business Support Assistant.",
-    image: "https://placehold.co/600x400",
-    aiHint: "office business"
   },
   {
     company: "OplaCRM",
     date: "2024",
-    title: "First Tech Project",
     description: "This was my very first project and where my passion for technology was ignited.",
-    image: "https://placehold.co/600x400",
-    aiHint: "technology code"
   },
   {
     company: "Maison RMI",
     date: "2025",
-    title: "Digital Transformation",
     description: "I immersed myself in various digital transformation projects, applying AI and automation.",
-    image: "https://placehold.co/600x400",
-    aiHint: "digital automation"
   },
 ];
 
@@ -212,28 +204,7 @@ export default async function Home() {
           </p>
         </div>
         <div className="container mx-auto max-w-5xl px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {experiences.map((exp, index) => (
-              <figure key={index} className="group">
-                <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-4">
-                  <Image
-                    src={exp.image}
-                    alt={exp.company}
-                    fill
-                    className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                    data-ai-hint={exp.aiHint}
-                  />
-                </div>
-                <figcaption className="mt-2 text-left">
-                  <p className="text-primary font-semibold">{exp.date}</p>
-                  <p className="mt-1 text-foreground font-semibold">
-                    {exp.company}
-                  </p>
-                  <p className="mt-1 text-muted-foreground text-sm">{exp.description}</p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <JourneyTimeline experiences={experiences} />
         </div>
       </section>
 
