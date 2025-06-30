@@ -76,7 +76,7 @@ export default async function Home() {
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
                   <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
-                      I'm Zura, <br />Project Delivery
+                      I'm Tuan (Zura), <br />Project Delivery
                   </h1>
                   <Squiggle />
               </div>
