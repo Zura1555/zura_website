@@ -50,24 +50,26 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
   }, []);
 
   return (
-    <div ref={ref} className="w-full space-y-10">
+    <div ref={ref} className="w-full space-y-8">
+      <div className="space-y-10">
         {experiences.map((exp, index) => (
-            <div key={index} className="flex flex-col gap-3">
+            <div key={index} className="grid grid-cols-[auto,1fr] items-start gap-x-6">
                 {/* Part 1: Year */}
-                <p className="font-bold text-primary text-sm">{exp.date}</p>
+                <p className="font-bold text-primary text-lg pt-1">{exp.date}</p>
                 
                 {/* Part 2: Description */}
                 <div>
                     <h4 className="font-headline text-xl font-semibold">{exp.company}</h4>
                     <p className="text-muted-foreground mt-1">{exp.description}</p>
                 </div>
-                
-                {/* Part 3: Progress Bar */}
-                <div className="pt-2">
-                    <Progress value={progress} className="h-1.5" />
-                </div>
             </div>
         ))}
+      </div>
+        
+      {/* Part 3: Single Progress Bar at the bottom */}
+      <div className="pt-4">
+          <Progress value={progress} className="h-2" />
+      </div>
     </div>
   );
 }
