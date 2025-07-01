@@ -9,11 +9,7 @@ import { Card } from "@/components/ui/card";
 import { 
   Search, 
   Globe, 
-  Gamepad2, 
-  Film, 
-  GraduationCap, 
-  FlaskConical, 
-  Music,
+  Tag,
   CheckCircle,
   Dot,
   User,
@@ -22,18 +18,28 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-const categories = [
-  { name: 'All', icon: <Globe className="h-5 w-5" />, count: 32429 },
-  { name: 'Development', icon: <Gamepad2 className="h-5 w-5" />, count: 24464 },
-  { name: 'Design', icon: <Film className="h-5 w-5" />, count: 13515 },
-  { name: 'Tutorials', icon: <GraduationCap className="h-5 w-5" />, count: 2529 },
-  { name: 'Tech', icon: <FlaskConical className="h-5 w-5" />, count: 2408 },
-  { name: 'Life', icon: <Music className="h-5 w-5" />, count: 2341 },
-];
-
-
 export default async function BlogPage() {
   const posts = await getBlogPosts();
+
+  const categoryCounts = posts.reduce((acc, post) => {
+    if (post.category) {
+      acc[post.category] = (acc[post.category] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
+  const sortedCategories = Object.entries(categoryCounts)
+    .sort(([, countA], [, countB]) => countB - countA)
+    .map(([name, count]) => ({
+      name,
+      icon: <Tag className="h-5 w-5" />,
+      count,
+    }));
+
+  const categories = [
+    { name: 'All', icon: <Globe className="h-5 w-5" />, count: posts.length },
+    ...sortedCategories,
+  ];
 
   return (
     <div className="animate-in fade-in duration-500">
@@ -128,11 +134,14 @@ export default async function BlogPage() {
                                         <span>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                                     </div>
                                 </div>
-                                <div className="mt-3">
+                                <div className="flex items-center gap-2 mt-3">
                                     <Badge variant="secondary" className="py-1 px-2.5">
                                         <CheckCircle className="h-4 w-4 mr-1.5" />
                                         Published
                                     </Badge>
+                                    {post.category && (
+                                        <Badge variant="outline">{post.category}</Badge>
+                                    )}
                                 </div>
                             </div>
                         </div>

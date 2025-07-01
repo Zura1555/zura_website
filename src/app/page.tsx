@@ -247,13 +247,20 @@ export default async function Home() {
                         {post.title}
                       </h3>
                       <p className="mt-2 text-sm text-primary-foreground/80 line-clamp-2">{post.summary}</p>
-                      <time className="mt-4 block text-xs font-medium text-primary-foreground/70">
-                        {new Date(post.date).toLocaleDateString("en-US", {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric',
-                        })}
-                      </time>
+                      <div className="flex justify-between items-center mt-4">
+                          {post.category && (
+                              <Badge variant="secondary" className="bg-primary-foreground/20 text-primary-foreground border-transparent">
+                                  {post.category}
+                              </Badge>
+                          )}
+                          <time className="block text-xs font-medium text-primary-foreground/70 ml-auto">
+                            {new Date(post.date).toLocaleDateString("en-US", {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                            })}
+                          </time>
+                      </div>
                     </div>
                   </div>
                 </Link>

@@ -11,6 +11,7 @@ export interface BlogPost {
   };
   image: string;
   aiHint: string;
+  category?: string;
 }
 
 export interface Album {

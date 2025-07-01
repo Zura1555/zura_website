@@ -61,9 +61,11 @@ function mapDocToBlogPost(doc: any): BlogPost {
         date: data.publish_date?.toDate ? data.publish_date.toDate().toISOString() : new Date().toISOString(),
         summary: summary,
         content: fullContentHtml,
+        category: data.category,
         author: {
             name: 'Zura',
             avatar: 'https://placehold.co/100x100.png',
+            // TODO: Implement fetching author details from CMS if available
             aiHint: 'person avatar'
         },
         image: data.header_image || `https://placehold.co/800x600.png`,
