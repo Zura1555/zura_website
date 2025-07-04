@@ -48,7 +48,27 @@ function mapDocToBlogPost(doc: any): BlogPost {
         data.content.forEach((item: { type: string; value: string }) => {
             if (item.type === 'text' && item.value) {
                 contentText += item.value + ' ';
-                fullContentHtml += `<p>${item.value.replace(/\n/g, '<br />')}</p>`;
+                
+                const lines = item.value.split('\n');
+                const blockHtml = lines.map(line => {
+                    let processedLine = line;
+
+                    // This will handle **bold** text
+                    processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                    // This will handle # Headings
+                    if (processedLine.trim().startsWith('# ')) {
+                        return processedLine.replace(/^# (.*)/, '<h1>$1</h1>');
+                    }
+
+                    if (processedLine.trim() === '') {
+                        return '';
+                    }
+
+                    return `<p>${processedLine}</p>`;
+                }).join('');
+                
+                fullContentHtml += blockHtml;
             }
         });
     }
