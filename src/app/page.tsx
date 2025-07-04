@@ -224,7 +224,7 @@ export default async function Home() {
                   <div className="relative transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:-translate-y-1">
                     <div className="relative h-56 w-full rounded-t-3xl overflow-hidden">
                       <Image
-                        src={post.image || 'https://placehold.co/600x400'}
+                        src={post.image}
                         alt={post.title || 'Blog post image'}
                         fill
                         className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"

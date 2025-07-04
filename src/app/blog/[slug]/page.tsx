@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </header>
       <div className="relative my-12 h-80 w-full overflow-hidden rounded-lg shadow-lg">
         <Image
-          src={post.image || 'https://placehold.co/800x600.png'}
+          src={post.image}
           alt={post.title || 'Blog post image'}
           fill
           className="object-cover"

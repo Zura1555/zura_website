@@ -36,6 +36,20 @@ const galleryAlbums: Album[] = [
     }
 ];
 
+function fixImageUrl(url: unknown): string {
+    const placeholder = 'https://placehold.co/800x600.png';
+    if (typeof url !== 'string' || url.trim() === '') {
+        return placeholder;
+    }
+    const trimmedUrl = url.trim();
+    if (trimmedUrl.startsWith('http') || trimmedUrl.startsWith('/')) {
+        return trimmedUrl;
+    }
+    // It's a relative path, like "images/foo.png". Prepend a slash.
+    return `/${trimmedUrl}`;
+}
+
+
 function mapDocToBlogPost(doc: any): BlogPost {
     const data = doc.data();
     const slug = doc.id;
@@ -62,7 +76,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
             // Images: ![alt](src)
             processedText = processedText.replace(
                 /!\[(.*?)\]\((.*?)\)/g, 
-                '<img src="$2" alt="$1" class="my-4 rounded-lg shadow-md" />'
+                (match, alt, src) => `<img src="${fixImageUrl(src)}" alt="${alt || ''}" class="my-4 rounded-lg shadow-md" />`
             );
 
             // Bold: **text** or __text__
@@ -169,7 +183,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                      if (Array.isArray(item.value)) {
                         item.value.forEach((img: { url?: string, name?: string }) => {
                             if (img.url) {
-                                fullContentHtml += `<figure class="my-6"><img src="${img.url}" alt="${img.name || 'Blog image'}" class="mx-auto rounded-lg shadow-md" /></figure>`;
+                                fullContentHtml += `<figure class="my-6"><img src="${fixImageUrl(img.url)}" alt="${img.name || 'Blog image'}" class="mx-auto rounded-lg shadow-md" /></figure>`;
                             }
                         });
                     }
@@ -197,7 +211,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
             avatar: 'https://placehold.co/100x100.png',
             aiHint: 'person avatar'
         },
-        image: data.header_image || `https://placehold.co/800x600.png`,
+        image: fixImageUrl(data.header_image),
         aiHint: title.toLowerCase().split(' ').slice(0, 2).join(' ') || 'abstract',
     };
 }

@@ -113,7 +113,7 @@ export default async function BlogPage() {
                         <div className="flex flex-col sm:flex-row gap-6">
                             <div className="relative w-full sm:w-48 h-48 sm:h-32 flex-shrink-0">
                                 <Image
-                                src={post.image || 'https://placehold.co/400x300.png'}
+                                src={post.image}
                                 alt={post.title || 'Blog post image'}
                                 fill
                                 className="object-cover rounded-lg"
