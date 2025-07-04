@@ -22,12 +22,12 @@ const services = [
   },
   {
     number: "02",
-    title: "Technical Strategy & Consultation",
-    slug: "technical-strategy-consultation",
-    tags: ["Technology Stack", "System Architecture", "Product Roadmapping", "Scalability Planning"],
-    description: "I help you make critical technical decisions with confidence. By analyzing your long-term goals, I recommend the optimal technology stack, design a robust system architecture, and create a clear product roadmap. This strategic foresight ensures your project is built on a solid foundation for future growth and success.",
+    title: "UI/UX Research",
+    slug: "ui-ux-research",
+    tags: ["User Interviews", "Usability Testing", "Persona & Journey Mapping", "Data-Driven Insights"],
+    description: "I uncover the \"why\" behind user behavior to ensure we're building the right product for the right people. Using proven methods like in-depth interviews and usability testing, I gather critical data directly from your target audience. These findings are then translated into actionable insights, personas, and journey maps that eliminate guesswork and empower us to design a truly intuitive and effective product.",
     image: "https://placehold.co/600x400",
-    aiHint: "technical strategy"
+    aiHint: "ux research"
   },
   {
     number: "03",
