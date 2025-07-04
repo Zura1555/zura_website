@@ -22,21 +22,21 @@ const services = [
   },
   {
     number: "02",
-    title: "MVP & Prototype Development",
-    slug: "mvp-prototyping",
-    tags: ["Rapid Prototyping", "User Feedback", "Lean Startup", "Product Validation"],
-    description: "Quickly transforming ideas into functional prototypes and Minimum Viable Products (MVPs). This allows for rapid user feedback and validation, ensuring we build the right product efficiently.",
+    title: "Technical Strategy & Consultation",
+    slug: "technical-strategy-consultation",
+    tags: ["Technology Stack", "System Architecture", "Product Roadmapping", "Scalability Planning"],
+    description: "I help you make critical technical decisions with confidence. By analyzing your long-term goals, I recommend the optimal technology stack, design a robust system architecture, and create a clear product roadmap. This strategic foresight ensures your project is built on a solid foundation for future growth and success.",
     image: "https://placehold.co/600x400",
-    aiHint: "prototype sketch"
+    aiHint: "technical strategy"
   },
   {
     number: "03",
-    title: "UI/UX Research",
-    slug: "ui-ux-research",
-    tags: ["User Interviews", "Usability Testing", "Persona Creation", "Journey Mapping"],
-    description: "Conducting in-depth user research to uncover insights that drive design decisions. From user interviews to usability testing, I ensure the final product is user-centric and solves real-world problems.",
+    title: "MVP & Prototype Development",
+    slug: "mvp-prototyping",
+    tags: ["Rapid Prototyping", "Core Feature Focus", "User Feedback Loop", "Concept Validation"],
+    description: "Transform your idea into a tangible product, fast. I specialize in building high-fidelity prototypes and Minimum Viable Products (MVPs) that focus on core functionality. This is the most effective way to test your concept with real users, gather actionable feedback, and validate your business model before investing in full-scale development.",
     image: "https://placehold.co/600x400",
-    aiHint: "user experience research"
+    aiHint: "prototype sketch"
   },
 ];
 
