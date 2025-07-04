@@ -12,6 +12,7 @@ export default {
       fontFamily: {
         body: ['"General Sans"', 'sans-serif'],
         headline: ['"General Sans"', 'sans-serif'],
+        'nunito-sans': ['"Nunito Sans"', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

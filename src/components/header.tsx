@@ -10,11 +10,9 @@ import { cn } from "@/lib/utils";
 
 const navLinksLeft = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/#services", label: "Services" },
 ];
 const navLinksRight = [
-  { href: "/gallery", label: "Portfolio" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
@@ -27,6 +25,7 @@ export default function Header() {
 
   const NavLink = ({ href, label }: { href: string; label: string; }) => {
     const isActive = href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#services";
+    const isBlog = label === "Blog";
     return (
       <Link
         href={href}
@@ -35,6 +34,7 @@ export default function Header() {
           isActive
             ? 'bg-primary text-primary-foreground'
             : 'text-muted-foreground hover:text-foreground',
+          isBlog && 'font-nunito-sans'
         )}
       >
         {label}
@@ -46,7 +46,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full py-4">
       <div className="container mx-auto flex h-16 items-center justify-center px-4">
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center justify-center gap-2 bg-background/80 backdrop-blur-sm p-2 rounded-full w-full max-w-xl mx-auto border">
+        <nav className="hidden md:flex items-center justify-center gap-2 bg-background/80 backdrop-blur-sm p-2 rounded-full w-auto mx-auto border">
           <div className="flex items-center gap-2">
             {navLinksLeft.map((link) => <NavLink key={link.href} {...link} />)}
           </div>
@@ -74,7 +74,10 @@ export default function Header() {
                       href={link.href}
                       key={link.href}
                       onClick={() => setSheetOpen(false)}
-                      className="text-lg font-medium text-foreground hover:text-primary"
+                      className={cn(
+                        "text-lg font-medium text-foreground hover:text-primary",
+                        link.label === "Blog" && "font-nunito-sans"
+                      )}
                     >
                       {link.label}
                     </Link>
