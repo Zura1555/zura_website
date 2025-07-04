@@ -111,14 +111,14 @@ function mapDocToBlogPost(doc: any): BlogPost {
                             } else if (p.startsWith('# ')) {
                                 fullContentHtml += `<h1 class="font-headline text-3xl md:text-4xl font-extrabold mt-12 mb-6">${processInline(p.substring(2))}</h1>`;
                             } else if (p.trim()) {
-                                fullContentHtml += `<p class="leading-relaxed">${processInline(p)}</p>`;
+                                fullContentHtml += `<p class="leading-relaxed font-normal">${processInline(p)}</p>`;
                             }
                         });
                     }
                     break;
                 case 'quote':
                     if (item.value && typeof item.value === 'string') {
-                        fullContentHtml += `<blockquote class="border-l-4 border-primary pl-4 italic text-muted-foreground my-6"><p>${processInline(item.value)}</p></blockquote>`;
+                        fullContentHtml += `<blockquote class="border-l-4 border-primary pl-4 italic text-muted-foreground my-6"><p class="font-normal">${processInline(item.value)}</p></blockquote>`;
                     }
                     break;
                 case 'code':
@@ -128,7 +128,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     break;
                 case 'bullet_list_item':
                     if (prevItem?.type !== 'bullet_list_item') {
-                        fullContentHtml += '<ul class="list-disc pl-6 space-y-2 my-6">';
+                        fullContentHtml += '<ul class="list-disc pl-6 space-y-2 my-6 font-normal">';
                     }
                     if (item.value && typeof item.value === 'string') {
                         fullContentHtml += `<li>${processInline(item.value)}</li>`;
@@ -139,7 +139,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     break;
                 case 'numbered_list_item':
                     if (prevItem?.type !== 'numbered_list_item') {
-                        fullContentHtml += '<ol class="list-decimal pl-6 space-y-2 my-6">';
+                        fullContentHtml += '<ol class="list-decimal pl-6 space-y-2 my-6 font-normal">';
                     }
                      if (item.value && typeof item.value === 'string') {
                         fullContentHtml += `<li>${processInline(item.value)}</li>`;
@@ -158,7 +158,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                         fullContentHtml += `
                             <li class="flex items-center gap-3 my-2">
                                 <input type="checkbox" ${checkedAttr} disabled class="h-4 w-4 rounded border-border text-primary focus:ring-primary disabled:opacity-100" />
-                                <span class="${isChecked ? 'text-muted-foreground line-through' : ''}">${processInline(item.value)}</span>
+                                <span class="${isChecked ? 'text-muted-foreground line-through' : ''} font-normal">${processInline(item.value)}</span>
                             </li>`;
                     }
                     if (nextItem?.type !== 'todo_list_item') {
@@ -176,7 +176,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     break;
                 default:
                     if (item.value && typeof item.value === 'string') {
-                       fullContentHtml += `<p class="leading-relaxed">${processInline(item.value)}</p>`;
+                       fullContentHtml += `<p class="leading-relaxed font-normal">${processInline(item.value)}</p>`;
                     }
                     break;
             }
