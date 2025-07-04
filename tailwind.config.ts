@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['"General Sans"', 'sans-serif'],
-        headline: ['"General Sans"', 'sans-serif'],
+        body: ['"Be Vietnam Pro"', 'sans-serif'],
+        headline: ['"Be Vietnam Pro"', 'sans-serif'],
         'nunito-sans': ['"Nunito Sans"', 'sans-serif'],
       },
       colors: {
