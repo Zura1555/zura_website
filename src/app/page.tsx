@@ -84,7 +84,7 @@ export default async function Home() {
               </div>
               
               <p className="mt-6 max-w-md text-lg text-muted-foreground">
-                With a technologist's curiosity, I love managing diverse projects. My passion is for continuous learning and exploring new tech. I thrive on this variety, building the versatile skillset required to be a true 'Swiss army knife' for any challenge.
+                With a technologist's curiosity, I love managing diverse projects. My passion is for continuous learning and exploring new tech. I thrive on this variety, building the versatile skillset required to be a true 'Swiss army knife'.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Button asChild size="lg" variant="outline" className="rounded-lg px-8 py-3">
