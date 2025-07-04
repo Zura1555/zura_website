@@ -48,9 +48,10 @@ function mapDocToBlogPost(doc: any): BlogPost {
     const content = data.content;
 
     if (Array.isArray(content)) {
-        const processInline = (text: string = '') => {
-            if (!text) return '';
+        const processInline = (text: unknown = '') => {
+            if (typeof text !== 'string' || !text) return '';
             return text
+                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="my-4 rounded-lg shadow-md" />')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         };
         
@@ -69,13 +70,13 @@ function mapDocToBlogPost(doc: any): BlogPost {
             const prevItem = i > 0 ? content[i - 1] : null;
             const nextItem = i < content.length - 1 ? content[i + 1] : null;
 
-            if (item.value) {
+            if (item.value && typeof item.value === 'string') {
                 contentText += item.value + ' ';
             }
 
             switch (item.type) {
                 case 'text':
-                    if (item.value) {
+                    if (item.value && typeof item.value === 'string') {
                         const paragraphs = item.value.split('\n').filter((line: string) => line.trim() !== '');
                         paragraphs.forEach((p: string) => {
                             if (p.startsWith('## ')) {
@@ -89,16 +90,22 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     }
                     break;
                 case 'quote':
-                    fullContentHtml += `<blockquote><p>${processInline(item.value)}</p></blockquote>`;
+                    if (item.value && typeof item.value === 'string') {
+                        fullContentHtml += `<blockquote><p>${processInline(item.value)}</p></blockquote>`;
+                    }
                     break;
                 case 'code':
-                    fullContentHtml += `<pre><code>${escapeHtml(item.value)}</code></pre>`;
+                    if (item.value && typeof item.value === 'string') {
+                        fullContentHtml += `<pre><code>${escapeHtml(item.value)}</code></pre>`;
+                    }
                     break;
                 case 'bullet_list_item':
                     if (prevItem?.type !== 'bullet_list_item') {
                         fullContentHtml += '<ul>';
                     }
-                    fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                    if (item.value && typeof item.value === 'string') {
+                        fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                    }
                     if (nextItem?.type !== 'bullet_list_item') {
                         fullContentHtml += '</ul>';
                     }
@@ -107,7 +114,9 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     if (prevItem?.type !== 'numbered_list_item') {
                         fullContentHtml += '<ol>';
                     }
-                    fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                     if (item.value && typeof item.value === 'string') {
+                        fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                    }
                     if (nextItem?.type !== 'numbered_list_item') {
                         fullContentHtml += '</ol>';
                     }
@@ -118,17 +127,23 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     }
                     const isChecked = item.checked || false;
                     const checkedAttr = isChecked ? 'checked' : '';
-                    fullContentHtml += `
-                        <li class="flex items-center gap-3 my-2">
-                            <input type="checkbox" ${checkedAttr} disabled class="h-4 w-4 rounded border-border text-primary focus:ring-primary disabled:opacity-100" />
-                            <span class="${isChecked ? 'text-muted-foreground line-through' : ''}">${processInline(item.value)}</span>
-                        </li>`;
+                    if (item.value && typeof item.value === 'string') {
+                        fullContentHtml += `
+                            <li class="flex items-center gap-3 my-2">
+                                <input type="checkbox" ${checkedAttr} disabled class="h-4 w-4 rounded border-border text-primary focus:ring-primary disabled:opacity-100" />
+                                <span class="${isChecked ? 'text-muted-foreground line-through' : ''}">${processInline(item.value)}</span>
+                            </li>`;
+                    }
                     if (nextItem?.type !== 'todo_list_item') {
                         fullContentHtml += '</ul>';
                     }
                     break;
+                case 'images':
+                    // Explicitly ignore 'images' type to prevent crash.
+                    // Images embedded in text fields with markdown will be handled by processInline.
+                    break;
                 default:
-                    if (item.value) {
+                    if (item.value && typeof item.value === 'string') {
                        fullContentHtml += `<p>${processInline(item.value)}</p>`;
                     }
                     break;
