@@ -1,14 +1,11 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow anyone to read documents in the 'blogPosts' collection.
+    // Allow public read access to blog posts
     match /blogPosts/{postId} {
       allow read: if true;
-      allow write: if false; // Disallow writing from the client-side.
+      allow write: if false;
     }
-  // Custom default security rules for FireCMS. Modifying this rule will the usage of the FireCMS.
-    match /{document=**} {
-        allow read, write: if request.auth.token.fireCMSUser;
-    }
-	}
+  }
 }
