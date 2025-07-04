@@ -43,34 +43,99 @@ function mapDocToBlogPost(doc: any): BlogPost {
 
     let contentText = '';
     let fullContentHtml = '';
+    
+    const content = data.content;
 
-    if (Array.isArray(data.content)) {
-        data.content.forEach((item: { type: string; value: string }) => {
-            if (item.type === 'text' && item.value) {
+    if (Array.isArray(content)) {
+        const processInline = (text: string = '') => {
+            if (!text) return '';
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        };
+        
+        const escapeHtml = (unsafe: string = '') => {
+            if (!unsafe) return '';
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        for (let i = 0; i < content.length; i++) {
+            const item = content[i];
+            const prevItem = i > 0 ? content[i - 1] : null;
+            const nextItem = i < content.length - 1 ? content[i + 1] : null;
+
+            if (item.value) {
                 contentText += item.value + ' ';
-                
-                const lines = item.value.split('\n');
-                const blockHtml = lines.map(line => {
-                    let processedLine = line;
-
-                    // This will handle **bold** text
-                    processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-                    // This will handle # Headings
-                    if (processedLine.trim().startsWith('# ')) {
-                        return processedLine.replace(/^# (.*)/, '<h1>$1</h1>');
-                    }
-
-                    if (processedLine.trim() === '') {
-                        return '';
-                    }
-
-                    return `<p>${processedLine}</p>`;
-                }).join('');
-                
-                fullContentHtml += blockHtml;
             }
-        });
+
+            switch (item.type) {
+                case 'heading_1':
+                    fullContentHtml += `<h1>${processInline(item.value)}</h1>`;
+                    break;
+                case 'heading_2':
+                    fullContentHtml += `<h2>${processInline(item.value)}</h2>`;
+                    break;
+                case 'heading_3':
+                    fullContentHtml += `<h3>${processInline(item.value)}</h3>`;
+                    break;
+                case 'text':
+                    if (item.value) {
+                        const paragraphs = item.value.split('\n').filter((line: string) => line.trim() !== '');
+                        paragraphs.forEach((p: string) => {
+                            fullContentHtml += `<p>${processInline(p)}</p>`;
+                        });
+                    }
+                    break;
+                case 'quote':
+                    fullContentHtml += `<blockquote><p>${processInline(item.value)}</p></blockquote>`;
+                    break;
+                case 'code':
+                    fullContentHtml += `<pre><code>${escapeHtml(item.value)}</code></pre>`;
+                    break;
+                case 'bullet_list_item':
+                    if (prevItem?.type !== 'bullet_list_item') {
+                        fullContentHtml += '<ul>';
+                    }
+                    fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                    if (nextItem?.type !== 'bullet_list_item') {
+                        fullContentHtml += '</ul>';
+                    }
+                    break;
+                case 'numbered_list_item':
+                    if (prevItem?.type !== 'numbered_list_item') {
+                        fullContentHtml += '<ol>';
+                    }
+                    fullContentHtml += `<li>${processInline(item.value)}</li>`;
+                    if (nextItem?.type !== 'numbered_list_item') {
+                        fullContentHtml += '</ol>';
+                    }
+                    break;
+                case 'todo_list_item':
+                    if (prevItem?.type !== 'todo_list_item') {
+                        fullContentHtml += '<ul class="list-none p-0">';
+                    }
+                    const isChecked = item.checked || false;
+                    const checkedAttr = isChecked ? 'checked' : '';
+                    fullContentHtml += `
+                        <li class="flex items-center gap-3 my-2">
+                            <input type="checkbox" ${checkedAttr} disabled class="h-4 w-4 rounded border-border text-primary focus:ring-primary disabled:opacity-100" />
+                            <span class="${isChecked ? 'text-muted-foreground line-through' : ''}">${processInline(item.value)}</span>
+                        </li>`;
+                    if (nextItem?.type !== 'todo_list_item') {
+                        fullContentHtml += '</ul>';
+                    }
+                    break;
+                default:
+                    if (item.value) {
+                       fullContentHtml += `<p>${processInline(item.value)}</p>`;
+                    }
+                    break;
+            }
+        }
     }
 
     const summary = contentText.trim().substring(0, 120) + (contentText.length > 120 ? '...' : '');
@@ -85,7 +150,6 @@ function mapDocToBlogPost(doc: any): BlogPost {
         author: {
             name: 'Zura',
             avatar: 'https://placehold.co/100x100.png',
-            // TODO: Implement fetching author details from CMS if available
             aiHint: 'person avatar'
         },
         image: data.header_image || `https://placehold.co/800x600.png`,
