@@ -15,7 +15,7 @@ const services = [
     number: "01",
     title: "End-to-End Project Delivery",
     slug: "project-delivery",
-    tags: ["Project Planning", "Agile Methodologies", "Stakeholder Management", "Risk Assessment"],
+    tags: ["Agile Execution", "Technical Direction", "Launch Management"],
     description: "Managing projects from concept to launch, ensuring clear communication, on-time delivery, and alignment with business goals. I bridge the gap between stakeholders and development teams to deliver successful outcomes.",
     image: "https://placehold.co/600x400",
     aiHint: "project management"
