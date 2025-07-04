@@ -7,7 +7,7 @@ import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
   title: "Zura | Project Delivery",
-  description: "I specialize in delivering high-quality projects on time and within budget, ensuring seamless execution from start to finish.",
+  description: "With a technologist's curiosity, I love managing diverse projects and exploring new tech.",
 };
 
 export default function RootLayout({
