@@ -13,30 +13,30 @@ export const dynamic = 'force-dynamic';
 const services = [
   {
     number: "01",
-    title: "UI/UX Design",
-    slug: "ui-ux-design",
-    tags: ["Research", "Wireframing", "Prototyping", "User Testing"],
-    description: "Creating intuitive and engaging user interfaces that are both beautiful and easy to use. I focus on a user-centered design process to deliver effective and enjoyable experiences.",
+    title: "End-to-End Project Delivery",
+    slug: "project-delivery",
+    tags: ["Project Planning", "Agile Methodologies", "Stakeholder Management", "Risk Assessment"],
+    description: "Managing projects from concept to launch, ensuring clear communication, on-time delivery, and alignment with business goals. I bridge the gap between stakeholders and development teams to deliver successful outcomes.",
     image: "https://placehold.co/600x400",
-    aiHint: "user interface design"
+    aiHint: "project management"
   },
   {
     number: "02",
-    title: "Application Design",
-    slug: "application-design",
-    tags: ["Cross-Platform App Design", "Progressive Web App", "Wireframing and Prototyping", "Custom App Theme Design"],
-    description: "I design professional and user-friendly applications, focusing on functionality and a seamless cross-platform experience. From initial wireframes to final polished designs, I ensure your app not only looks great but also meets the needs of your users.",
+    title: "MVP & Prototype Development",
+    slug: "mvp-prototyping",
+    tags: ["Rapid Prototyping", "User Feedback", "Lean Startup", "Product Validation"],
+    description: "Quickly transforming ideas into functional prototypes and Minimum Viable Products (MVPs). This allows for rapid user feedback and validation, ensuring we build the right product efficiently.",
     image: "https://placehold.co/600x400",
-    aiHint: "app wireframe sketch"
+    aiHint: "prototype sketch"
   },
   {
     number: "03",
-    title: "Website Design",
-    slug: "website-design",
-    tags: ["Responsive Design", "E-commerce", "CMS Integration", "SEO"],
-    description: "Designing and developing responsive, fast-loading, and SEO-friendly websites that provide a seamless user experience across all devices. Let's build a website that drives traffic and conversions.",
+    title: "UI/UX Research",
+    slug: "ui-ux-research",
+    tags: ["User Interviews", "Usability Testing", "Persona Creation", "Journey Mapping"],
+    description: "Conducting in-depth user research to uncover insights that drive design decisions. From user interviews to usability testing, I ensure the final product is user-centric and solves real-world problems.",
     image: "https://placehold.co/600x400",
-    aiHint: "modern website design"
+    aiHint: "user experience research"
   },
 ];
 
@@ -135,7 +135,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <Accordion type="single" collapsible defaultValue="item-1" className="w-full space-y-4">
+          <Accordion type="single" collapsible defaultValue="item-0" className="w-full space-y-4">
             {services.map((service, index) => (
               <AccordionItem key={service.slug} value={`item-${index}`} className="border-none rounded-2xl bg-secondary/30 data-[state=open]:bg-card transition-colors duration-300 overflow-hidden">
                 <AccordionTrigger className="w-full p-6 text-left hover:no-underline group [&>svg]:hidden">
