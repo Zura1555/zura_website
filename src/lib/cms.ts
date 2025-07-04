@@ -1,3 +1,4 @@
+
 import type { BlogPost, Album } from './types';
 import { db } from './firebase';
 import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
@@ -73,20 +74,17 @@ function mapDocToBlogPost(doc: any): BlogPost {
             }
 
             switch (item.type) {
-                case 'heading_1':
-                    fullContentHtml += `<h1>${processInline(item.value)}</h1>`;
-                    break;
-                case 'heading_2':
-                    fullContentHtml += `<h2>${processInline(item.value)}</h2>`;
-                    break;
-                case 'heading_3':
-                    fullContentHtml += `<h3>${processInline(item.value)}</h3>`;
-                    break;
                 case 'text':
                     if (item.value) {
                         const paragraphs = item.value.split('\n').filter((line: string) => line.trim() !== '');
                         paragraphs.forEach((p: string) => {
-                            fullContentHtml += `<p>${processInline(p)}</p>`;
+                            if (p.startsWith('## ')) {
+                                fullContentHtml += `<h2>${processInline(p.substring(3))}</h2>`;
+                            } else if (p.startsWith('# ')) {
+                                fullContentHtml += `<h1>${processInline(p.substring(2))}</h1>`;
+                            } else {
+                                fullContentHtml += `<p>${processInline(p)}</p>`;
+                            }
                         });
                     }
                     break;
