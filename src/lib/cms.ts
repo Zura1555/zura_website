@@ -50,9 +50,34 @@ function mapDocToBlogPost(doc: any): BlogPost {
     if (Array.isArray(content)) {
         const processInline = (text: unknown = '') => {
             if (typeof text !== 'string' || !text) return '';
-            return text
-                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="my-4 rounded-lg shadow-md" />')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            let processedText = text;
+
+            // Links: [text](url)
+            processedText = processedText.replace(
+                /\[([^\]]+)\]\(([^)]+)\)/g, 
+                '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>'
+            );
+            
+            // Images: ![alt](src)
+            processedText = processedText.replace(
+                /!\[(.*?)\]\((.*?)\)/g, 
+                '<img src="$2" alt="$1" class="my-4 rounded-lg shadow-md" />'
+            );
+
+            // Bold: **text** or __text__
+            processedText = processedText.replace(/\*\*(.*?)\*\*|__(.*?)__/g, '<strong>$1$2</strong>');
+            
+            // Italic: *text* or _text_
+            processedText = processedText.replace(/\*(.*?)\*|_(.*?)_/g, '<em>$1$2</em>');
+
+            // Strikethrough: ~~text~~
+            processedText = processedText.replace(/~~(.*?)~~/g, '<del>$1</del>');
+
+            // Inline code: `code`
+            processedText = processedText.replace(/`(.*?)`/g, '<code class="bg-muted text-muted-foreground px-1 py-0.5 rounded-sm">$1</code>');
+            
+            return processedText;
         };
         
         const escapeHtml = (unsafe: string = '') => {
@@ -79,29 +104,31 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     if (item.value && typeof item.value === 'string') {
                         const paragraphs = item.value.split('\n').filter((line: string) => line.trim() !== '');
                         paragraphs.forEach((p: string) => {
-                            if (p.startsWith('## ')) {
-                                fullContentHtml += `<h2>${processInline(p.substring(3))}</h2>`;
+                            if (p.startsWith('### ')) {
+                                fullContentHtml += `<h3 class="font-headline text-xl md:text-2xl font-semibold mt-8 mb-4">${processInline(p.substring(4))}</h3>`;
+                            } else if (p.startsWith('## ')) {
+                                fullContentHtml += `<h2 class="font-headline text-2xl md:text-3xl font-bold mt-10 mb-4 border-b pb-2">${processInline(p.substring(3))}</h2>`;
                             } else if (p.startsWith('# ')) {
-                                fullContentHtml += `<h1>${processInline(p.substring(2))}</h1>`;
-                            } else {
-                                fullContentHtml += `<p>${processInline(p)}</p>`;
+                                fullContentHtml += `<h1 class="font-headline text-3xl md:text-4xl font-extrabold mt-12 mb-6">${processInline(p.substring(2))}</h1>`;
+                            } else if (p.trim()) {
+                                fullContentHtml += `<p class="leading-relaxed">${processInline(p)}</p>`;
                             }
                         });
                     }
                     break;
                 case 'quote':
                     if (item.value && typeof item.value === 'string') {
-                        fullContentHtml += `<blockquote><p>${processInline(item.value)}</p></blockquote>`;
+                        fullContentHtml += `<blockquote class="border-l-4 border-primary pl-4 italic text-muted-foreground my-6"><p>${processInline(item.value)}</p></blockquote>`;
                     }
                     break;
                 case 'code':
                     if (item.value && typeof item.value === 'string') {
-                        fullContentHtml += `<pre><code>${escapeHtml(item.value)}</code></pre>`;
+                        fullContentHtml += `<pre class="bg-muted p-4 rounded-md overflow-x-auto my-6"><code class="text-muted-foreground">${escapeHtml(item.value)}</code></pre>`;
                     }
                     break;
                 case 'bullet_list_item':
                     if (prevItem?.type !== 'bullet_list_item') {
-                        fullContentHtml += '<ul>';
+                        fullContentHtml += '<ul class="list-disc pl-6 space-y-2 my-6">';
                     }
                     if (item.value && typeof item.value === 'string') {
                         fullContentHtml += `<li>${processInline(item.value)}</li>`;
@@ -112,7 +139,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     break;
                 case 'numbered_list_item':
                     if (prevItem?.type !== 'numbered_list_item') {
-                        fullContentHtml += '<ol>';
+                        fullContentHtml += '<ol class="list-decimal pl-6 space-y-2 my-6">';
                     }
                      if (item.value && typeof item.value === 'string') {
                         fullContentHtml += `<li>${processInline(item.value)}</li>`;
@@ -123,7 +150,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     break;
                 case 'todo_list_item':
                     if (prevItem?.type !== 'todo_list_item') {
-                        fullContentHtml += '<ul class="list-none p-0">';
+                        fullContentHtml += '<ul class="list-none p-0 my-6">';
                     }
                     const isChecked = item.checked || false;
                     const checkedAttr = isChecked ? 'checked' : '';
@@ -139,12 +166,17 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     }
                     break;
                 case 'images':
-                    // Explicitly ignore 'images' type to prevent crash.
-                    // Images embedded in text fields with markdown will be handled by processInline.
+                     if (Array.isArray(item.value)) {
+                        item.value.forEach((img: { url?: string, name?: string }) => {
+                            if (img.url) {
+                                fullContentHtml += `<figure class="my-6"><img src="${img.url}" alt="${img.name || 'Blog image'}" class="mx-auto rounded-lg shadow-md" /></figure>`;
+                            }
+                        });
+                    }
                     break;
                 default:
                     if (item.value && typeof item.value === 'string') {
-                       fullContentHtml += `<p>${processInline(item.value)}</p>`;
+                       fullContentHtml += `<p class="leading-relaxed">${processInline(item.value)}</p>`;
                     }
                     break;
             }
