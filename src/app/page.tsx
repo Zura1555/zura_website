@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -36,15 +37,6 @@ const services = [
     description: "Designing and developing responsive, fast-loading, and SEO-friendly websites that provide a seamless user experience across all devices. Let's build a website that drives traffic and conversions.",
     image: "https://placehold.co/600x400",
     aiHint: "modern website design"
-  },
-  {
-    number: "04",
-    title: "UI Design",
-    slug: "ui-design",
-    tags: ["Design Systems", "Component Libraries", "Visual Design", "Branding"],
-    description: "Specializing in creating visually stunning and cohesive user interfaces. My work ensures brand consistency and a polished final product that stands out from the competition.",
-    image: "https://placehold.co/600x400",
-    aiHint: "ui components library"
   },
 ];
 
