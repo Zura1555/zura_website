@@ -3,8 +3,7 @@ import { getBlogPostBySlug, getBlogPosts } from "@/lib/cms";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-export const dynamic = 'force-dynamic';
+import ReactMarkdown from "react-markdown";
 
 type BlogPostPageProps = {
   params: {
@@ -65,8 +64,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       <div
         className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      >
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </div>
     </article>
   );
 }
