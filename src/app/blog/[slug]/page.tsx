@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       <div
-        className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90"
+        className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light"
       >
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
