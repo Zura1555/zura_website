@@ -135,7 +135,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <Accordion type="single" collapsible defaultValue="item-0" className="w-full space-y-4">
+          <Accordion type="single" collapsible className="w-full space-y-4">
             {services.map((service, index) => (
               <AccordionItem key={service.slug} value={`item-${index}`} className="border-none rounded-2xl bg-secondary/30 data-[state=open]:bg-card transition-colors duration-300 overflow-hidden">
                 <AccordionTrigger className="w-full p-6 text-left hover:no-underline group [&>svg]:hidden">
