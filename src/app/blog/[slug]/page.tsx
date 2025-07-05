@@ -19,7 +19,15 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPostBySlug(params.slug);
+  let post;
+  try {
+    post = await getBlogPostBySlug(params.slug);
+  } catch (error) {
+    console.error("Failed to fetch blog post:", error);
+    return <div>Error loading post.</div>;
+  }
+
+  console.log("Fetched Post:", post); 
 
   if (!post) {
     notFound();
@@ -70,3 +78,4 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </article>
   );
 }
+
