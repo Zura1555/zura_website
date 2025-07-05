@@ -14,7 +14,7 @@ interface JourneyTimelineProps {
   experiences: Experience[];
 }
 
-const ANIMATION_DURATION = 2500; // Must match the transition duration in the Progress component
+const ANIMATION_DURATION = 3000; // Must match the transition duration in the Progress component
 const INITIAL_DELAY = 100;
 
 export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
@@ -65,7 +65,7 @@ export function JourneyTimeline({ experiences }: JourneyTimelineProps) {
             <div 
               key={index}
               className={cn(
-                "transition-opacity duration-500 ease-out",
+                "transition-opacity duration-1000 ease-out",
                 index < visibleItems ? "opacity-100" : "opacity-0"
               )}
             >
