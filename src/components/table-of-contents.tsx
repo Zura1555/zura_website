@@ -95,8 +95,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                       href={`#${heading.slug}`}
                       onClick={(e) => handleLinkClick(e, heading.slug)}
                       className={cn(
-                        'flex-1 text-sm py-1 transition-colors hover:text-primary font-medium',
-                        activeId === heading.slug ? 'text-primary' : 'text-muted-foreground'
+                        'flex-1 text-sm py-1 px-2 rounded-md transition-colors font-medium',
+                        activeId === heading.slug
+                          ? 'bg-primary text-primary-foreground'
+                          : 'text-muted-foreground hover:bg-muted'
                       )}
                     >
                       {heading.text}
@@ -116,8 +118,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                   href={`#${heading.slug}`}
                   onClick={(e) => handleLinkClick(e, heading.slug)}
                   className={cn(
-                    'block text-sm py-1 transition-colors hover:text-primary',
-                    activeId === heading.slug ? 'text-primary font-semibold' : 'text-muted-foreground'
+                    'block text-sm py-1 px-2 rounded-md transition-colors',
+                    activeId === heading.slug
+                      ? 'bg-primary text-primary-foreground font-semibold'
+                      : 'text-muted-foreground hover:bg-muted'
                   )}
                 >
                   {heading.text}
