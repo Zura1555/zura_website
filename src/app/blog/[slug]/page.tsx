@@ -37,7 +37,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const authorName = author.name || 'Author';
 
   return (
-    <article className="container mx-auto max-w-3xl py-12 px-2 animate-in fade-in duration-500">
+    <article className="container mx-auto max-w-4xl py-12 px-2 animate-in fade-in duration-500">
       <header className="mb-8 text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">{post.title}</h1>
         <div className="mt-6 flex justify-center items-center gap-4 text-muted-foreground">
