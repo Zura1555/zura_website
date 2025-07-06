@@ -61,31 +61,39 @@ function mapDocToBlogPost(doc: any): BlogPost {
 
     if (Array.isArray(content)) {
         content.forEach((item, index) => {
-            const value = item.value || '';
-            if (typeof value === 'string' && value) {
-                // Avoid adding image URLs to the summary text
-                if (item.type !== 'images') {
-                    contentText += value + ' ';
-                }
+            let currentValue = item.value || '';
+            
+            // Remove bold markdown from all types except 'code'.
+            if (item.type !== 'code' && typeof currentValue === 'string') {
+                currentValue = currentValue.replace(/\*\*/g, '');
             }
 
+            if (typeof currentValue === 'string' && currentValue) {
+                // Add to summary text, skipping images.
+                if (item.type !== 'images') {
+                    contentText += currentValue + ' ';
+                }
+            }
+            
             switch (item.type) {
                 case 'text':
-                    if (typeof value === 'string') {
-                        markdownContent += value + '\n\n';
+                    if (typeof currentValue === 'string') {
+                        markdownContent += currentValue + '\n\n';
                     }
                     break;
                 case 'quote':
-                    if (typeof value === 'string') {
-                        markdownContent += `> ${value.replace(/\n/g, '\n> ')}\n\n`;
+                    if (typeof currentValue === 'string') {
+                        markdownContent += `> ${currentValue.replace(/\n/g, '\n> ')}\n\n`;
                     }
                     break;
                 case 'code':
-                    if (typeof value === 'string') {
-                        markdownContent += '```\n' + value + '\n```\n\n';
+                    // For code, we use the original, unmodified value.
+                    if (typeof item.value === 'string') {
+                        markdownContent += '```\n' + item.value + '\n```\n\n';
                     }
                     break;
                 case 'images':
+                    // Handle both array of images and single image URL string
                     if (Array.isArray(item.value)) {
                         item.value.forEach((img: { url?: string, name?: string }) => {
                             if (img.url) {
@@ -97,44 +105,40 @@ function mapDocToBlogPost(doc: any): BlogPost {
                     }
                     break;
                 case 'bullet_list_item':
-                    if (typeof value === 'string') {
-                        markdownContent += `* ${value}\n`;
+                    if (typeof currentValue === 'string') {
+                        markdownContent += `* ${currentValue}\n`;
                     }
-                    // Add a newline after the last list item
                     if (index === content.length - 1 || content[index + 1]?.type !== 'bullet_list_item') {
                         markdownContent += '\n';
                     }
                     break;
                 case 'numbered_list_item':
-                    // This is a simplified approach. For proper numbering, we'd need to track the list index.
-                    if (typeof value === 'string') {
-                        markdownContent += `1. ${value}\n`;
+                    if (typeof currentValue === 'string') {
+                        markdownContent += `1. ${currentValue}\n`;
                     }
-                     // Add a newline after the last list item
-                    if (index === content.length - 1 || content[index + 1]?.type !== 'numbered_list_item') {
+                     if (index === content.length - 1 || content[index + 1]?.type !== 'numbered_list_item') {
                         markdownContent += '\n';
                     }
                     break;
                 case 'todo_list_item':
-                    if (typeof value === 'string') {
-                        markdownContent += `* [${item.checked ? 'x' : ' '}] ${value}\n`;
+                    if (typeof currentValue === 'string') {
+                        markdownContent += `* [${item.checked ? 'x' : ' '}] ${currentValue}\n`;
                     }
-                    // Add a newline after the last list item
                     if (index === content.length - 1 || content[index + 1]?.type !== 'todo_list_item') {
                         markdownContent += '\n';
                     }
                     break;
                 default:
-                    if (typeof value === 'string' && value) {
-                        markdownContent += value + '\n\n';
+                    if (typeof currentValue === 'string' && currentValue) {
+                        markdownContent += currentValue + '\n\n';
                     }
                     break;
             }
         });
     } else if (typeof content === 'string') {
         // Fallback for plain string content
-        markdownContent = content;
-        contentText = content;
+        markdownContent = content.replace(/\*\*/g, '');
+        contentText = content.replace(/\*\*/g, '');
     }
 
     const summary = contentText.trim().substring(0, 120) + (contentText.length > 120 ? '...' : '');
