@@ -24,9 +24,27 @@ interface TableOfContentsProps {
   headings: Heading[];
 }
 
+// Helper function to find the full path to a node with a given slug
+const findPathToNode = (nodes: NestedHeading[], slug: string): NestedHeading[] | null => {
+  for (const node of nodes) {
+    if (node.slug === slug) {
+      return [node];
+    }
+    if (node.children.length > 0) {
+        const childPath = findPathToNode(node.children, slug);
+        if (childPath) {
+        return [node, ...childPath];
+        }
+    }
+  }
+  return null;
+};
+
+
 export function TableOfContents({ headings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [nestedHeadings, setNestedHeadings] = useState<NestedHeading[]>([]);
+  const [openStates, setOpenStates] = useState<Record<string, boolean>>({}); // Control collapsible states
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
@@ -66,6 +84,24 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
     return () => observer.current?.disconnect();
   }, [headings]);
+
+  // This effect will automatically expand parent sections when a new heading becomes active
+  useEffect(() => {
+    if (activeId && nestedHeadings.length > 0) {
+      const path = findPathToNode(nestedHeadings, activeId);
+      if (path) {
+        const newOpenStates: Record<string, boolean> = {};
+        // Find all parents in the path that have children and mark them to be opened
+        path.forEach(node => {
+          if (node.children.length > 0) {
+            newOpenStates[node.slug] = true;
+          }
+        });
+        // Merge with existing states to preserve manual interactions
+        setOpenStates(prev => ({ ...prev, ...newOpenStates }));
+      }
+    }
+  }, [activeId, nestedHeadings]);
   
   if (headings.length === 0) {
     return null;
@@ -81,6 +117,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     setActiveId(slug);
   };
 
+  const handleOpenChange = (slug: string, isOpen: boolean) => {
+    setOpenStates(prev => ({ ...prev, [slug]: isOpen }));
+  };
+
   const renderNestedHeadings = (headingsToRender: NestedHeading[], isSublevel = false) => {
     return (
       <ol className={cn("space-y-2", isSublevel ? "pl-4 border-l border-border/50 ml-2 mt-1" : "pl-0")}>
@@ -89,7 +129,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           return (
             <li key={heading.slug}>
               {hasChildren ? (
-                <Collapsible>
+                <Collapsible
+                  open={openStates[heading.slug] || false}
+                  onOpenChange={(isOpen) => handleOpenChange(heading.slug, isOpen)}
+                >
                   <div className="flex items-center justify-between gap-1 group">
                     <a
                       href={`#${heading.slug}`}
