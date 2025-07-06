@@ -89,7 +89,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           return (
             <li key={heading.slug}>
               {hasChildren ? (
-                <Collapsible defaultOpen={heading.level === 1}>
+                <Collapsible>
                   <div className="flex items-center justify-between gap-1 group">
                     <a
                       href={`#${heading.slug}`}
