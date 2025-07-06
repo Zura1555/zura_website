@@ -63,7 +63,10 @@ function mapDocToBlogPost(doc: any): BlogPost {
         content.forEach((item, index) => {
             const value = item.value || '';
             if (typeof value === 'string' && value) {
-                contentText += value + ' ';
+                // Avoid adding image URLs to the summary text
+                if (item.type !== 'images') {
+                    contentText += value + ' ';
+                }
             }
 
             switch (item.type) {
@@ -82,13 +85,15 @@ function mapDocToBlogPost(doc: any): BlogPost {
                         markdownContent += '```\n' + value + '\n```\n\n';
                     }
                     break;
-                case 'images': // Changed from 'image' to 'images' to match corrected_old_string
+                case 'images':
                     if (Array.isArray(item.value)) {
                         item.value.forEach((img: { url?: string, name?: string }) => {
                             if (img.url) {
                                 markdownContent += `![${img.name || ''}](${fixImageUrl(img.url)})\n\n`;
                             }
                         });
+                    } else if (typeof item.value === 'string' && item.value) {
+                        markdownContent += `![Image from CMS](${fixImageUrl(item.value)})\n\n`;
                     }
                     break;
                 case 'bullet_list_item':
