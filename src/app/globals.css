@@ -140,6 +140,16 @@
     margin-bottom: 1.5em;
   }
 
+  .prose ul {
+    list-style-type: disc;
+    list-style-position: outside;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+  }
+
   .prose li {
     padding-left: 0.5em;
     margin-bottom: 0.6em;
