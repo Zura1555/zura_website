@@ -134,6 +134,14 @@ function mapDocToBlogPost(doc: any): BlogPost {
 
     const summary = contentText.trim().substring(0, 120) + (contentText.length > 120 ? '...' : '');
 
+    const headerImageData = data.header_image;
+    let headerImageUrl = '';
+    if (Array.isArray(headerImageData) && headerImageData.length > 0 && typeof headerImageData[0].url === 'string') {
+        headerImageUrl = headerImageData[0].url;
+    } else if (typeof headerImageData === 'string') {
+        headerImageUrl = headerImageData;
+    }
+
     return {
         slug: slug,
         title: title,
@@ -146,7 +154,7 @@ function mapDocToBlogPost(doc: any): BlogPost {
             avatar: 'https://placehold.co/100x100.png',
             aiHint: 'person avatar'
         },
-        image: fixImageUrl(data.header_image),
+        image: fixImageUrl(headerImageUrl),
         aiHint: title.toLowerCase().split(' ').slice(0, 2).join(' ') || 'abstract',
     };
 }
