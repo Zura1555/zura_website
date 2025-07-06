@@ -59,12 +59,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </div>
       </header>
-      <div className="relative my-12 h-80 w-full overflow-hidden rounded-lg shadow-lg">
+      <div className="my-12 flex justify-center">
         <Image
           src={post.image}
           alt={post.title || 'Blog post image'}
-          fill
-          className="object-cover"
+          width={680}
+          height={450}
+          className="rounded-lg shadow-lg object-cover"
           data-ai-hint={post.aiHint || 'blog post'}
           priority
         />
