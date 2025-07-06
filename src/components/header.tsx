@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -25,8 +25,15 @@ export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
 
   const NavLink = ({ href, label }: { href: string; label: string; }) => {
-    const isActive = href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#services";
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+
+    const isActive = isClient && (href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#services");
     const isBlog = label === "Blog";
+    
     return (
       <Link
         href={href}
