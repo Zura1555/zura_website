@@ -1,42 +1,40 @@
 import ReactMarkdown from 'react-markdown';
 
 const markdownContent = `
-# Heading 1: The Quick Brown Fox
+# Heading 1
+This is a paragraph of text. It's designed to give you a feel for the body copy. **This part is bold**, and *this part is emphasized (italic)*. The quick brown fox jumps over the lazy dog.
 
-This is a paragraph of text to see how the body copy looks. It's important for readability and overall aesthetic. The quick brown fox jumps over the lazy dog.
+## Heading 2
+Here's a bit more content under a level two heading.
 
-## Heading 2: Jumps Over the Lazy Dog
+### Heading 3
+Now we're getting into the smaller headings.
 
-Here is some more text. This time, we're introducing a list to see how that renders.
+#### Heading 4
+This is a level four heading.
 
-- Unordered list item one
-- Unordered list item two
-  - A nested list item
-- Unordered list item three
+##### Heading 5
+And a level five.
 
-And now for a numbered list:
-
-1.  Ordered list item one
-2.  Ordered list item two
-3.  Ordered list item three
-
-> This is a blockquote. It's often used for highlighting a quote or a key piece of information. It should stand out from the rest of the text.
-
-Here is some inline \`code\`. And below is a full code block:
-
-\`\`\`javascript
-function greet(name) {
-  console.log('Hello, ' + name + '!');
-}
-
-greet('World');
-\`\`\`
-
-And finally, a horizontal rule to separate sections.
+###### Heading 6
+Finally, a level six heading, which is often the smallest.
 
 ---
 
-This is the end of the style guide.
+> This is a blockquote. It's perfect for highlighting a key piece of information or a quote from a source. It should stand out visually from the rest of the content.
+
+Here are some lists.
+
+**Unordered List:**
+- Item one
+- Item two
+  - A nested item
+- Item three
+
+**Ordered List:**
+1. First item
+2. Second item
+3. Third item
 `;
 
 export default function StyleGuidePage() {
