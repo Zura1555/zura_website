@@ -1,7 +1,18 @@
+import type { BlogPost, Album, StrapiArticle, StrapiAuthor, StrapiCategory } from './types';
+import axios from 'axios';
 
-import type { BlogPost, Album } from './types';
-import { db } from './firebase';
-import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
+// Strapi API configuration
+const STRAPI_API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'https://uplifting-champion-8a8387e8ac.strapiapp.com/api';
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+
+// Create axios instance with default headers
+const strapiApi = axios.create({
+  baseURL: STRAPI_API_URL,
+  headers: {
+    'Authorization': `Bearer ${STRAPI_API_TOKEN}`,
+    'Content-Type': 'application/json',
+  },
+});
 
 const galleryAlbums: Album[] = [
     {
@@ -37,7 +48,7 @@ const galleryAlbums: Album[] = [
 ];
 
 function fixImageUrl(url: unknown): string {
-    const placeholder = 'https://placehold.co/800x600.png';
+    const placeholder = 'https://placehold.co/1000x600.png';
     if (typeof url !== 'string' || url.trim() === '') {
         return placeholder;
     }
@@ -50,171 +61,190 @@ function fixImageUrl(url: unknown): string {
 }
 
 
-function mapDocToBlogPost(doc: any): BlogPost {
-    const data = doc.data();
-    const slug = doc.id;
-    const title = data.name || 'Untitled Post';
-    const content = data.content;
+// Helper function to process Strapi blocks into markdown content
+function processBlocks(blocks: any[]): { content: string; summary: string } {
+  let markdownContent = '';
+  let textContent = '';
 
-    let contentText = ''; // Used for generating a summary
-    let markdownContent = '';
+  if (!Array.isArray(blocks)) {
+    return { content: '', summary: '' };
+  }
 
-    if (Array.isArray(content)) {
-        content.forEach((item, index) => {
-            let currentValue = item.value || '';
-            
-            // Remove bold markdown from all types except 'code'.
-            if (item.type !== 'code' && typeof currentValue === 'string') {
-                currentValue = currentValue.replace(/\*\*/g, '');
+  blocks.forEach((block) => {
+    switch (block.__component) {
+      case 'shared.rich-text':
+        if (block.body) {
+          markdownContent += block.body + '\n\n';
+          textContent += block.body.replace(/[#*_~`]/g, '') + ' ';
+        }
+        break;
+      case 'shared.quote':
+        if (block.body) {
+          markdownContent += `> ${block.body}\n\n`;
+          if (block.author) {
+            markdownContent += `*— ${block.author}*\n\n`;
+          }
+          textContent += block.body + ' ';
+        }
+        break;
+      case 'shared.media':
+        if (block.file?.url) {
+          const imageUrl = block.file.url.startsWith('http') ? block.file.url : `${STRAPI_API_URL.replace('/api', '')}${block.file.url}`;
+          markdownContent += `![${block.file.alternativeText || 'Image'}](${imageUrl})\n\n`;
+        }
+        break;
+      case 'shared.slider':
+        if (block.files && Array.isArray(block.files)) {
+          markdownContent += '\n<div class="slider-gallery">\n\n';
+          block.files.forEach((file: any, index: number) => {
+            if (file.url) {
+              const imageUrl = file.url.startsWith('http') ? file.url : `${STRAPI_API_URL.replace('/api', '')}${file.url}`;
+              markdownContent += `![${file.alternativeText || `Slider Image ${index + 1}`}](${imageUrl})\n\n`;
             }
-
-            if (typeof currentValue === 'string' && currentValue) {
-                // Add to summary text, skipping images.
-                if (item.type !== 'images') {
-                    contentText += currentValue + ' ';
-                }
-            }
-            
-            switch (item.type) {
-                case 'text':
-                    if (typeof currentValue === 'string') {
-                        markdownContent += currentValue + '\n\n';
-                    }
-                    break;
-                case 'quote':
-                    if (typeof currentValue === 'string') {
-                        markdownContent += `> ${currentValue.replace(/\n/g, '\n> ')}\n\n`;
-                    }
-                    break;
-                case 'code':
-                    // For code, we use the original, unmodified value.
-                    if (typeof item.value === 'string') {
-                        markdownContent += '```\n' + item.value + '\n```\n\n';
-                    }
-                    break;
-                case 'images':
-                    // Handle both array of images and single image URL string
-                    if (Array.isArray(item.value)) {
-                        item.value.forEach((img: { url?: string, name?: string }) => {
-                            if (img.url) {
-                                markdownContent += `![${img.name || ''}](${fixImageUrl(img.url)})\n\n`;
-                            }
-                        });
-                    } else if (typeof item.value === 'string' && item.value) {
-                        markdownContent += `![Image from CMS](${fixImageUrl(item.value)})\n\n`;
-                    }
-                    break;
-                case 'bullet_list_item':
-                    if (typeof currentValue === 'string') {
-                        markdownContent += `* ${currentValue}\n`;
-                    }
-                    if (index === content.length - 1 || content[index + 1]?.type !== 'bullet_list_item') {
-                        markdownContent += '\n';
-                    }
-                    break;
-                case 'numbered_list_item':
-                    if (typeof currentValue === 'string') {
-                        markdownContent += `1. ${currentValue}\n`;
-                    }
-                     if (index === content.length - 1 || content[index + 1]?.type !== 'numbered_list_item') {
-                        markdownContent += '\n';
-                    }
-                    break;
-                case 'todo_list_item':
-                    if (typeof currentValue === 'string') {
-                        markdownContent += `* [${item.checked ? 'x' : ' '}] ${currentValue}\n`;
-                    }
-                    if (index === content.length - 1 || content[index + 1]?.type !== 'todo_list_item') {
-                        markdownContent += '\n';
-                    }
-                    break;
-                default:
-                    if (typeof currentValue === 'string' && currentValue) {
-                        markdownContent += currentValue + '\n\n';
-                    }
-                    break;
-            }
-        });
-    } else if (typeof content === 'string') {
-        // Fallback for plain string content
-        markdownContent = content.replace(/\*\*/g, '');
-        contentText = content.replace(/\*\*/g, '');
+          });
+          markdownContent += '</div>\n\n';
+        }
+        break;
+      default:
+        // Handle any other block types generically
+        if (block.body || block.text) {
+          const content = block.body || block.text;
+          markdownContent += content + '\n\n';
+          textContent += content.replace(/[#*_~`]/g, '') + ' ';
+        }
+        break;
     }
+  });
 
-    const summary = contentText.trim().substring(0, 120) + (contentText.length > 120 ? '...' : '');
+  const summary = textContent.trim().substring(0, 120) + (textContent.trim().length > 120 ? '...' : '');
+  
+  return {
+    content: markdownContent.trim(),
+    summary: summary || 'No summary available.'
+  };
+}
 
-    const headerImageData = data.header_image;
-    let headerImageUrl = '';
-    if (Array.isArray(headerImageData) && headerImageData.length > 0 && typeof headerImageData[0].url === 'string') {
-        headerImageUrl = headerImageData[0].url;
-    } else if (typeof headerImageData === 'string') {
-        headerImageUrl = headerImageData;
-    }
+// Helper function to convert Strapi article to BlogPost
+function mapStrapiArticleToBlogPost(article: StrapiArticle): BlogPost {
+  const { content, summary } = processBlocks(article.blocks || []);
 
-    return {
-        slug: slug,
-        title: title,
-        date: data.publish_date?.toDate ? data.publish_date.toDate().toISOString() : new Date().toISOString(),
-        summary: summary,
-        content: markdownContent.trim(),
-        category: data.category,
-        author: {
-            name: 'Zura',
-            avatar: 'https://placehold.co/100x100.png',
-            aiHint: 'person avatar'
-        },
-        image: fixImageUrl(headerImageUrl),
-        aiHint: title.toLowerCase().split(' ').slice(0, 2).join(' ') || 'abstract',
-    };
+  // Handle cover image URL
+  let coverImageUrl = 'https://placehold.co/1000x600.png';
+  if (article.cover?.url) {
+    coverImageUrl = article.cover.url.startsWith('http') 
+      ? article.cover.url 
+      : `${STRAPI_API_URL.replace('/api', '')}${article.cover.url}`;
+  }
+
+  // Handle author avatar URL
+  let authorAvatar = 'https://placehold.co/100x100.png';
+  if (article.author?.avatar?.url) {
+    authorAvatar = article.author.avatar.url.startsWith('http')
+      ? article.author.avatar.url
+      : `${STRAPI_API_URL.replace('/api', '')}${article.author.avatar.url}`;
+  }
+
+  return {
+    slug: article.slug,
+    title: article.title || 'Untitled Post',
+    date: article.publishedAt || article.createdAt,
+    summary: article.description || summary,
+    content: content || 'No content available.',
+    category: article.category?.name,
+    author: {
+      name: article.author?.name || 'Zura',
+      avatar: authorAvatar,
+      aiHint: 'person avatar'
+    },
+    image: coverImageUrl,
+    aiHint: article.title?.toLowerCase().split(' ').slice(0, 2).join(' ') || 'blog post',
+  };
 }
 
 
 export const getBlogPosts = async (): Promise<BlogPost[]> => {
-  console.log("Attempting to fetch blog posts from Firestore...");
+  console.log("Attempting to fetch blog posts from Strapi...");
   try {
-    const postsCollection = collection(db, 'blogPosts');
-    const q = query(postsCollection, orderBy('publish_date', 'desc'));
-    const querySnapshot = await getDocs(q);
+    const response = await strapiApi.get('/articles', {
+      params: {
+        populate: {
+          cover: true,
+          author: {
+            populate: ['avatar']
+          },
+          category: true,
+          blocks: {
+            populate: '*'
+          }
+        },
+        sort: 'publishedAt:desc',
+        'publicationState': 'live'
+      }
+    });
 
-    console.log(`Found ${querySnapshot.docs.length} blog post(s) matching query.`);
+    const articles: StrapiArticle[] = response.data.data;
+    console.log(`Found ${articles.length} blog post(s) from Strapi.`);
 
-    if (querySnapshot.docs.length === 0) {
-      console.log("If you have posts in Firestore, check the following:");
-      console.log("1. Your 'blogPosts' collection exists and has documents.");
-      console.log("2. Your Firestore security rules allow read access to 'blogPosts'.");
-      console.log("3. Each document has a 'publish_date' field of type Timestamp.");
+    if (articles.length === 0) {
+      console.log("No published articles found in Strapi. Check:");
+      console.log("1. Your Strapi server is running and accessible.");
+      console.log("2. You have published articles in your Strapi admin.");
+      console.log("3. The API token has proper permissions.");
     }
 
-    const posts = querySnapshot.docs.map(mapDocToBlogPost);
+    const posts = articles.map(mapStrapiArticleToBlogPost);
     return posts;
 
   } catch (error) {
-    console.error("\n--- ERROR FETCHING BLOG POSTS ---");
+    console.error("\n--- ERROR FETCHING BLOG POSTS FROM STRAPI ---");
     console.error(error);
-    console.error("This could be due to incorrect Firebase security rules or a missing Firestore index for 'publish_date' on the 'blogPosts' collection.");
-    console.error("Please ensure your rules allow public read access to the 'blogPosts' collection.");
-    console.error("-----------------------------------\n");
+    if (axios.isAxiosError(error)) {
+      console.error(`Status: ${error.response?.status}`);
+      console.error(`Response:`, error.response?.data);
+    }
+    console.error("Check your Strapi server connection and API token.");
+    console.error("-------------------------------------------------\n");
     return [];
   }
 };
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
-  console.log(`Attempting to fetch blog post with slug: ${slug}`);
+  console.log(`Attempting to fetch blog post with slug: ${slug} from Strapi`);
   try {
-    const docRef = doc(db, 'blogPosts', slug);
-    const docSnap = await getDoc(docRef);
+    const response = await strapiApi.get('/articles', {
+      params: {
+        filters: { slug },
+        populate: {
+          cover: true,
+          author: {
+            populate: ['avatar']
+          },
+          category: true,
+          blocks: {
+            populate: '*'
+          }
+        },
+        'publicationState': 'live'
+      }
+    });
 
-    if (docSnap.exists()) {
-      console.log(`Found document with slug '${slug}':`, docSnap.data());
-      return mapDocToBlogPost(docSnap);
+    const articles: StrapiArticle[] = response.data.data;
+
+    if (articles.length > 0) {
+      console.log(`Found blog post with slug: ${slug}`);
+      return mapStrapiArticleToBlogPost(articles[0]);
     } else {
-        console.log(`No blog post found with slug: ${slug}`);
-        return undefined;
+      console.log(`No blog post found with slug: ${slug}`);
+      return undefined;
     }
   } catch (error) {
-    console.error(`\n--- ERROR FETCHING BLOG POST with slug ${slug} ---`);
+    console.error('\n--- ERROR FETCHING BLOG POST from Strapi with slug ' + slug + ' ---');
     console.error(error);
-    console.error("Check your Firestore security rules and ensure the document exists.");
+    if (axios.isAxiosError(error)) {
+      console.error(`Status: ${error.response?.status}`);
+      console.error(`Response:`, error.response?.data);
+    }
+    console.error("Check your Strapi server connection and API token.");
     console.error("-----------------------------------------------------\n");
     return undefined;
   }
@@ -222,4 +252,57 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefi
 
 export const getGalleryAlbums = async (): Promise<Album[]> => {
     return new Promise(resolve => setTimeout(() => resolve(galleryAlbums), 500));
+};
+
+// Additional Strapi helper functions
+export const getCategories = async (): Promise<StrapiCategory[]> => {
+  try {
+    const response = await strapiApi.get('/categories');
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
+
+export const getAuthors = async (): Promise<StrapiAuthor[]> => {
+  try {
+    const response = await strapiApi.get('/authors', {
+      params: {
+        populate: ['avatar']
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching authors:', error);
+    return [];
+  }
+};
+
+export const getBlogPostsByCategory = async (categorySlug: string): Promise<BlogPost[]> => {
+  try {
+    const response = await strapiApi.get('/articles', {
+      params: {
+        filters: { category: { slug: categorySlug } },
+        populate: {
+          cover: true,
+          author: {
+            populate: ['avatar']
+          },
+          category: true,
+          blocks: {
+            populate: '*'
+          }
+        },
+        sort: 'publishedAt:desc',
+        'publicationState': 'live'
+      }
+    });
+
+    const articles: StrapiArticle[] = response.data.data;
+    return articles.map(mapStrapiArticleToBlogPost);
+  } catch (error) {
+    console.error(`Error fetching posts for category ${categorySlug}:`, error);
+    return [];
+  }
 };

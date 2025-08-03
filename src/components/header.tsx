@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const navLinksLeft = [
   { href: "/", label: "Home" },
-  { href: "/#services", label: "Services" },
+  { href: "/milestones", label: "Milestones" },
 ];
 const navLinksRight = [
   { href: "/blog", label: "Blog" },
@@ -31,7 +31,7 @@ export default function Header() {
       setIsClient(true);
     }, []);
 
-    const isActive = isClient && (href === "/" ? pathname === href : pathname.startsWith(href) && href !== "/#services");
+    const isActive = isClient && (href === "/" ? pathname === href : pathname.startsWith(href));
     const isBlog = label === "Blog";
     
     return (

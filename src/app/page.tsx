@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, Download, X } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 import { JourneyTimeline } from "@/components/journey-timeline";
+import WaveCard from "@/components/nurui/wave-card";
+import { FlexibleBlogGrid } from "@/components/flexible-blog-grid";
 
 export const dynamic = 'force-dynamic';
 
@@ -60,7 +62,7 @@ const experiences = [
 
 export default async function Home() {
   const posts = await getBlogPosts();
-  const latestPosts = posts.slice(0, 3);
+  const latestPosts = posts.slice(0, 10); // Allow up to 10 posts for flexibility
   
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
@@ -70,20 +72,44 @@ export default async function Home() {
             {/* Left Column */}
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
-                  <h1 className="font-headline text-5xl md:text-6xl font-bold tracking-tight">
-                      I'm Tuan <span className="bg-primary text-primary-foreground px-3 py-1 rounded-lg">(Zura),</span> <br />Project Delivery
+                  <h1 className="font-luckiest text-5xl md:text-6xl tracking-tight">
+                      I'm Tuan <span className="bg-primary text-primary-foreground px-3 py-1 rounded-lg">(Zura)</span>
                   </h1>
               </div>
               
               <p className="mt-6 max-w-md text-lg text-muted-foreground">
-                With a technologist's curiosity, I love managing diverse projects. My passion is for continuous learning and exploring new tech. I thrive on this variety, building the versatile skillset required to be a true 'Swiss army knife'.
+                You've found my little corner of the internet.
+              </p>
+              <p className="mt-4 max-w-md text-lg text-muted-foreground">
+                By day, I work as IT Project Delivery at{" "}
+                <a 
+                  href="https://maisonrmi.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-bold text-primary hover:text-primary/80 relative inline-block transition-colors duration-300 group"
+                >
+                  Maison RMI
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                . By night, I'm a hobbyist vibe-coder and a{" "}
+                <span className="relative">
+                  <span className="line-through text-primary">not very active</span>
+                </span>{" "}
+                content blogger.
+              </p>
+              <p className="mt-4 max-w-md text-lg text-muted-foreground">
+                Think of this as a collection of my findings, from project insights to project experiments.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Button asChild size="lg" variant="outline" className="rounded-lg px-8 py-3">
                   <Link href="/about">About</Link>
                 </Button>
-                <Button asChild size="lg" className="rounded-lg px-8 py-3">
-                  <a href="/zura_cv.pdf" download>Download CV <Download className="ml-2" /></a>
+                <Button asChild size="lg" className="rounded-lg px-8 py-3 btn-border-animation">
+                  <a href="/zura_cv.pdf" download>
+                    <span className="border-left"></span>
+                    <span className="border-right"></span>
+                    Download CV <Download className="ml-2" />
+                  </a>
                 </Button>
               </div>
             </div>
@@ -96,7 +122,7 @@ export default async function Home() {
                   {/* Image */}
                   <div className="absolute inset-5">
                       <Image
-                          src="https://placehold.co/400x500"
+                          src="https://ik.imagekit.io/zmblm08qi/Blog%20Header%20Image.png?updatedAt=1754142363015"
                           alt="Portrait of Zura"
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -217,52 +243,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestPosts.length > 0 ? (
-              latestPosts.map((post) => (
-                <Link href={`/blog/${post.slug}`} key={post.slug} className="group block">
-                  <div className="relative transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:-translate-y-1">
-                    <div className="relative h-56 w-full rounded-t-3xl overflow-hidden">
-                      <Image
-                        src={post.image}
-                        alt={post.title || 'Blog post image'}
-                        fill
-                        className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-                        data-ai-hint={post.aiHint}
-                      />
-                      <div className="absolute top-4 right-4 z-10 h-12 w-12 rounded-full bg-primary flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                        <ArrowUpRight className="h-6 w-6 text-primary-foreground" />
-                      </div>
-                    </div>
-                    <div className="bg-primary p-6 rounded-b-3xl text-primary-foreground">
-                      <h3 className="font-headline text-xl font-semibold">
-                        {post.title}
-                      </h3>
-                      <p className="mt-2 text-sm text-primary-foreground/80 line-clamp-2">{post.summary}</p>
-                      <div className="flex justify-between items-center mt-4">
-                          {post.category && (
-                              <Badge variant="secondary" className="bg-primary-foreground/20 text-primary-foreground border-transparent">
-                                  {post.category}
-                              </Badge>
-                          )}
-                          <time className="block text-xs font-medium text-primary-foreground/70 ml-auto">
-                            {new Date(post.date).toLocaleDateString("en-US", {
-                              day: 'numeric',
-                              month: 'long',
-                              year: 'numeric',
-                            })}
-                          </time>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p className="col-span-full text-center text-muted-foreground">
-                No blog posts found. Check your Firestore database and ensure your security rules allow read access to the 'blog' collection.
-              </p>
-            )}
-          </div>
+          <FlexibleBlogGrid posts={latestPosts} />
         </div>
       </section>
     </div>

@@ -10,9 +10,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['"Be Vietnam Pro"', 'sans-serif'],
-        headline: ['"Be Vietnam Pro"', 'sans-serif'],
-        'nunito-sans': ['"Nunito Sans"', 'sans-serif'],
+        body: ['M PLUS Rounded 1c', 'sans-serif'],
+        headline: ['M PLUS Rounded 1c', 'sans-serif'],
+        'luckiest': ['Luckiest Guy', 'cursive'],
+        mono: ['Intel One Mono', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',

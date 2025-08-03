@@ -4,10 +4,11 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import PageTransition from '@/components/page-transition';
 
 export const metadata: Metadata = {
-  title: "Zura | Project Delivery",
-  description: "With a technologist's curiosity, I love managing diverse projects and exploring new tech.",
+  title: "Zura",
+  description: "You've found my little corner of the internet. By day, I work at Maison RMI. By night, I'm a hobbyist vibe-coder and a content blogger. Think of this as a collection of my findings, from project insights to project experiments.",
 };
 
 export default function RootLayout({
@@ -18,14 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('min-h-screen font-body antialiased bg-background')}>
         <div className="relative flex min-h-screen flex-col">
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </main>
           <Footer />
         </div>
         <Toaster />

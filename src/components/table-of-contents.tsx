@@ -45,6 +45,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [nestedHeadings, setNestedHeadings] = useState<NestedHeading[]>([]);
   const [openStates, setOpenStates] = useState<Record<string, boolean>>({}); // Control collapsible states
+  const [activeAndAboveIds, setActiveAndAboveIds] = useState<Set<string>>(new Set());
+  const [readingProgress, setReadingProgress] = useState(0);
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
@@ -71,6 +73,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       for (const entry of entries) {
         if (entry.isIntersecting) {
           setActiveId(entry.target.id);
+          // Find the index of the active heading and highlight it and all above it
+          const activeIndex = headings.findIndex(h => h.slug === entry.target.id);
+          if (activeIndex !== -1) {
+            const highlightedIds = new Set(headings.slice(0, activeIndex + 1).map(h => h.slug));
+            setActiveAndAboveIds(highlightedIds);
+          }
         }
       }
     };
@@ -84,6 +92,40 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
     return () => observer.current?.disconnect();
   }, [headings]);
+
+  // Track reading progress
+  useEffect(() => {
+    const updateProgress = () => {
+      const article = document.querySelector('article');
+      if (!article) return;
+
+      const articleRect = article.getBoundingClientRect();
+      const articleTop = articleRect.top + window.scrollY;
+      const articleHeight = articleRect.height;
+      const windowHeight = window.innerHeight;
+      const scrollTop = window.scrollY;
+
+      // Calculate progress based on how much of the article has been scrolled through
+      const articleStart = articleTop - windowHeight * 0.3; // Start counting when article is 30% visible
+      const articleEnd = articleTop + articleHeight - windowHeight * 0.7; // End when article is 70% past
+      
+      let progress = 0;
+      if (scrollTop > articleStart) {
+        progress = Math.min(100, Math.max(0, (scrollTop - articleStart) / (articleEnd - articleStart) * 100));
+      }
+      
+      setReadingProgress(progress);
+    };
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress(); // Initial calculation
+
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    };
+  }, []);
 
   // This effect will automatically expand parent sections when a new heading becomes active
   useEffect(() => {
@@ -138,17 +180,20 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                       href={`#${heading.slug}`}
                       onClick={(e) => handleLinkClick(e, heading.slug)}
                       className={cn(
-                        'flex-1 text-sm py-1 px-2 rounded-md transition-colors font-medium',
-                        activeId === heading.slug
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:bg-muted'
+                        'flex-1 text-xs py-1 px-2 rounded-md transition-colors font-medium truncate',
+                        activeAndAboveIds.has(heading.slug)
+                          ? 'text-primary font-semibold'
+                          : 'text-muted-foreground hover:text-foreground'
                       )}
                     >
                       {heading.text}
                     </a>
                     <CollapsibleTrigger asChild>
                       <button className="p-1 rounded-md hover:bg-muted -mr-1">
-                        <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200 text-muted-foreground group-data-[state=open]:rotate-90" />
+                        <ChevronRight className={cn(
+                          "h-4 w-4 shrink-0 transition-transform duration-200 text-muted-foreground",
+                          openStates[heading.slug] ? "rotate-90" : "rotate-0"
+                        )} />
                       </button>
                     </CollapsibleTrigger>
                   </div>
@@ -161,10 +206,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                   href={`#${heading.slug}`}
                   onClick={(e) => handleLinkClick(e, heading.slug)}
                   className={cn(
-                    'block text-sm py-1 px-2 rounded-md transition-colors',
-                    activeId === heading.slug
-                      ? 'bg-primary text-primary-foreground font-semibold'
-                      : 'text-muted-foreground hover:bg-muted'
+                    'block text-xs py-1 px-2 rounded-md transition-colors truncate',
+                    activeAndAboveIds.has(heading.slug)
+                      ? 'text-primary font-semibold'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
                   {heading.text}
@@ -181,7 +226,17 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     <aside className="sticky top-24 hidden lg:block" aria-label="Table of contents">
       <h2 className="font-headline text-lg font-semibold mb-3">On this page</h2>
       <div className="border-t border-border mb-4"></div>
-      <div className="max-h-[calc(100vh-12rem)] overflow-y-auto pr-2">
+      {/* Reading Progress Bar */}
+      <div className="w-full bg-muted/30 rounded-full h-1.5 mb-4 overflow-hidden">
+        <div
+          className="bg-primary h-1.5 rounded-full transition-all duration-300 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        ></div>
+      </div>
+      <div className="text-xs text-muted-foreground mb-4 text-center">
+        {Math.round(readingProgress)}% complete
+      </div>
+      <div className="max-h-[calc(100vh-12rem)] overflow-y-hidden pr-2">
         {renderNestedHeadings(nestedHeadings)}
       </div>
     </aside>

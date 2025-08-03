@@ -3,6 +3,7 @@ export interface BlogPost {
   title: string;
   date: string;
   summary: string;
+  description?: string;
   content: string;
   author: {
     name: string;
@@ -12,6 +13,59 @@ export interface BlogPost {
   image: string;
   aiHint: string;
   category?: string;
+}
+
+// Strapi-specific types
+export interface StrapiArticle {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  slug: string;
+  cover?: {
+    url: string;
+    alternativeText?: string;
+  };
+  author?: {
+    name: string;
+    email: string;
+    avatar?: {
+      url: string;
+    };
+  };
+  category?: {
+    name: string;
+    slug: string;
+  };
+  blocks?: any[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface StrapiAuthor {
+  id: number;
+  documentId: string;
+  name: string;
+  email: string;
+  avatar?: {
+    url: string;
+    alternativeText?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface StrapiCategory {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface Album {
