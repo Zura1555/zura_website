@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['M PLUS Rounded 1c', 'sans-serif'],
-        headline: ['M PLUS Rounded 1c', 'sans-serif'],
+        body: ['Sora', 'sans-serif'],
+        headline: ['Sora', 'sans-serif'],
         'luckiest': ['Luckiest Guy', 'cursive'],
         mono: ['Intel One Mono', 'monospace'],
       },
@@ -45,6 +45,9 @@ export default {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
+        },
+        yellow: {
+          DEFAULT: '#FFD700',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

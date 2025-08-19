@@ -41,7 +41,7 @@ export const InfoCard = ({
   textColor = "#f5f5f5",
   hoverTextColor = "#242424",
   fontFamily = "'Roboto Mono', monospace",
-  rtlFontFamily = "'Montserrat', sans-serif",
+  rtlFontFamily = "'Sora', sans-serif",
   effectBgColor = "#80eeb4",
   contentPadding = "10px 16px",
   className

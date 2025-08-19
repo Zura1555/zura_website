@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&family=Luckiest+Guy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -180,6 +181,33 @@
   .prose h6 {
     font-weight: 700;
     line-height: 1.3;
+  }
+
+  /* Yellow color and animated underline for blog h2 only */
+  .prose h2 {
+    position: relative;
+    color: #FFD700; /* Yellow color */
+    display: inline-block;
+  }
+
+  .prose h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 86px;
+    height: 3px;
+    background-color: #FFD700; /* Yellow color */
+    transition: width 0.3s ease;
+  }
+
+  .prose h2:hover::after {
+    width: 100%;
+  }
+
+  /* Yellow color only for other blog headings (no animation) */
+  .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: #FFD700; /* Yellow color */
   }
 
   .prose h1 { font-size: 2.472rem; }

@@ -9,6 +9,7 @@ import { getBlogPosts } from "@/lib/cms";
 import { JourneyTimeline } from "@/components/journey-timeline";
 import WaveCard from "@/components/nurui/wave-card";
 import { FlexibleBlogGrid } from "@/components/flexible-blog-grid";
+import { GradientBars } from "@/components/nurui";
 
 export const dynamic = 'force-dynamic';
 
@@ -66,8 +67,10 @@ export default async function Home() {
   
   return (
     <div className="overflow-x-clip animate-in fade-in duration-700">
-      <section id="home" className="px-4">
-        <div className="container mx-auto max-w-5xl py-16 sm:py-24">
+      <section id="home" className="px-4 relative">
+        {/* Gradient Bars Background */}
+        <GradientBars bars={15} colors={['#3ca2faD9', 'transparent']} />
+        <div className="container mx-auto max-w-5xl py-16 sm:py-24 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left Column */}
             <div className="flex flex-col items-start text-left">

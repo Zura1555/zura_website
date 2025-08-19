@@ -224,7 +224,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   
   return (
     <aside className="sticky top-24 hidden lg:block" aria-label="Table of contents">
-      <h2 className="font-headline text-lg font-semibold mb-3">On this page</h2>
+              <h2 className="font-headline text-lg font-semibold mb-3">On this page</h2>
       <div className="border-t border-border mb-4"></div>
       {/* Reading Progress Bar */}
       <div className="w-full bg-muted/30 rounded-full h-1.5 mb-4 overflow-hidden">
