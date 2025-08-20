@@ -15,7 +15,6 @@ const navLinksLeft = [
 const navLinksRight = [
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
-  { href: "/style-guide", label: "Style Guide" },
 ];
 const allNavLinks = [...navLinksLeft, ...navLinksRight];
 

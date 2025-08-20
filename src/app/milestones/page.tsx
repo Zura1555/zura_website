@@ -104,7 +104,7 @@ function MilestoneItem({
                     {' '}
                     <a 
                       href={feature.learnMoreLink}
-                      className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+                      className="text-primary hover:text-primary/80 underline underline-offset-[4.2px] transition-colors font-medium"
                     >
                       Learn more
                     </a>

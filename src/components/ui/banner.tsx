@@ -32,9 +32,9 @@ const BlogBanner: React.FC<BlogBannerProps> = ({
       <div className="mx-auto text-center" style={{ maxWidth: '866px' }}>
         {/* Breadcrumbs */}
         <nav className="text-sm text-yellow-500 mb-6 font-medium">
-          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/" className="hover:underline font-medium underline-offset-[4.2px]">Home</Link>
           <span className="mx-2">»</span>
-          <Link href="/blog" className="hover:underline">Blog</Link>
+          <Link href="/blog" className="hover:underline font-medium underline-offset-[4.2px]">Blog</Link>
           <span className="mx-2">»</span>
           <span className="text-yellow-400">{title}</span>
         </nav>

@@ -258,12 +258,12 @@
   }
 
   .prose blockquote {
-    font-size: 1.2rem;
-    font-style: italic;
+    font-size: 17px;
+    font-style: normal;
     margin-top: 2em;
-    margin-bottom: 2em;
+    margin-bottom: 0;
     margin-left: 1em;
-    padding: 1em 1.5em;
+    padding: 16px 24px;
     border-left: 4px solid hsl(var(--border));
     color: hsl(var(--muted-foreground));
   }
@@ -300,6 +300,8 @@
   .prose a {
     text-decoration: underline;
     color: hsl(var(--primary));
+    font-weight: 500;
+    text-underline-offset: 4.2px;
   }
 
   .prose hr {

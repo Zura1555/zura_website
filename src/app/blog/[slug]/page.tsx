@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             <div
-              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:rounded-r-md prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-pre:border"
+              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-img:w-[80%] prose-img:h-auto prose-img:mx-auto prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-pre:border"
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -104,18 +104,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   h5: renderHeading(5),
                   h6: renderHeading(6),
                   img: ({ src, alt, ...props }) => (
-                    <Image
-                      src={src || ''}
-                      alt={alt || 'Blog image'}
-                      width={800}
-                      height={400}
-                      className="rounded-lg shadow-md w-full h-auto"
-                      style={{ maxHeight: '500px', objectFit: 'cover' }}
-                    />
+                    <div className="flex justify-center">
+                      <Image
+                        src={src || ''}
+                        alt={alt || 'Blog image'}
+                        width={800}
+                        height={400}
+                        className="rounded-lg shadow-md w-[80%] h-auto"
+                        style={{ maxHeight: '500px', objectFit: 'cover' }}
+                      />
+                    </div>
                   ),
                   blockquote: ({ children, ...props }) => (
                     <blockquote
-                      className="border-l-4 border-primary bg-muted/50 px-4 py-2 rounded-r-md my-4 italic text-muted-foreground"
+                      className="border-l-4 border-primary bg-muted/50 rounded-r-md text-muted-foreground"
+                      style={{ fontSize: '17px', fontStyle: 'normal', padding: '16px 24px', marginBottom: '0' }}
                       {...props}
                     >
                       {children}
