@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             <div
-              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-img:w-[80%] prose-img:h-auto prose-img:mx-auto prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-pre:border"
+              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-img:w-[80%] prose-img:h-auto prose-img:mx-auto prose-img:block prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-pre:border"
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -104,16 +104,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   h5: renderHeading(5),
                   h6: renderHeading(6),
                   img: ({ src, alt, ...props }) => (
-                    <div className="flex justify-center">
-                      <Image
-                        src={src || ''}
-                        alt={alt || 'Blog image'}
-                        width={800}
-                        height={400}
-                        className="rounded-lg shadow-md w-[80%] h-auto"
-                        style={{ maxHeight: '500px', objectFit: 'cover' }}
-                      />
-                    </div>
+                    <Image
+                      src={src || ''}
+                      alt={alt || 'Blog image'}
+                      width={800}
+                      height={400}
+                      className="rounded-lg shadow-md w-[80%] h-auto mx-auto block"
+                      style={{ maxHeight: '500px', objectFit: 'cover' }}
+                    />
                   ),
                   blockquote: ({ children, ...props }) => (
                     <blockquote
