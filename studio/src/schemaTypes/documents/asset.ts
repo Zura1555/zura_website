@@ -171,15 +171,15 @@ export const asset = defineType({
       if (type === 'folder') {
         return {
           title,
-          subtitle: parentFolder ? `Folder: ${parentFolder}` : 'Root folder',
+          subtitle: parentFolder ? `📁 ${parentFolder}` : 'Root folder',
           media: FolderIcon,
         }
       }
       
       return {
         title,
-        subtitle: parentFolder ? `Folder: ${parentFolder}` : 'No folder',
-        media: media || ImageIcon,
+        subtitle: parentFolder ? `📁 ${parentFolder}` : 'No folder',
+        media,
       }
     },
   },

@@ -82,18 +82,7 @@ export const post = defineType({
       type: 'reference',
       to: [{type: 'person'}],
     }),
-    defineField({
-      name: 'assets',
-      title: 'Related Assets',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{type: 'asset'}],
-        },
-      ],
-      description: 'Select assets (images) related to this post',
-    }),
+
   ],
   // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {

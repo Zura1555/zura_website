@@ -109,5 +109,33 @@ export const blockContent = defineType({
         ],
       },
     }),
+
+    // Standard image block
+    defineArrayMember({
+      type: 'image',
+      title: 'Image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative text',
+          description: 'Important for SEO and accessibility.',
+        }),
+        defineField({
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          description: 'Optional caption for the image',
+        }),
+      ],
+    }),
+    // Add code block for syntax-highlighted code snippets
+    defineArrayMember({
+      type: 'code',
+      title: 'Code Block',
+    }),
   ],
 })

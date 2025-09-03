@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext", "es2017"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -9,8 +9,10 @@
     "module": "Preserve",
     "moduleDetection": "force",
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true
+    "jsx": "react-jsx",
+    "incremental": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

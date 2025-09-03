@@ -6,6 +6,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {codeInput} from '@sanity/code-input'
 import {schemaTypes} from './src/schemaTypes'
 import {structure} from './src/structure'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
@@ -47,7 +48,7 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
 // Main Sanity configuration
 export default defineConfig({
   name: 'default',
-  title: 'Sanity + Next.js Starter Template',
+  title: 'Asset',
 
   projectId,
   dataset,
@@ -125,6 +126,7 @@ export default defineConfig({
     // Additional plugins for enhanced functionality
     unsplashImageAsset(),
     assist(),
+    codeInput(),
     visionTool(),
   ],
 
