@@ -1,6 +1,5 @@
 {
   "framework": "nextjs",
-  "rootDirectory": "frontend",
   "env": {
     "NEXT_PUBLIC_SANITY_PROJECT_ID": "$NEXT_PUBLIC_SANITY_PROJECT_ID",
     "NEXT_PUBLIC_SANITY_DATASET": "$NEXT_PUBLIC_SANITY_DATASET",
