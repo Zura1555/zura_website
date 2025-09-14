@@ -6,7 +6,7 @@ Your project structure:
 ```
 zura/
 ├── studio/          # Sanity CMS Studio
-├── zura_website/    # Next.js Frontend
+├── frontend/        # Next.js Frontend
 └── package.json     # Monorepo configuration
 ```
 
@@ -26,7 +26,7 @@ zura/
 - Need to configure deployment paths
 
 ### Option 2: Separate Repositories
-**Push only `zura_website` to GitHub**
+**Push only `frontend` to GitHub**
 
 **Pros:**
 - Smaller repository size
@@ -79,7 +79,7 @@ zura/
 1. **Connect to Vercel:**
    - Go to [vercel.com](https://vercel.com)
    - Import your GitHub repository
-   - Set **Root Directory** to `zura_website`
+   - The `vercel.json` configuration will automatically set the correct root directory
 
 2. **Configure Environment Variables in Vercel:**
    ```

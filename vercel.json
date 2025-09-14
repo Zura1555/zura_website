@@ -1,0 +1,27 @@
+{
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install",
+  "devCommand": "cd frontend && npm run dev",
+  "framework": "nextjs",
+  "rootDirectory": "frontend",
+  "env": {
+    "NEXT_PUBLIC_SANITY_PROJECT_ID": "@sanity_project_id",
+    "NEXT_PUBLIC_SANITY_DATASET": "@sanity_dataset",
+    "NEXT_PUBLIC_SANITY_API_VERSION": "@sanity_api_version",
+    "NEXT_PUBLIC_SANITY_STUDIO_URL": "@sanity_studio_url",
+    "SANITY_API_READ_TOKEN": "@sanity_api_read_token",
+    "SANITY_API_TOKEN": "@sanity_api_token"
+  },
+  "functions": {
+    "frontend/src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/studio/:path*",
+      "destination": "https://zura.sanity.studio/:path*"
+    }
+  ]
+}
