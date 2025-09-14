@@ -4,7 +4,6 @@
   "installCommand": "cd frontend && npm install",
   "devCommand": "cd frontend && npm run dev",
   "framework": "nextjs",
-  "rootDirectory": "frontend",
   "env": {
     "NEXT_PUBLIC_SANITY_PROJECT_ID": "@sanity_project_id",
     "NEXT_PUBLIC_SANITY_DATASET": "@sanity_dataset",
