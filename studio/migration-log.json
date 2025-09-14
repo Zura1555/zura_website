@@ -1,0 +1,227 @@
+{
+  "timestamp": "2025-09-14T13:22:22.127Z",
+  "migratedCount": 2,
+  "totalCount": 2,
+  "results": [
+    {
+      "_createdAt": "2025-09-14T13:22:17Z",
+      "_id": "migrated-b0azir12nrjkw6vpmpqf8a2w",
+      "_rev": "x7AKQdsMTT5RY3O5CjefA7",
+      "_type": "post",
+      "_updatedAt": "2025-09-14T13:22:17Z",
+      "categories": [],
+      "content": [
+        {
+          "_key": "block-131",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-131",
+              "_type": "span",
+              "marks": [],
+              "text": "One of the most annoying problems that most Directus users face is to implement calculated fields right in the Directus Database. There are a lot of Q&A in the Directus Community and also a lot of plug-ins that are unable to solve this problem completely. In this blog, I will instruct an alternative solution to resolve this problem using Directus Flow (You will get familiar with it if you have use n8n already).\n\n## Limitation on Directus extension\nBefore going in directly into the Directus Flow, you guys should also know some alternative ways that can generate calculated fields, but still, has limitation.\n\n### Extension & Plug-in\n>📝 This feature is useful for people who may want to view the calculated field in Directus. Not recommended for who want to use calculated field for other projects like NextJS Application.\n\nDirectus users can access its marketplace right in Directus with the available extensions. With the annoying problem of calculated fields, of course, some developers have introduced the extension to get this done. \n\nI have installed these 2 extensions on the Marketplace: Calculated Fields Bundle and Computed Interface. The latest one is from [Mike Elsmore](https://directus.io/team/mike-elsmore), Developer Experience Engineer @ Directus. You can also find the tutorial here: [Calculated Fields Interface](https://youtu.be/186dd1VrwXk?si=2lZAppX5RBGzKFHf)"
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-132",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-132",
+              "_type": "span",
+              "marks": [],
+              "text": "Navigation: Setting -> Marketplace -> Search \"Calculated Fields\" -> Installation\nSome highlight on this feature from [Directus Docs](https://www.npmjs.com/package/@directus-labs/calculated-fields-bundle):\n- Display a calculated value based on any number of fields of an item.\n- Supports the full set of functions provided by [Formula.js](https://formulajs.info/).\n- Supports a majority of JavaScript operators that work for numbers and strings.\n- Use any M2O related fields in addition to root level fields.\n\n### Setting on Extension\nOnce installed, users can access this function by going directly into the Data Model and create a new field. For the field interface or type, instead of choosing \"Input\" or related usual field types, you gonna choose \"Calculated\", installed in the previous step.\n\n\n\n\n"
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-133",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-133",
+              "_type": "span",
+              "marks": [],
+              "text": "In the calculated field setting, there are different settings, but you may be familiar if you have used Directus for a while. However, there are 2 primary settings you need to note on this: Calculated Field Type and Formula.\n\n### Limitation on Extension\n\n"
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-134",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-134",
+              "_type": "span",
+              "marks": [],
+              "text": "As you can see, the type of this field is Alias, which is the limitation of this extension. The primary use of this extension is for display only and **API is not available**."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-135",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-135",
+              "_type": "span",
+              "marks": [],
+              "text": "Even for display, it has some limitations. In the table view, Directus user is unable to show the calculated. \n\nFor example, in my Data Model, I have 2 different field types: sample_qrcode (Input) and sample_sitename (Calculated). "
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-136",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-136",
+              "_type": "span",
+              "marks": [],
+              "text": "One of the most important steps is applying formula to the field. For a non-tech user like me, AI helps a lot. Here is the way that I use:\n- Step 1: Prepare your formula in Excel or other Spreadsheets.\n    You will need to prepare the formula you want to convert and prepare the Field Mapping table. The reason why you need a Field Mapping table is that Excel formula uses Cell Position (A2, B2, etc).\n\n**For example:**    \nExcel Formula: =CONCATENATE(B2, \" - \", C2)\n    Field Mapping Table\n\n```\nB2 = product_category\nC2 = item_code\n```\n\n- Step 2: Input the materials to AI (Gemini for my use case)\nCovert the following Excel formula into a Formula format for Directus Calculated Field\n```\nMy Excel formula = <YOUR EXCEL FORMULA>\nField Mapping for my Excel = <YOUR FIELD MAPPING TABLE>\n```\n Output: Exclude the leading equals sign (=) from the original Excel formula. \n- Step 3: Input the formula to Directus\nAfter AI generates the formula for you, you can copy and paste it to Directus formula setting in Calculated Fields. If the system does not recognize your mapping field, you may need to configure it again. If success, the Mapping Field will turn purple like this example\n    image    \n    \nNote: You can also use field from other collections also as long as you have set up the relationship between two collections. For more information: Directus Field Relationships\n\nSave and find the magic happens when navigate to the item detail (of course, no API & Layout)\n"
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        }
+      ],
+      "coverImage": {
+        "_type": "image",
+        "alt": "Calculated field in Directus",
+        "asset": {
+          "_ref": "image-314bfc38888b304f37567fc036a666e45689bcae-3218x1800-png",
+          "_type": "reference"
+        }
+      },
+      "date": "2025-08-03T01:17:55.074Z",
+      "excerpt": "My fix for limited Directus calculated fields: use Flows!\n",
+      "publishedAt": "2025-08-21T13:10:56.310Z",
+      "slug": {
+        "_type": "slug",
+        "current": "calculated-field-in-Directus"
+      },
+      "title": "Calculated field in Directus"
+    },
+    {
+      "_createdAt": "2025-09-14T13:22:21Z",
+      "_id": "migrated-zm4606tshambemwwdybklcmc",
+      "_rev": "x7AKQdsMTT5RY3O5CjefNr",
+      "_type": "post",
+      "_updatedAt": "2025-09-14T13:22:21Z",
+      "categories": [],
+      "content": [
+        {
+          "_key": "block-137",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-137",
+              "_type": "span",
+              "marks": [],
+              "text": "Today, I want to share a rather special story from my career: the journey of becoming a Product Owner for a project that combines both AI and Gamification, starting from absolute zero!\n\nPreviously, I worked in Product Marketing, where my main responsibilities were competitor and market research. So, when my boss offered me the chance to switch to a PO role for an \"AI Agent\" project - I honestly felt a mix of excitement and anxiety. \n\nI was excited for the opportunity to challenge myself in a new role, especially on a trendy project involving AI and gamification. But I was also anxious because... I had never been a PO before. My knowledge of AI was vague, and I had only ever experienced gamification as a \"user,\" not a \"builder.\"\n\nBut then I thought, opportunities like this don't come around often. I decided to just start, learning as I went.\n\n## What is Oppy?\n\nIn short, Oppy is an AI that our team plans to develop and integrate into OplaCRM for our users (salespeople) to use."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-138",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-138",
+              "_type": "span",
+              "marks": [],
+              "text": ">(The name Oppy is a play on the word \"Opportunity,\" and the \"Op\" also comes from \"OplaCRM,\" which is why our team finalized this name.)\n\n## How We Built Oppy\n\nFrom the very beginning, we determined that Oppy had to deliver a truly unique experience. Instead of using existing gamification platforms, the team decided to **custom-build** the entire game mechanic from scratch. We drew inspiration from several sources:\n\n- **Pet Raising:** The idea of allowing users to \"raise\" Oppy from an egg, watching it grow, and change based on their work performance. You might recognize this concept from games like *Mole's World* (I was super into that game back then TT). \n\n*(An interesting point: a few weeks after our team started the project, TikTok released a similar feature, also involving raising a pet by maintaining a streak. This just goes to show how critical time-to-market is in product development. An opponent releasing a feature just one sprint or even one week ahead of you can give them a huge advantage.)*"
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-139",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-139",
+              "_type": "span",
+              "marks": [],
+              "text": "- **Duolingo:** Our team also studied and looked to Duolingo as a model for increasing an app's User Engagement, particularly in creating personalized messages and a daily mission system for users.\n\n- **Shimeji:** We wanted to create an Oppy that could move around on the screen and have fun interactions with the user, similar to the Shimeji you can find as Chrome Add-ons.\n\nOur team's goal was to make Oppy a natural and ever-present part of a salesperson's workflow, thereby becoming their genuine buddy, unlike any other chatbot.\n\nVisually, Oppy was sketched as a wise and extremely curious egg. Since our team didn't have a dedicated animator, we decided to outsource the design and animation to bring Oppy to life. I searched for a suitable artist on [Fiverr](https://www.fiverr.com/) (a platform for finding freelancers).\n\n## What Can Oppy Do?\n\nTo make it easier to visualize, I've divided Oppy's main features (Phase 1) into the following groups:\n\n### Interaction\n\n- **AI Buddy:** Oppy doesn't just sit still. It can run, jump, and express emotions like joy and sadness right on your CRM screen, creating the feeling of having a little companion always by your side.\n\n### Gamification\n\n- **Raising Oppy:** When users perform positive actions in OplaCRM (e.g., completing tasks, updating customer information, hitting KPIs...), Oppy receives \"experience points\" and gradually \"grows up,\" changing its appearance from an egg to more mature forms. \n\n- **Duolingo-Style Missions:** Every day (or every week), Oppy will present a list of specific tasks directly related to the sales work that needs to be done in the CRM (e.g., \"Create 2 new leads today,\" \"Call 5 potential customers,\" \"Update the status of 3 sales opportunities\"). \n\nUpon completing these missions, users receive rewards like experience points for Oppy, achievement badges, or virtual items."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-140",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-140",
+              "_type": "span",
+              "marks": [],
+              "text": "## Challenges and How I Overcame Them\n\nBeing a PO for the first time, especially on such a complex project, I admit I faced quite a few difficulties:\n\n### Misaligned Communication\n\nInitially, because I was new and didn't have a deep technical understanding, I wrote rather vague user stories. The dev team would read them and have to ask questions back and forth (This is why I learned to create prototypes using AI). Then, each stakeholder had a different opinion. Some features had to be revised several times because the initial requirements weren't clear.\n\n- **Solution:** I realized that User Stories alone were not enough for complex features, so I learned to write more detailed **BRDs** (Business Requirements Documents). A BRD helps to clearly describe the context, objectives, processes, and use cases, which allowed the dev team to better understand the \"what\" and \"why\" of the task, while also having a reference document when needed (Using AI to create prototypes, which I've shared about before, is also a great way to visualize requirements). \n\nBesides that, I continued to maintain regular grooming sessions with the team and stakeholders.\n\n### Working with the Artist\n\nWorking with an artist for the first time also had its own set of challenges. There was a time when the animation didn't quite match what I had in mind, requiring several rounds of feedback.\n\n- **Solution:** I started preparing a very thorough mood board and reference images before assigning the work. I also made sure to have frequent, short check-ins via chat to ensure the artist correctly understood my vision."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-141",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-141",
+              "_type": "span",
+              "marks": [],
+              "text": "### Estimating Workload\n\nAs a new PO, I didn't have a good feel for estimating the complexity of tasks. There was one sprint where I was a bit too ambitious and took on too much work, causing the team to become overloaded.\n\n- **Solution:** I learned to trust the dev team's estimations more, to listen, and not to push the team to overcommit. I also learned how to break down large features (epics) into smaller user stories to make them easier to manage and estimate.\n\n### Measuring Outcomes\n\nHow do you know if gamification is really effective? How do you measure engagement? I was quite confused about this at first.\n\n- **Solution:** I worked with the dev team to extract data and define the key metrics to track (e.g., daily mission completion rate, interaction time with Oppy, number of users unlocking items...). Although we didn't have immediate results, defining these metrics early on was crucial.\n\n## Lessons from the Project\n\nThese are perhaps two of the biggest lessons I've learned in the PO role, especially when facing the harsh realities of product development.\n\n## From Messy Ideas to a Clear Roadmap\n\nInitially, when I looked at Oppy with its countless ideas for AI, gamification, and interactions, I truly felt a bit \"overwhelmed.\" What should we build first? What comes later? How could I help the dev team understand the long-term vision without getting confused? How could I explain the plan to my boss and other stakeholders?\n\nI realized that I couldn't just list a long series of features and tell the team to build them. I learned to adopt a \"top-down\" approach:\n\n1. **Define Objectives:** First, I had to identify the major strategic goals Oppy needed to achieve over a longer period. For our team, that was to make Oppy an indispensable part of the daily workflow for OplaCRM users.\n\n2. **Break Down into Features:** From those large objectives, I broke them down into more specific feature groups. For example, to increase the task completion rate, we needed features like \"Daily Missions,\" \"Achievement Badges,\" \"Leaderboards,\" and so on.\n\n3. **Write Detailed User Stories:** Finally, each feature was broken down further into specific User Stories, small enough for the dev team to understand, estimate, and complete within a single Sprint (usually 2 weeks)."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        },
+        {
+          "_key": "block-142",
+          "_type": "block",
+          "children": [
+            {
+              "_key": "span-142",
+              "_type": "span",
+              "marks": [],
+              "text": "This approach helps both me and the team see the big picture (the quarterly or yearly roadmap) while also knowing exactly what to focus on in each short-term sprint. It also makes it easier for me to communicate with and get feedback from stakeholders.\n\n### When Oppy Had to \"Take a Backseat\" for Customers\n\nYour \"pet project\" isn't always the top priority. There were sprints where Oppy's development was moving along smoothly, and then suddenly, a request would come in from a major client, or we'd need to immediately build an integration with another system to serve the company's overall strategy.\n\nThe first time Oppy was put on \"hold,\" I honestly felt quite disappointed and a little frustrated. But then I realized that this is an inevitable part of a PO's job. The product is built to serve overall business objectives, and sometimes those objectives change, or more important, unexpected tasks arise.\n\nThe lesson here is **flexibility in managing the Product Backlog and the skill of continuous prioritization:**\n\n- **The backlog isn't a fixed plan:** It's a living list that is constantly being updated and reordered based on the company's needs.\n\n- **Prioritize based on value:** Not every cool or interesting feature is the most important. I learned to assess priority based on multiple factors: the value delivered to the user, business value (revenue, customer retention), urgency, requests from key stakeholders, technical complexity, and more.\n\n- **Clear communication:** When priorities have to change, it's crucial to clearly explain the reasons to the dev team and relevant parties to avoid confusion or the feeling that their effort has been wasted.\n\nHaving to pause Oppy a few times, while it slowed progress a bit, taught me a practical lesson about balancing the long-term vision of a product with the short-term demands of the business.\n\n*(P.S: Of course, during this downtime, I was relatively free. Combined with the joy I found in product work, I was assigned to support tasks like researching and creating wireframes for features like Global Search and RBAC (Role-based Access Control), which I will cover in future posts.)*\n\n## Other Lessons I've Learned\n\nBesides the two major lessons in Product Management—creating a roadmap and managing the backlog—I also accumulated quite a few other experiences:\n\n### Don't be afraid to ask (and proactively seek help)\n\nAs a newcomer, it's normal not to know things. It's better to ask early than to let a problem get too far. I asked the dev team and my boss a lot of questions. \n\nSpecifically, when I had to work with multiple stakeholders at once and was still clumsy with processes like Sprint Planning or Sprint Review, I proactively approached our BA and my direct manager to ask if my methods and workflow were correct and effective. By doing so, I avoided many unnecessary mistakes and gradually became more confident.\n\n**Communication is key:** Talking frequently and clearly with everyone (devs, designers, stakeholders, artists) helps minimize misunderstandings and keeps everything on the right track.\n\n### The Joy of Seeing Your \"Brainchild\" Come to Life\n\nThere's one memory I'll never forget: when my boss asked me to create a two-year development roadmap for Oppy. For a complete novice like me, especially dealing with AI, just hearing it sounded exhausting. I was very uncertain at first, but as I began to research and gradually define the development stages, I felt much more confident. \n\nAnd the moment Oppy's first features were released, seeing it work, and then seeing it being welcomed and used by the sales team... it was truly joyful and meaningful. That has been the biggest motivation for me to keep trying."
+            }
+          ],
+          "markDefs": [],
+          "style": "normal"
+        }
+      ],
+      "coverImage": {
+        "_type": "image",
+        "alt": "How I become a Product Owner with 0XP?",
+        "asset": {
+          "_ref": "image-97a5f8725bba6965ef12da33387abc3188ae5de3-2700x1350-png",
+          "_type": "reference"
+        }
+      },
+      "date": "2025-07-26T01:52:36.707Z",
+      "excerpt": "Building an AI gamification pet: A new Product Owner's story & lesson",
+      "publishedAt": "2025-08-22T01:59:40.077Z",
+      "slug": {
+        "_type": "slug",
+        "current": "0-experience-PO"
+      },
+      "title": "How I become a Product Owner with 0XP?"
+    }
+  ]
+}

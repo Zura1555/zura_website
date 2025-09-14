@@ -14,21 +14,25 @@
     "dev": "sanity dev",
     "extract-types": "sanity schema extract --enforce-required-fields",
     "start": "sanity start",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "migrate": "node migrate-from-strapi.js"
   },
   "dependencies": {
     "@sanity/assist": "^5.0.0",
+    "@sanity/client": "^6.21.3",
     "@sanity/code-input": "^6.0.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.0.7",
     "@sanity/uuid": "^3.0.2",
-    "@sanity/vision": "^4.6.0",
+    "@sanity/vision": "^4.8.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.2",
+    "node-fetch": "^2.7.0",
     "pluralize-esm": "^9.0.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "rxjs": "^7.8.2",
-    "sanity": "^4.6.0",
+    "sanity": "^4.8.1",
     "sanity-plugin-asset-source-unsplash": "^3.1.0",
     "styled-components": "^6.1.19"
   },

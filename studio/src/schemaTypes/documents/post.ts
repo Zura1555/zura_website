@@ -77,10 +77,41 @@ export const post = defineType({
       initialValue: () => new Date().toISOString(),
     }),
     defineField({
+      name: 'publishedAt',
+      title: 'Published at',
+      type: 'datetime',
+      description: 'Set this field to publish the post. Leave empty to keep as draft.',
+    }),
+    defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: [{type: 'person'}],
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'category'}],
+        },
+      ],
+      validation: (rule) => rule.required().min(1).max(5).error('At least one category is required'),
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [
+        {
+          type: 'string',
+        },
+      ],
+      options: {
+        layout: 'tags',
+      },
     }),
 
   ],

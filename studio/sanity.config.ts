@@ -10,6 +10,7 @@ import {codeInput} from '@sanity/code-input'
 import {schemaTypes} from './src/schemaTypes'
 import {structure} from './src/structure'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
+import {unpublishAction} from './src/lib/unpublishAction'
 
 import {assist} from '@sanity/assist'
 
@@ -42,5 +43,16 @@ export default defineConfig({
   // Schema configuration, imported from ./src/schemaTypes/index.ts
   schema: {
     types: schemaTypes,
+  },
+
+  // Document actions configuration
+  document: {
+    actions: (prev, context) => {
+      // Add unpublish action for post documents
+      if (context.schemaType === 'post') {
+        return [...prev, unpublishAction(context)]
+      }
+      return prev
+    },
   },
 })
