@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&family=Luckiest+Guy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 252 67% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 252 67% 11%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 252 67% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 226 97% 64%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 252 67% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 252 67% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 252 67% 16%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 252 67% 21%;
+    --input: 252 67% 21%;
+    --ring: 226 97% 64%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 252 67% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 252 67% 11%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 252 67% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 226 97% 64%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 252 67% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 252 67% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 252 67% 16%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 252 67% 21%;
+    --input: 252 67% 21%;
+    --ring: 226 97% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Border animation for Download CV button */
+  .btn-border-animation {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-border-animation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-foreground)), transparent);
+    animation: border-slide-top 2s linear infinite;
+  }
+  
+  .btn-border-animation::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-foreground)), transparent);
+    animation: border-slide-bottom 2s linear infinite;
+  }
+  
+  .btn-border-animation .border-left {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, hsl(var(--primary-foreground)), transparent);
+    animation: border-slide-left 2s linear infinite;
+  }
+  
+  .btn-border-animation .border-right {
+    position: absolute;
+    bottom: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, hsl(var(--primary-foreground)), transparent);
+    animation: border-slide-right 2s linear infinite;
+  }
+  
+  @keyframes border-slide-top {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+  }
+  
+  @keyframes border-slide-bottom {
+    0% { right: -100%; }
+    50%, 100% { right: 100%; }
+  }
+  
+  @keyframes border-slide-left {
+    0% { top: -100%; }
+    50%, 100% { top: 100%; }
+  }
+  
+  @keyframes border-slide-right {
+    0% { bottom: -100%; }
+    50%, 100% { bottom: 100%; }
+  }
+
+  /* Shiny Card Effect */
+  .shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      55deg,
+      rgba(255, 255, 255, 0.2) 25%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.2) 75%
+    );
+    transform: translateX(100%);
+    transition: transform 1s linear;
+  }
+
+  .shiny-card:hover .shine {
+    transform: translateX(-100%);
+  }
+
+  .prose {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* Yellow color and animated underline for blog h2 only */
+  .prose h2 {
+    position: relative;
+    color: #FFD700; /* Yellow color */
+    display: inline-block;
+  }
+
+  .prose h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 86px;
+    height: 3px;
+    background-color: #FFD700; /* Yellow color */
+    transition: width 0.3s ease;
+  }
+
+  .prose h2:hover::after {
+    width: 100%;
+  }
+
+  /* Yellow color only for other blog headings (no animation) */
+  .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: #FFD700; /* Yellow color */
+  }
+
+  .prose h1 { font-size: 2.472rem; }
+  .prose h2 { font-size: 1.977rem; }
+  .prose h3 { font-size: 1.582rem; }
+  .prose h4 { font-size: 1.266rem; }
+  .prose h5 { font-size: 1.013rem;  }
+  .prose h6 { font-size: 0.912rem; }
+
+  .prose h2 {
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+  }
+
+  .prose h3 {
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    margin-top: 1.8em;
+    margin-bottom: 0.8em;
+  }
+
+  .prose > *:first-child {
+    margin-top: 0;
+  }
+
+  .prose p {
+    margin-bottom: 1.25em;
+  }
+
+  .prose blockquote {
+    font-size: 17px;
+    font-style: normal;
+    margin-top: 2em;
+    margin-bottom: 0;
+    margin-left: 1em;
+    padding: 16px 24px;
+    border-left: 4px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    list-style-position: outside;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+  }
+
+  .prose li {
+    padding-left: 0.5em;
+    margin-bottom: 0.6em;
+  }
+
+  .prose strong {
+    font-weight: 700;
+  }
+
+  .prose em {
+    font-style: italic;
+  }
+
+  .prose a {
+    text-decoration: underline;
+    color: hsl(var(--primary));
+    font-weight: 500;
+    text-underline-offset: 4.2px;
+  }
+
+  .prose hr {
+      border: none;
+      border-top: 1px solid hsl(var(--border));
+      opacity: 0.2;
+      margin: 3em 0;
+  }
+
+  .prose code {
+    background-color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    border-radius: 0.25rem;
+  }
+
+  .prose pre {
+    background-color: hsl(var(--muted));
+    padding: 1em;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+  }
+
+  /* Page Transition Styles */
+  .page-transition {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform, opacity, filter;
+  }
+
+  /* Smooth blur transitions */
+  .blur-transition {
+    transition: filter 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Hardware acceleration for smooth animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}

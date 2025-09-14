@@ -1,0 +1,7 @@
+{
+  "myserver": {
+    "api_url": "https://uplifting-champion-8a8387e8ac.strapiapp.com",
+    "api_key": "4fa692b6bedcb63eceafc7b5ab377a4745d5abf424d51b4a57a0e8c21e2786bbb53f0da7a6c1a9a8fa965c236bac779e257d655480a4a5c0eb772ca622768829e43ac854afc67d3645a10e9e664b6f71d5c3e80c63d3c7c33600a11be2f94678b14963ef12ddb32c0dca4a3b1f5b1f7e7984f922d9c2432118c86907f59ad8df",
+    "version": "5.*"
+  }
+}
