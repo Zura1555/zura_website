@@ -1,18 +1,22 @@
-import type { BlogPost, Album, StrapiArticle, StrapiAuthor, StrapiCategory } from './types';
-import axios from 'axios';
+import type { BlogPost, Album } from './types';
+import { createClient } from '@sanity/client';
+import imageUrlBuilder from '@sanity/image-url';
 
-// Strapi API configuration
-const STRAPI_API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'https://uplifting-champion-8a8387e8ac.strapiapp.com/api';
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
-
-// Create axios instance with default headers
-const strapiApi = axios.create({
-  baseURL: STRAPI_API_URL,
-  headers: {
-    'Authorization': `Bearer ${STRAPI_API_TOKEN}`,
-    'Content-Type': 'application/json',
-  },
+// Sanity client configuration
+const sanityClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'w486ji4p',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  useCdn: true,
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  token: process.env.SANITY_API_TOKEN,
 });
+
+// Image URL builder
+const builder = imageUrlBuilder(sanityClient);
+
+function urlFor(source: any) {
+  return builder.image(source);
+}
 
 const galleryAlbums: Album[] = [
     {
@@ -61,7 +65,7 @@ function fixImageUrl(url: unknown): string {
 }
 
 
-// Helper function to process Strapi blocks into markdown content
+// Helper function to process Sanity blocks into markdown content
 function processBlocks(blocks: any[]): { content: string; summary: string } {
   let markdownContent = '';
   let textContent = '';
@@ -71,44 +75,78 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
   }
 
   blocks.forEach((block) => {
-    switch (block.__component) {
-      case 'shared.rich-text':
-        if (block.body) {
-          markdownContent += block.body + '\n\n';
-          textContent += block.body.replace(/[#*_~`]/g, '') + ' ';
-        }
-        break;
-      case 'shared.quote':
-        if (block.body) {
-          markdownContent += `> ${block.body}\n\n`;
-          if (block.author) {
-            markdownContent += `*— ${block.author}*\n\n`;
-          }
-          textContent += block.body + ' ';
-        }
-        break;
-      case 'shared.media':
-        if (block.file?.url) {
-          const imageUrl = block.file.url.startsWith('http') ? block.file.url : `${STRAPI_API_URL.replace('/api', '')}${block.file.url}`;
-          markdownContent += `![${block.file.alternativeText || 'Image'}](${imageUrl})\n\n`;
-        }
-        break;
-      case 'shared.slider':
-        if (block.files && Array.isArray(block.files)) {
-          markdownContent += '\n<div class="slider-gallery">\n\n';
-          block.files.forEach((file: any, index: number) => {
-            if (file.url) {
-              const imageUrl = file.url.startsWith('http') ? file.url : `${STRAPI_API_URL.replace('/api', '')}${file.url}`;
-              markdownContent += `![${file.alternativeText || `Slider Image ${index + 1}`}](${imageUrl})\n\n`;
+    switch (block._type) {
+      case 'block':
+        // Handle Sanity's portable text blocks
+        if (block.children) {
+          let blockText = block.children.map((child: any) => {
+            let text = child.text || '';
+            
+            // Handle marks (bold, italic, etc.)
+            if (child.marks && child.marks.length > 0) {
+              child.marks.forEach((mark: string) => {
+                switch (mark) {
+                  case 'strong':
+                    text = `**${text}**`;
+                    break;
+                  case 'em':
+                    text = `*${text}*`;
+                    break;
+                  case 'code':
+                    text = `\`${text}\``;
+                    break;
+                }
+              });
             }
-          });
-          markdownContent += '</div>\n\n';
+            return text;
+          }).join('');
+
+          // Handle block styles (headings, paragraphs, etc.)
+          switch (block.style) {
+            case 'h1':
+              markdownContent += `# ${blockText}\n\n`;
+              break;
+            case 'h2':
+              markdownContent += `## ${blockText}\n\n`;
+              break;
+            case 'h3':
+              markdownContent += `### ${blockText}\n\n`;
+              break;
+            case 'h4':
+              markdownContent += `#### ${blockText}\n\n`;
+              break;
+            case 'h5':
+              markdownContent += `##### ${blockText}\n\n`;
+              break;
+            case 'h6':
+              markdownContent += `###### ${blockText}\n\n`;
+              break;
+            case 'blockquote':
+              markdownContent += `> ${blockText}\n\n`;
+              break;
+            default:
+              markdownContent += `${blockText}\n\n`;
+              break;
+          }
+          textContent += blockText.replace(/[#*_~`]/g, '') + ' ';
+        }
+        break;
+      case 'image':
+        if (block.asset) {
+          const imageUrl = urlFor(block.asset).url();
+          markdownContent += `![${block.alt || 'Image'}](${imageUrl})\n\n`;
+        }
+        break;
+      case 'code':
+        if (block.code) {
+          const language = block.language || '';
+          markdownContent += `\`\`\`${language}\n${block.code}\n\`\`\`\n\n`;
         }
         break;
       default:
         // Handle any other block types generically
-        if (block.body || block.text) {
-          const content = block.body || block.text;
+        if (block.text || block.content) {
+          const content = block.text || block.content;
           markdownContent += content + '\n\n';
           textContent += content.replace(/[#*_~`]/g, '') + ' ';
         }
@@ -124,127 +162,147 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
   };
 }
 
-// Helper function to convert Strapi article to BlogPost
-function mapStrapiArticleToBlogPost(article: StrapiArticle): BlogPost {
-  const { content, summary } = processBlocks(article.blocks || []);
+// Helper function to convert Sanity post to BlogPost
+function mapSanityPostToBlogPost(post: any): BlogPost {
+  const { content, summary } = processBlocks(post.content || []);
 
   // Handle cover image URL
   let coverImageUrl = 'https://placehold.co/1000x600.png';
-  if (article.cover?.url) {
-    coverImageUrl = article.cover.url.startsWith('http') 
-      ? article.cover.url 
-      : `${STRAPI_API_URL.replace('/api', '')}${article.cover.url}`;
+  if (post.coverImage?.asset) {
+    coverImageUrl = urlFor(post.coverImage.asset).url();
   }
 
   // Handle author avatar URL
   let authorAvatar = 'https://placehold.co/100x100.png';
-  if (article.author?.avatar?.url) {
-    authorAvatar = article.author.avatar.url.startsWith('http')
-      ? article.author.avatar.url
-      : `${STRAPI_API_URL.replace('/api', '')}${article.author.avatar.url}`;
+  if (post.author?.picture?.asset) {
+    authorAvatar = urlFor(post.author.picture.asset).url();
   }
 
+  // Handle author name - combine firstName and lastName
+  const authorName = post.author 
+    ? `${post.author.firstName || ''} ${post.author.lastName || ''}`.trim()
+    : 'Zura';
+
+  // Handle categories - get the first category or default
+  const categoryName = post.categories && post.categories.length > 0 
+    ? post.categories[0].title 
+    : undefined;
+
   return {
-    slug: article.slug,
-    title: article.title || 'Untitled Post',
-    date: article.publishedAt || article.createdAt,
-    summary: article.description || summary,
+    slug: post.slug?.current || post.slug,
+    title: post.title || 'Untitled Post',
+    date: post.publishedAt || post.date || post._createdAt,
+    summary: post.excerpt || summary,
     content: content || 'No content available.',
-    category: article.category?.name,
+    category: categoryName,
     author: {
-      name: article.author?.name || 'Zura',
+      name: authorName,
       avatar: authorAvatar,
       aiHint: 'person avatar'
     },
     image: coverImageUrl,
-    aiHint: article.title?.toLowerCase().split(' ').slice(0, 2).join(' ') || 'blog post',
+    aiHint: post.title?.toLowerCase().split(' ').slice(0, 2).join(' ') || 'blog post',
   };
 }
 
 
 export const getBlogPosts = async (): Promise<BlogPost[]> => {
-  console.log("Attempting to fetch blog posts from Strapi...");
+  console.log("Attempting to fetch blog posts from Sanity...");
   try {
-    const response = await strapiApi.get('/articles', {
-      params: {
-        populate: {
-          cover: true,
-          author: {
-            populate: ['avatar']
-          },
-          category: true,
-          blocks: {
-            populate: '*'
-          }
-        },
-        sort: 'publishedAt:desc',
-        'publicationState': 'live'
-      }
-    });
+    const query = `*[_type == "post" && defined(publishedAt)] | order(publishedAt desc) {
+      _id,
+      _createdAt,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      date,
+      coverImage {
+        asset->,
+        alt
+      },
+      author-> {
+        firstName,
+        lastName,
+        picture {
+          asset->,
+          alt
+        }
+      },
+      categories[]-> {
+        title,
+        slug
+      },
+      content,
+      tags
+    }`;
 
-    const articles: StrapiArticle[] = response.data.data;
-    console.log(`Found ${articles.length} blog post(s) from Strapi.`);
+    const posts = await sanityClient.fetch(query);
+    console.log(`Found ${posts.length} blog post(s) from Sanity.`);
 
-    if (articles.length === 0) {
-      console.log("No published articles found in Strapi. Check:");
-      console.log("1. Your Strapi server is running and accessible.");
-      console.log("2. You have published articles in your Strapi admin.");
-      console.log("3. The API token has proper permissions.");
+    if (posts.length === 0) {
+      console.log("No published posts found in Sanity. Check:");
+      console.log("1. Your Sanity project is properly configured.");
+      console.log("2. You have published posts in your Sanity studio.");
+      console.log("3. The schema is properly deployed.");
     }
 
-    const posts = articles.map(mapStrapiArticleToBlogPost);
-    return posts;
+    const blogPosts = posts.map(mapSanityPostToBlogPost);
+    return blogPosts;
 
   } catch (error) {
-    console.error("\n--- ERROR FETCHING BLOG POSTS FROM STRAPI ---");
+    console.error("\n--- ERROR FETCHING BLOG POSTS FROM SANITY ---");
     console.error(error);
-    if (axios.isAxiosError(error)) {
-      console.error(`Status: ${error.response?.status}`);
-      console.error(`Response:`, error.response?.data);
-    }
-    console.error("Check your Strapi server connection and API token.");
+    console.error("Check your Sanity client configuration and project setup.");
     console.error("-------------------------------------------------\n");
     return [];
   }
 };
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
-  console.log(`Attempting to fetch blog post with slug: ${slug} from Strapi`);
+  console.log(`Attempting to fetch blog post with slug: ${slug} from Sanity`);
   try {
-    const response = await strapiApi.get('/articles', {
-      params: {
-        filters: { slug },
-        populate: {
-          cover: true,
-          author: {
-            populate: ['avatar']
-          },
-          category: true,
-          blocks: {
-            populate: '*'
-          }
-        },
-        'publicationState': 'live'
-      }
-    });
+    const query = `*[_type == "post" && slug.current == $slug && defined(publishedAt)][0] {
+      _id,
+      _createdAt,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      date,
+      coverImage {
+        asset->,
+        alt
+      },
+      author-> {
+        firstName,
+        lastName,
+        picture {
+          asset->,
+          alt
+        }
+      },
+      categories[]-> {
+        title,
+        slug
+      },
+      content,
+      tags
+    }`;
 
-    const articles: StrapiArticle[] = response.data.data;
+    const post = await sanityClient.fetch(query, { slug });
 
-    if (articles.length > 0) {
+    if (post) {
       console.log(`Found blog post with slug: ${slug}`);
-      return mapStrapiArticleToBlogPost(articles[0]);
+      return mapSanityPostToBlogPost(post);
     } else {
       console.log(`No blog post found with slug: ${slug}`);
       return undefined;
     }
   } catch (error) {
-    console.error('\n--- ERROR FETCHING BLOG POST from Strapi with slug ' + slug + ' ---');
+    console.error('\n--- ERROR FETCHING BLOG POST from Sanity with slug ' + slug + ' ---');
     console.error(error);
-    if (axios.isAxiosError(error)) {
-      console.error(`Status: ${error.response?.status}`);
-      console.error(`Response:`, error.response?.data);
-    }
-    console.error("Check your Strapi server connection and API token.");
+    console.error("Check your Sanity client configuration and project setup.");
     console.error("-----------------------------------------------------\n");
     return undefined;
   }
@@ -254,25 +312,42 @@ export const getGalleryAlbums = async (): Promise<Album[]> => {
     return new Promise(resolve => setTimeout(() => resolve(galleryAlbums), 500));
 };
 
-// Additional Strapi helper functions
-export const getCategories = async (): Promise<StrapiCategory[]> => {
+// Additional Sanity helper functions
+export const getCategories = async (): Promise<any[]> => {
   try {
-    const response = await strapiApi.get('/categories');
-    return response.data.data;
+    const query = `*[_type == "category"] | order(title asc) {
+      _id,
+      title,
+      slug,
+      description,
+      color,
+      featured,
+      image {
+        asset->,
+        alt
+      }
+    }`;
+    const categories = await sanityClient.fetch(query);
+    return categories;
   } catch (error) {
     console.error('Error fetching categories:', error);
     return [];
   }
 };
 
-export const getAuthors = async (): Promise<StrapiAuthor[]> => {
+export const getAuthors = async (): Promise<any[]> => {
   try {
-    const response = await strapiApi.get('/authors', {
-      params: {
-        populate: ['avatar']
+    const query = `*[_type == "person"] | order(firstName asc) {
+      _id,
+      firstName,
+      lastName,
+      picture {
+        asset->,
+        alt
       }
-    });
-    return response.data.data;
+    }`;
+    const authors = await sanityClient.fetch(query);
+    return authors;
   } catch (error) {
     console.error('Error fetching authors:', error);
     return [];
@@ -281,26 +356,36 @@ export const getAuthors = async (): Promise<StrapiAuthor[]> => {
 
 export const getBlogPostsByCategory = async (categorySlug: string): Promise<BlogPost[]> => {
   try {
-    const response = await strapiApi.get('/articles', {
-      params: {
-        filters: { category: { slug: categorySlug } },
-        populate: {
-          cover: true,
-          author: {
-            populate: ['avatar']
-          },
-          category: true,
-          blocks: {
-            populate: '*'
-          }
-        },
-        sort: 'publishedAt:desc',
-        'publicationState': 'live'
-      }
-    });
+    const query = `*[_type == "post" && $categorySlug in categories[]->slug.current && defined(publishedAt)] | order(publishedAt desc) {
+      _id,
+      _createdAt,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      date,
+      coverImage {
+        asset->,
+        alt
+      },
+      author-> {
+        firstName,
+        lastName,
+        picture {
+          asset->,
+          alt
+        }
+      },
+      categories[]-> {
+        title,
+        slug
+      },
+      content,
+      tags
+    }`;
 
-    const articles: StrapiArticle[] = response.data.data;
-    return articles.map(mapStrapiArticleToBlogPost);
+    const posts = await sanityClient.fetch(query, { categorySlug });
+    return posts.map(mapSanityPostToBlogPost);
   } catch (error) {
     console.error(`Error fetching posts for category ${categorySlug}:`, error);
     return [];

@@ -42,6 +42,12 @@ const nextConfig: NextConfig = {
         hostname: 'ik.imagekit.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
