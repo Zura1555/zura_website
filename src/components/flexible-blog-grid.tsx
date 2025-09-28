@@ -98,9 +98,9 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
   // Two posts - 2 grid container
   if (postCount === 2) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
         {posts.map((post, index) => (
-          <div key={post.slug} className={cn("h-full", index === 0 ? "lg:col-span-2" : "lg:col-span-1")}>
+          <div key={post.slug} className="h-full">
             <FeaturedBlogPost post={post} />
           </div>
         ))}

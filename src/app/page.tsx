@@ -241,9 +241,6 @@ export default async function Home() {
                 Blog Update
               </p>
             </div>
-            <p className="text-lg text-muted-foreground">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.
-            </p>
           </div>
 
           <FlexibleBlogGrid posts={latestPosts} />

@@ -1,12 +1,15 @@
 "use server";
 
 import { z } from "zod";
+import { Resend } from "resend";
 
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export type ContactFormState = {
   message: string;
@@ -38,8 +41,21 @@ export async function submitContactForm(
 
   // Here, you would typically send an email using a service like Resend, SendGrid, or Nodemailer.
   // For this example, we'll just log the data to the console.
-  console.log("Contact form submitted successfully:");
-  console.log(validatedFields.data);
+  try {
+    await resend.emails.send({
+      from: 'guithutuantran@gmail.com', // Your verified email in Resend
+      replyTo: validatedFields.data.email, // So you can reply directly to the submitter
+      to: 'guithutuantran@gmail.com',
+      subject: `New Contact Form Submission from ${validatedFields.data.name}`,
+      text: `Name: ${validatedFields.data.name}\nEmail: ${validatedFields.data.email}\nMessage: ${validatedFields.data.message}`,
+    });
+  } catch (error) {
+    console.error('Failed to send email:', error);
+    return {
+      message: "Failed to send message. Please try again later.",
+      success: false,
+    };
+  }
 
   return {
     message: "Thank you for your message! I'll get back to you soon.",

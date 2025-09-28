@@ -1,51 +1,68 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
-import { useActionState, useEffect } from "react";
+import { useState } from "react";
 import { Mail, Send } from "lucide-react";
 
-import { submitContactForm, type ContactFormState } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
 
-const initialState: ContactFormState = {
-  message: "",
-  success: false,
-};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending} className="w-full bg-accent hover:bg-accent/90">
-      {pending ? "Sending..." : "Send Message"}
-      <Send className="ml-2 h-4 w-4" />
-    </Button>
-  );
-}
-
 export default function ContactPage() {
-  const [state, formAction] = useActionState(submitContactForm, initialState);
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (state.message) {
-      if (state.success) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Form submitted');
+    setStatus('Sending...');
+    setLoading(true);
+
+    const formData = {
+      name: (event.target as any).name.value,
+      email: (event.target as any).email.value,
+      message: (event.target as any).message.value,
+    };
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus('Message sent successfully!');
         toast({
           title: "Success!",
-          description: state.message,
+          description: data.message,
         });
-      } else if (state.errors) {
+        (event.target as any).reset();
+      } else {
+        setStatus('Sorry, an error occurred.');
         toast({
           title: "Oops!",
-          description: state.message,
+          description: data.message,
           variant: "destructive",
         });
       }
+    } catch (error) {
+      setStatus('Sorry, an error occurred.');
+      toast({
+        title: "Oops!",
+        description: "Failed to send message.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [state, toast]);
+  };
 
   return (
     <div className="container mx-auto max-w-5xl py-12 px-4 animate-in fade-in duration-500">
@@ -58,23 +75,24 @@ export default function ContactPage() {
 
       <section className="mt-16 mx-auto max-w-lg">
         <div className="rounded-lg border bg-card p-8 shadow-sm">
-          <form action={formAction} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input id="name" name="name" placeholder="Your Name" required />
-              {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" placeholder="your.email@example.com" required />
-              {state.errors?.email && <p className="text-sm text-destructive">{state.errors.email[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" name="message" placeholder="Your message..." rows={5} required />
-              {state.errors?.message && <p className="text-sm text-destructive">{state.errors.message[0]}</p>}
             </div>
-            <SubmitButton />
+            <Button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent/90">
+              {loading ? "Sending..." : "Send Message"}
+              <Send className="ml-2 h-4 w-4" />
+            </Button>
+            {status && <p className="text-sm text-center">{status}</p>}
           </form>
         </div>
       </section>
