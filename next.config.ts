@@ -48,6 +48,18 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.licdn.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
