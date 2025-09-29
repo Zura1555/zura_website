@@ -65,16 +65,16 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-5xl py-12 px-4 animate-in fade-in duration-500">
+    <div className="container mx-auto max-w-5xl py-8 sm:py-12 px-4 animate-in fade-in duration-500">
       <section className="text-center">
-        <h1 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Get In Touch</h1>
-        <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+        <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Get In Touch</h1>
+        <p className="mt-3 sm:mt-4 mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground">
           Have a project in mind, a question, or just want to say hello? I'd love to hear from you.
         </p>
       </section>
 
-      <section className="mt-16 mx-auto max-w-lg">
-        <div className="rounded-lg border bg-card p-8 shadow-sm">
+      <section className="mt-12 sm:mt-16 mx-auto max-w-lg">
+        <div className="rounded-lg border bg-card p-6 sm:p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>

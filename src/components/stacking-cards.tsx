@@ -4,6 +4,7 @@ import { ReactLenis } from 'lenis/react';
 import { useTransform, motion, useScroll, MotionValue } from 'motion/react';
 import { useRef } from 'react';
 import Image from 'next/image';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const projects = [
   {
@@ -56,6 +57,8 @@ export const Card: React.FC<CardProps> = ({
   targetScale,
 }) => {
   const container = useRef(null);
+  const isMobile = useIsMobile();
+  
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ['start end', 'start start'],
@@ -67,31 +70,31 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       ref={container}
-      className='h-screen flex items-center justify-center sticky top-0'
+      className={`${isMobile ? 'h-[80vh]' : 'h-screen'} flex items-center justify-center sticky top-0`}
     >
       <motion.div
         style={{
           backgroundColor: color,
           scale,
-          top: `calc(-5vh + ${i * 25}px)`,
+          top: `calc(-5vh + ${i * (isMobile ? 15 : 25)}px)`,
         }}
-        className={`flex flex-col relative -top-[25%] h-[450px] w-[70%] rounded-md p-10 origin-top`}
+        className={`flex ${isMobile ? 'flex-col' : 'flex-col'} relative ${isMobile ? '-top-[15%]' : '-top-[25%]'} ${isMobile ? 'h-[500px] w-[90%] p-4' : 'h-[450px] w-[70%] p-10'} rounded-md origin-top`}
       >
-        <h2 className='text-2xl text-center font-semibold'>{title}</h2>
-        <div className={`flex h-full mt-5 gap-10`}>
-          <div className={`w-[40%] relative top-[10%]`}>
-            <p className='text-sm'>{description}</p>
-            <span className='flex items-center gap-2 pt-2'>
+        <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} text-center font-semibold ${isMobile ? 'mb-3' : ''}`}>{title}</h2>
+        <div className={`flex ${isMobile ? 'flex-col' : ''} h-full ${isMobile ? 'gap-4' : 'mt-5 gap-10'}`}>
+          <div className={`${isMobile ? 'w-full' : 'w-[40%] relative top-[10%]'}`}>
+            <p className={`${isMobile ? 'text-xs leading-relaxed' : 'text-sm'}`}>{description}</p>
+            <span className={`flex items-center gap-2 ${isMobile ? 'pt-3' : 'pt-2'}`}>
               <a
                 href={'#'}
                 target='_blank'
-                className='underline cursor-pointer'
+                className={`underline cursor-pointer ${isMobile ? 'text-xs' : ''}`}
               >
                 See more
               </a>
               <svg
-                width='22'
-                height='12'
+                width={isMobile ? '18' : '22'}
+                height={isMobile ? '10' : '12'}
                 viewBox='0 0 22 12'
                 fill='none'
                 xmlns='http://www.w3.org/2000/svg'
@@ -105,11 +108,11 @@ export const Card: React.FC<CardProps> = ({
           </div>
 
           <div
-            className={`relative w-[60%] h-full rounded-lg overflow-hidden `}
+            className={`relative ${isMobile ? 'w-full h-[200px]' : 'w-[60%] h-full'} rounded-lg overflow-hidden`}
           >
             <motion.div
               className={`w-full h-full`}
-              style={{ scale: imageScale }}
+              style={{ scale: isMobile ? 1 : imageScale }}
             >
               <Image fill src={url} alt='image' className='object-cover' />
             </motion.div>
@@ -122,6 +125,8 @@ export const Card: React.FC<CardProps> = ({
 
 export default function StackingCards(): JSX.Element {
   const container = useRef(null);
+  const isMobile = useIsMobile();
+  
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ['start start', 'end end'],
@@ -132,7 +137,11 @@ export default function StackingCards(): JSX.Element {
       <main className='bg-black' ref={container}>
         <section className='text-white w-full bg-slate-950'>
           {projects.map((project, i) => {
-            const targetScale = 1 - (projects.length - i) * 0.05;
+            // Reduce scaling effect on mobile for better performance and usability
+            const targetScale = isMobile ? 
+              1 - (projects.length - i) * 0.02 : 
+              1 - (projects.length - i) * 0.05;
+            
             return (
               <Card
                 key={`p_${i}`}
@@ -143,7 +152,7 @@ export default function StackingCards(): JSX.Element {
                 color={project?.color}
                 description={project?.description}
                 progress={scrollYProgress}
-                range={[i * 0.25, 1]}
+                range={[i * (isMobile ? 0.3 : 0.25), 1]}
                 targetScale={targetScale}
               />
             );

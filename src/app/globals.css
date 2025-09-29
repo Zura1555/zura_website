@@ -351,4 +351,52 @@
     transform: translateZ(0);
     will-change: transform;
   }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    /* Reduce motion for mobile devices for better performance */
+    .stacking-card {
+      transform: translate3d(0, 0, 0);
+    }
+    
+    /* Improved touch targets */
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Better readability on small screens */
+    .prose {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* Optimized spacing for mobile */
+    .mobile-spacing {
+      padding: 1rem;
+    }
+    
+    /* Prevent horizontal scrolling */
+    body {
+      overflow-x: hidden;
+    }
+  }
+
+  /* Tablet optimizations */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .prose {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+  }
+
+  /* Reduced motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

@@ -34,9 +34,9 @@ const FeaturedBlogPost = ({ post }: { post: BlogPost }) => (
 // Component for compact blog post (Grid B)
 const CompactBlogPost = ({ post }: { post: BlogPost }) => (
   <Link href={`/blog/${post.slug}`} className="group block h-full">
-    <Card className="p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/50 h-full flex flex-col">
+    <Card className="p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/50 h-full flex flex-col">
       {/* Image */}
-      <div className="relative w-full h-32 mb-4 flex-shrink-0">
+      <div className="relative w-full h-28 sm:h-32 mb-3 sm:mb-4 flex-shrink-0">
         <Image
           src={post.image}
           alt={post.title || 'Blog post image'}
@@ -48,18 +48,18 @@ const CompactBlogPost = ({ post }: { post: BlogPost }) => (
       
       {/* Content */}
       <div className="flex flex-col flex-grow">
-        <h3 className="font-semibold text-base line-clamp-2 group-hover:text-primary transition-colors mb-3 flex-grow">
+        <h3 className="font-semibold text-sm sm:text-base line-clamp-2 group-hover:text-primary transition-colors mb-2 sm:mb-3 flex-grow">
           {post.title}
         </h3>
         
         {/* Date and Category */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-auto">
+        <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground mt-auto">
           <CalendarDays className="h-3 w-3" />
-          <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          <span className="text-xs">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           {post.category && (
             <>
               <span>•</span>
-              <Badge variant="outline" className="text-xs px-2 py-0.5">
+              <Badge variant="outline" className="text-xs px-1.5 py-0.5">
                 {post.category}
               </Badge>
             </>
@@ -110,14 +110,14 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
 
   // Three or more posts - Featured + Compact layout
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-[500px]">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 min-h-[400px] sm:min-h-[500px]">
       {/* Grid A - Latest featured post (2/3 width) */}
       <div className="lg:col-span-2 h-full">
         <FeaturedBlogPost post={posts[0]} />
       </div>
 
       {/* Grid B - Second and third latest posts in vertical layout (1/3 width) */}
-      <div className="lg:col-span-1 flex flex-col gap-4 h-full">
+      <div className="lg:col-span-1 flex flex-col gap-3 sm:gap-4 h-full">
         <div className="flex-1">
           <CompactBlogPost post={posts[1]} />
         </div>
@@ -131,10 +131,10 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
         {postCount > 3 && (
           <Link 
             href="/blog" 
-            className="group flex items-center justify-center gap-2 p-4 text-sm text-muted-foreground hover:text-primary transition-colors border border-dashed border-muted-foreground/30 hover:border-primary/50 rounded-lg mt-auto"
+            className="group flex items-center justify-center gap-2 p-3 sm:p-4 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors border border-dashed border-muted-foreground/30 hover:border-primary/50 rounded-lg mt-auto"
           >
             <span>View all {postCount} posts</span>
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         )}
       </div>

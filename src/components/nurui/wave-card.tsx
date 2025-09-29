@@ -75,7 +75,7 @@ const WaveCard = ({
       <div 
         ref={cardRef}
         className={cn(
-          "relative p-6 w-full h-full bg-card dark:bg-card rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 border border-border flex flex-col"
+          "relative p-4 sm:p-6 w-full h-full bg-card dark:bg-card rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 border border-border flex flex-col min-h-[400px] sm:min-h-[500px]"
         )}
       >
         {/* Wave effect */}
@@ -104,7 +104,7 @@ const WaveCard = ({
         <div className="relative z-10 flex flex-col h-full">
           {/* Blog Image */}
           {image && (
-            <div className="relative w-full h-80 rounded-lg overflow-hidden mb-4 flex-shrink-0">
+            <div className="relative w-full h-48 sm:h-64 md:h-80 rounded-lg overflow-hidden mb-3 sm:mb-4 flex-shrink-0">
               <Image
                 src={image}
                 alt={title || 'Blog post image'}
@@ -117,24 +117,24 @@ const WaveCard = ({
           )}
           
           {/* Tags */}
-          <div className="flex items-start space-x-4 mb-4">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-transparent">
+          <div className="flex items-start space-x-4 mb-3 sm:mb-4">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-transparent text-xs sm:text-sm">
               {tags}
             </Badge>
           </div>
           
           {/* Title and Description */}
-          <div className="mb-4 flex-grow">
-            <h3 className="text-xl font-semibold text-foreground mb-3 font-headline line-clamp-2">
+          <div className="mb-3 sm:mb-4 flex-grow">
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2 sm:mb-3 font-headline line-clamp-2">
               {title}
             </h3>
-            <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed line-clamp-3">
               {description}
             </p>
           </div>
           
           {/* Date and Button */}
-          <div className="flex justify-between items-center mt-auto pt-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-auto pt-3 sm:pt-4 gap-2 sm:gap-0">
             {date && (
               <time className="block text-xs font-medium text-muted-foreground">
                 {new Date(date).toLocaleDateString("en-US", {
@@ -144,7 +144,7 @@ const WaveCard = ({
                 })}
               </time>
             )}
-            <button className="ml-auto bg-primary hover:bg-primary/90 text-primary-foreground py-2 px-4 rounded-lg transition-colors duration-200 font-medium text-sm">
+            <button className="w-full sm:w-auto sm:ml-auto bg-primary hover:bg-primary/90 text-primary-foreground py-2 px-3 sm:px-4 rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm">
               {buttonText}
             </button>
           </div>
