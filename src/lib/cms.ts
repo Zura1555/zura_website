@@ -9,10 +9,20 @@ const sanityClient = createClient({
   useCdn: true,
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
+  perspective: 'published'
+});
+
+// Legacy client for admin operations
+const sanityClientAdmin = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'w486ji4p',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  useCdn: true,
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  token: process.env.SANITY_API_TOKEN,
 });
 
 // Image URL builder
-const builder = imageUrlBuilder(sanityClient);
+const builder = imageUrlBuilder(sanityClientAdmin);
 
 function urlFor(source: any) {
   return builder.image(source);
@@ -262,7 +272,7 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
   console.log(`Attempting to fetch blog post with slug: ${slug} from Sanity`);
   try {
-    const query = `*[_type == "post" && slug.current == $slug && defined(publishedAt)][0] {
+    const query = `*[_type == "post" && slug.current == $slug && defined(publishedAt) && !startsWith(_id, "drafts.")][0] {
       _id,
       _createdAt,
       title,
@@ -356,7 +366,7 @@ export const getAuthors = async (): Promise<any[]> => {
 
 export const getBlogPostsByCategory = async (categorySlug: string): Promise<BlogPost[]> => {
   try {
-    const query = `*[_type == "post" && $categorySlug in categories[]->slug.current && defined(publishedAt)] | order(publishedAt desc) {
+    const query = `*[_type == "post" && $categorySlug in categories[]->slug.current && defined(publishedAt) && !startsWith(_id, "drafts.")] | order(publishedAt desc) {
       _id,
       _createdAt,
       title,

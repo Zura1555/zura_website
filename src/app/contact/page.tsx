@@ -12,11 +12,67 @@ import { Label } from "@/components/ui/label";
 export default function ContactPage() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
   const { toast } = useToast();
+
+  // Email validation function
+  const validateEmail = (email: string) => {
+    if (!email) return false;
+    
+    // Check for valid email format first
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return false;
+    
+    // Check for allowed domains (gmail.com or common work email domains)
+    const allowedDomains = [
+      'gmail.com',
+      'outlook.com',
+      'hotmail.com',
+      'yahoo.com',
+      'company.com', // Add more work domains as needed
+      'microsoft.com',
+      'google.com',
+      'apple.com',
+      'amazon.com',
+      'meta.com',
+      'netflix.com',
+      'linkedin.com'
+    ];
+    
+    const domain = email.split('@')[1]?.toLowerCase() ?? '';
+    
+    // Allow gmail.com specifically or any domain that looks like a work email (contains a dot and isn't a common personal domain)
+    if (domain === 'gmail.com') return true;
+    
+    // For work emails, check if it's in our allowed list or if it looks like a corporate domain
+    // (not a common personal email provider)
+    const personalDomains = ['yahoo.com', 'hotmail.com', 'aol.com', 'live.com'];
+    const isPersonalDomain = personalDomains.includes(domain);
+    
+    return allowedDomains.includes(domain) || (!isPersonalDomain && Boolean(domain) && domain.includes('.'));
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const emailValue = e.target.value;
+    setEmail(emailValue);
+    setIsEmailValid(validateEmail(emailValue));
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('Form submitted');
+    
+    // Double-check email validation before submission
+    if (!isEmailValid || !email) {
+      toast({
+        title: "Invalid Email",
+        description: "Please use a Gmail account (@gmail.com) or a valid work email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setStatus('Sending...');
     setLoading(true);
 
@@ -82,13 +138,31 @@ export default function ContactPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="your.email@example.com" required />
+              <Input 
+                id="email" 
+                name="email" 
+                type="email" 
+                placeholder="your.email@gmail.com or work email" 
+                value={email}
+                onChange={handleEmailChange}
+                required 
+                className={email && !isEmailValid ? "border-red-500 focus:border-red-500" : ""}
+              />
+              {email && !isEmailValid && (
+                <p className="text-sm text-red-500">
+                  Please use a Gmail account (@gmail.com) or a valid work email address
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" name="message" placeholder="Your message..." rows={5} required />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent/90">
+            <Button 
+              type="submit" 
+              disabled={loading || !isEmailValid || !email} 
+              className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {loading ? "Sending..." : "Send Message"}
               <Send className="ml-2 h-4 w-4" />
             </Button>

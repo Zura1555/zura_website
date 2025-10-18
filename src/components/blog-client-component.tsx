@@ -70,11 +70,11 @@ export function BlogClientComponent({ initialPosts }: BlogClientComponentProps) 
       {/* Hero Section */}
       <section className="relative w-full h-64 sm:h-80 bg-primary/10">
         <Image
-          src="https://placehold.co/1920x480"
-          alt="Abstract background"
+          src="/banner/blog-banner.png"
+          alt="Blog banner"
           fill
           className="object-cover opacity-20"
-          data-ai-hint="abstract community background"
+          data-ai-hint="blog banner"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-foreground px-4">
           <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight">From My Desk</h1>

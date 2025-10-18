@@ -2,11 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Download } from "lucide-react";
+import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 import { FlexibleBlogGrid } from "@/components/flexible-blog-grid";
 import { GradientBars } from "@/components/nurui";
-import StackingCards from "@/components/stacking-cards";
+import SwapyDrag from "@/components/swapy-drag";
 
 export const dynamic = 'force-dynamic';
 
@@ -54,13 +54,21 @@ export default async function Home() {
               </p>
               <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
                 <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
-                  <Link href="/about">About</Link>
+                  <a href="https://github.com/Zura1555" target="_blank" rel="noopener noreferrer">
+                    <Github className="mr-2" />
+                    GitHub
+                  </a>
                 </Button>
-                <Button asChild size="lg" className="rounded-lg px-6 sm:px-8 py-3 btn-border-animation">
-                  <a href="/zura_cv.pdf" download>
-                    <span className="border-left"></span>
-                    <span className="border-right"></span>
-                    Download CV <Download className="ml-2" />
+                <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
+                  <a href="https://www.linkedin.com/in/zuratran/" target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="mr-2" />
+                    LinkedIn
+                  </a>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
+                  <a href="mailto:guithutuantran@gmail.com">
+                    <Mail className="mr-2" />
+                    Gmail
                   </a>
                 </Button>
               </div>
@@ -96,8 +104,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Stacking Cards Section */}
-      <StackingCards />
+      {/* Swapy Drag Section */}
+      <SwapyDrag />
 
       {/* Blog Section */}
       <section id="blog" className="bg-background px-4">

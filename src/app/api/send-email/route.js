@@ -14,6 +14,49 @@ export async function POST(req) {
     return NextResponse.json({ message: 'Name, email, and message are required.' }, { status: 400 });
   }
 
+  // Email validation function (server-side)
+  const validateEmail = (email) => {
+    if (!email) return false;
+    
+    // Check for valid email format first
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return false;
+    
+    // Check for allowed domains (gmail.com or common work email domains)
+    const allowedDomains = [
+      'gmail.com',
+      'outlook.com',
+      'hotmail.com',
+      'yahoo.com',
+      'company.com',
+      'microsoft.com',
+      'google.com',
+      'apple.com',
+      'amazon.com',
+      'meta.com',
+      'netflix.com',
+      'linkedin.com'
+    ];
+    
+    const domain = email.split('@')[1]?.toLowerCase();
+    
+    // Allow gmail.com specifically or any domain that looks like a work email
+    if (domain === 'gmail.com') return true;
+    
+    // For work emails, check if it's in our allowed list or if it looks like a corporate domain
+    const personalDomains = ['yahoo.com', 'hotmail.com', 'aol.com', 'live.com'];
+    const isPersonalDomain = personalDomains.includes(domain);
+    
+    return allowedDomains.includes(domain) || (!isPersonalDomain && domain && domain.includes('.'));
+  };
+
+  // Validate email format and domain
+  if (!validateEmail(email)) {
+    return NextResponse.json({ 
+      message: 'Please use a Gmail account (@gmail.com) or a valid work email address.' 
+    }, { status: 400 });
+  }
+
   try {
     await resend.emails.send({
       from: 'contact@zura.id.vn', // Your verified domain
