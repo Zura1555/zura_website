@@ -242,29 +242,48 @@ function DefaultSwapy() {
           </div>
         </div>
         
-        <SwapyLayout
-          id="swapy-dashboard"
-          className="w-full"
-          onSwapStart={handleSwapStart}
-          onSwapEnd={handleSwapEnd}
-        >
-          <div className="grid w-full grid-cols-12 gap-1.5 sm:gap-2 md:gap-4 max-h-[50vh] sm:max-h-[60vh] md:max-h-none overflow-y-auto sm:overflow-y-visible">
+        {/* Mobile View - Static Grid without Swapy */}
+        <div className="block md:hidden">
+          <div className="grid w-full grid-cols-12 gap-1.5 sm:gap-2">
             {initialItems.map((item) => (
               <div
                 key={item.id}
-                data-swapy-slot={item.id}
-                className={`rounded-lg min-h-[160px] sm:min-h-[200px] md:min-h-[240px] lg:h-64 ${item.className}`}
+                className={`rounded-lg min-h-[160px] sm:min-h-[200px] ${item.className}`}
               >
-                <div
-                  data-swapy-item={item.id}
-                  className="relative rounded-lg w-full h-full 2xl:text-xl text-xs sm:text-sm sm:cursor-move cursor-default transition-transform hover:scale-[1.02] touch-none"
-                >
+                <div className="relative rounded-lg w-full h-full 2xl:text-xl text-xs sm:text-sm">
                   {item.widgets}
                 </div>
               </div>
             ))}
           </div>
-        </SwapyLayout>
+        </div>
+        
+        {/* Desktop View - Swapy Enabled */}
+        <div className="hidden md:block">
+          <SwapyLayout
+            id="swapy-dashboard"
+            className="w-full"
+            onSwapStart={handleSwapStart}
+            onSwapEnd={handleSwapEnd}
+          >
+            <div className="grid w-full grid-cols-12 gap-1.5 sm:gap-2 md:gap-4">
+              {initialItems.map((item) => (
+                <div
+                  key={item.id}
+                  data-swapy-slot={item.id}
+                  className={`rounded-lg min-h-[240px] lg:h-64 ${item.className}`}
+                >
+                  <div
+                    data-swapy-item={item.id}
+                    className="relative rounded-lg w-full h-full 2xl:text-xl text-sm cursor-move transition-transform hover:scale-[1.02]"
+                  >
+                    {item.widgets}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SwapyLayout>
+        </div>
       </div>
     </section>
   );
