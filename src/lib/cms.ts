@@ -270,9 +270,8 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
 };
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
-  console.log(`Attempting to fetch blog post with slug: ${slug} from Sanity`);
   try {
-    const query = `*[_type == "post" && slug.current == $slug && defined(publishedAt) && !startsWith(_id, "drafts.")][0] {
+    const query = `*[_type == "post" && slug.current == $slug && defined(publishedAt)][0] {
       _id,
       _createdAt,
       title,
@@ -303,10 +302,8 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefi
     const post = await sanityClient.fetch(query, { slug });
 
     if (post) {
-      console.log(`Found blog post with slug: ${slug}`);
       return mapSanityPostToBlogPost(post);
     } else {
-      console.log(`No blog post found with slug: ${slug}`);
       return undefined;
     }
   } catch (error) {

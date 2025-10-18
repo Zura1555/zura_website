@@ -24,6 +24,12 @@ export const SwapyLayout: React.FC<SwapyLayoutProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Skip initialization on mobile to prevent scroll conflicts
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      return;
+    }
+
     try {
       // Initialize swapy with simple configuration
       const swapy = createSwapy(containerRef.current, {
@@ -40,6 +46,21 @@ export const SwapyLayout: React.FC<SwapyLayoutProps> = ({
       }
 
       swapyRef.current = swapy;
+
+      // Handle window resize
+      const handleResize = () => {
+        if (swapyRef.current && window.innerWidth <= 768) {
+          try {
+            swapyRef.current.destroy();
+            swapyRef.current = null;
+          } catch (error) {
+            console.error('Failed to destroy Swapy on resize:', error);
+          }
+        }
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     } catch (error) {
       console.error('Failed to initialize Swapy:', error);
     }
