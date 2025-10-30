@@ -57,6 +57,10 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  transpilePackages: ['styled-components'],
+  experimental: {
+    esmExternals: 'loose',
+  },
 };
 
 export default nextConfig;
