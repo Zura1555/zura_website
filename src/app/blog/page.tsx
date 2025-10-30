@@ -1,17 +1,40 @@
 import { getBlogPosts } from "@/lib/cms";
 import { BlogClientComponent } from "@/components/blog-client-component";
 import type { BlogPost } from "@/lib/types";
+import type { Metadata } from 'next';
+import { logger } from "@/lib/logger";
+
+export const metadata: Metadata = {
+  title: 'Blog | Zura',
+  description: 'Explore my collection of blog posts covering project insights, technical experiments, and learnings from my journey as a developer. Topics include web development, programming, and tech insights.',
+  keywords: ['blog', 'tech', 'programming', 'web development', 'coding', 'software engineering'],
+  openGraph: {
+    title: 'Blog | Zura',
+    description: 'Explore my collection of blog posts covering project insights, technical experiments, and learnings from my journey as a developer.',
+    type: 'website',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/blog`,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Zura',
+    description: 'Explore my collection of blog posts covering project insights, technical experiments, and learnings.',
+    creator: '@yourtwitterhandle', // Replace with your Twitter handle
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/blog`,
+  },
+};
 
 export default async function BlogPage() {
   let posts: BlogPost[] = [];
   let error: string | null = null;
 
   try {
-    console.log('🔄 Starting to fetch blog posts...');
+    logger.info('🔄 Starting to fetch blog posts...');
     posts = await getBlogPosts();
-    console.log('✅ Successfully fetched posts:', posts.length);
+    logger.info('✅ Successfully fetched posts:', posts.length);
   } catch (err) {
-    console.error('❌ Error fetching posts:', err);
+    logger.error('❌ Error fetching posts:', err);
     error = err instanceof Error ? err.message : 'Failed to fetch posts';
   }
 

@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { Resend } from "resend";
+import { logger } from "./logger";
 
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -39,18 +40,24 @@ export async function submitContactForm(
     };
   }
 
-  // Here, you would typically send an email using a service like Resend, SendGrid, or Nodemailer.
-  // For this example, we'll just log the data to the console.
+  // Send email using Resend
   try {
+    const fromEmail = process.env.CONTACT_EMAIL_FROM;
+    const toEmail = process.env.CONTACT_EMAIL_TO;
+
+    if (!fromEmail || !toEmail) {
+      throw new Error('Email configuration is missing. Please set CONTACT_EMAIL_FROM and CONTACT_EMAIL_TO in environment variables.');
+    }
+
     await resend.emails.send({
-      from: 'guithutuantran@gmail.com', // Your verified email in Resend
+      from: fromEmail, // Your verified email in Resend
       replyTo: validatedFields.data.email, // So you can reply directly to the submitter
-      to: 'guithutuantran@gmail.com',
+      to: toEmail,
       subject: `New Contact Form Submission from ${validatedFields.data.name}`,
       text: `Name: ${validatedFields.data.name}\nEmail: ${validatedFields.data.email}\nMessage: ${validatedFields.data.message}`,
     });
   } catch (error) {
-    console.error('Failed to send email:', error);
+    logger.error('Failed to send email:', error);
     return {
       message: "Failed to send message. Please try again later.",
       success: false,

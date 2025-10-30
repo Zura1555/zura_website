@@ -16,6 +16,12 @@ export interface BlogPost {
 }
 
 // Strapi-specific types
+export interface StrapiBlock {
+  id: string;
+  type: string;
+  [key: string]: unknown;
+}
+
 export interface StrapiArticle {
   id: number;
   documentId: string;
@@ -37,7 +43,7 @@ export interface StrapiArticle {
     name: string;
     slug: string;
   };
-  blocks?: any[];
+  blocks?: StrapiBlock[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

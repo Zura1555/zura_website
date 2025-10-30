@@ -1,10 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Heart, PlusCircle } from "lucide-react";
 import { SwapyLayout } from "@/components/ui/swapy";
 import Lottie from 'lottie-react';
 import blueCatAnimation from '../../lottie/Blue Working Cat Animation.json';
 import boyRunningAnimation from '../../lottie/Cute Boy Running.json';
+
+// Image wrapper component with error handling
+function SafeImage({ src, alt, className, fallbackText }: { src: string; alt: string; className?: string; fallbackText: string }) {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-gray-900 text-xs sm:text-sm font-bold">
+        {fallbackText}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className={className}
+      onError={() => setError(true)}
+      sizes="(max-width: 768px) 100px, 150px"
+    />
+  );
+}
 
 
 export function TeamCard() {
@@ -27,34 +52,20 @@ export function AgencyCard() {
         <p>projects</p>
       </div>
       <div className="flex gap-3 sm:gap-4 h-16 sm:h-20 justify-center">
-        <div className="w-full bg-transparent rounded-lg flex items-center justify-center">
-          <img 
-            src="/n8n.png" 
-            alt="n8n" 
-            className="max-w-full max-h-full object-contain rounded-lg p-2"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<span class="text-gray-900 text-xs font-bold">n8n</span>';
-              }
-            }}
+        <div className="w-full bg-transparent rounded-lg flex items-center justify-center relative">
+          <SafeImage
+            src="/n8n.png"
+            alt="n8n"
+            className="object-contain rounded-lg p-2"
+            fallbackText="n8n"
           />
         </div>
-        <div className="w-full bg-transparent rounded-lg flex items-center justify-center">
-          <img 
-            src="/directus.png" 
-            alt="Directus" 
-            className="max-w-full max-h-full object-contain rounded-lg p-2"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<span class="text-gray-900 text-xs font-bold">Directus</span>';
-              }
-            }}
+        <div className="w-full bg-transparent rounded-lg flex items-center justify-center relative">
+          <SafeImage
+            src="/directus.png"
+            alt="Directus"
+            className="object-contain rounded-lg p-2"
+            fallbackText="Directus"
           />
         </div>
       </div>
@@ -100,19 +111,12 @@ export function InfluencersCard() {
       <div className="flex items-center justify-center mb-4 sm:mb-6">
         <div className="flex items-center space-x-3 sm:space-x-4">
           {/* Current influencer image */}
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center bg-transparent">
-            <img 
-              src={`/influencers/influencer${currentIndex + 1}.png`} 
-              alt={currentInfluencer.name} 
-              className="max-w-full max-h-full object-contain rounded-lg p-1"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = `<span class="text-gray-900 text-xs font-bold">${currentIndex + 1}</span>`;
-                }
-              }}
+          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center bg-transparent relative">
+            <SafeImage
+              src={`/influencers/influencer${currentIndex + 1}.png`}
+              alt={currentInfluencer.name}
+              className="object-contain rounded-lg p-1"
+              fallbackText={`${currentIndex + 1}`}
             />
           </div>
           
@@ -147,49 +151,28 @@ export function CompanyCard() {
       <p className="mb-4 sm:mb-6 text-gray-600">Experience</p>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mt-2 sm:mt-4 sm:items-center justify-center sm:justify-start">
-        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center">
-          <img 
-            src="/cpa.png" 
-            alt="CPA Australia" 
-            className="max-w-full max-h-full object-contain rounded-lg p-2"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-900 text-xs sm:text-sm font-bold">CPA</div>';
-              }
-            }}
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center relative">
+          <SafeImage
+            src="/cpa.png"
+            alt="CPA Australia"
+            className="object-contain rounded-lg p-2"
+            fallbackText="CPA"
           />
         </div>
-        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center">
-          <img 
-            src="/oplacrm.png" 
-            alt="OplaCRM" 
-            className="max-w-full max-w-full max-h-full object-contain rounded-lg p-2"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-900 text-xs sm:text-sm font-bold">Opla</div>';
-              }
-            }}
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center relative">
+          <SafeImage
+            src="/oplacrm.png"
+            alt="OplaCRM"
+            className="object-contain rounded-lg p-2"
+            fallbackText="Opla"
           />
         </div>
-        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center">
-          <img 
-            src="/maisonrmi.png" 
-            alt="Maison RMI" 
-            className="max-w-full max-h-full max-h-full object-contain rounded-lg p-2"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-900 text-xs sm:text-sm font-bold">RMI</div>';
-              }
-            }}
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md bg-transparent flex items-center justify-center relative">
+          <SafeImage
+            src="/maisonrmi.png"
+            alt="Maison RMI"
+            className="object-contain rounded-lg p-2"
+            fallbackText="RMI"
           />
         </div>
       </div>

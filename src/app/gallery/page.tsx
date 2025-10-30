@@ -1,6 +1,28 @@
 import { getGalleryAlbums } from "@/lib/cms";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Gallery | Zura',
+  description: 'A visual journey through my projects, travels, and moments of inspiration. Explore my collection of landscapes, projects, and portraits.',
+  keywords: ['gallery', 'portfolio', 'photography', 'projects', 'visual'],
+  openGraph: {
+    title: 'Gallery | Zura',
+    description: 'A visual journey through my projects, travels, and moments of inspiration.',
+    type: 'website',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/gallery`,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gallery | Zura',
+    description: 'A visual journey through my projects, travels, and moments of inspiration.',
+    creator: '@yourtwitterhandle', // Replace with your Twitter handle
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/gallery`,
+  },
+};
 
 export default async function GalleryPage() {
   const albums = await getGalleryAlbums();

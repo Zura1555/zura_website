@@ -61,7 +61,6 @@ export default function ContactPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Form submitted');
     
     // Double-check email validation before submission
     if (!isEmailValid || !email) {
@@ -134,39 +133,59 @@ export default function ContactPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" placeholder="Your Name" required />
+              <Input
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                required
+                aria-required="true"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                name="email" 
-                type="email" 
-                placeholder="your.email@gmail.com or work email" 
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="your.email@gmail.com or work email"
                 value={email}
                 onChange={handleEmailChange}
-                required 
+                required
+                aria-invalid={email && !isEmailValid ? "true" : "false"}
+                aria-describedby={email && !isEmailValid ? "email-error" : undefined}
                 className={email && !isEmailValid ? "border-red-500 focus:border-red-500" : ""}
               />
               {email && !isEmailValid && (
-                <p className="text-sm text-red-500">
+                <p id="email-error" role="alert" className="text-sm text-red-500">
                   Please use a Gmail account (@gmail.com) or a valid work email address
                 </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
-              <Textarea id="message" name="message" placeholder="Your message..." rows={5} required />
+              <Textarea
+                id="message"
+                name="message"
+                placeholder="Your message..."
+                rows={5}
+                required
+                aria-required="true"
+              />
             </div>
-            <Button 
-              type="submit" 
-              disabled={loading || !isEmailValid || !email} 
+            <Button
+              type="submit"
+              disabled={loading || !isEmailValid || !email}
               className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={loading ? "Sending message" : "Send message"}
             >
               {loading ? "Sending..." : "Send Message"}
-              <Send className="ml-2 h-4 w-4" />
+              <Send className="ml-2 h-4 w-4" aria-hidden="true" />
             </Button>
-            {status && <p className="text-sm text-center">{status}</p>}
+            {status && (
+              <p className="text-sm text-center" role="status" aria-live="polite">
+                {status}
+              </p>
+            )}
           </form>
         </div>
       </section>

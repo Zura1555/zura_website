@@ -1,6 +1,8 @@
 import type { BlogPost, Album } from './types';
+import type { SanityBlockContent, SanityPost, SanityImageAsset } from './sanity-types';
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
+import { logger } from './logger';
 
 // Sanity client configuration
 const sanityClient = createClient({
@@ -24,7 +26,7 @@ const sanityClientAdmin = createClient({
 // Image URL builder
 const builder = imageUrlBuilder(sanityClientAdmin);
 
-function urlFor(source: any) {
+function urlFor(source: SanityImageAsset) {
   return builder.image(source);
 }
 
@@ -76,7 +78,7 @@ function fixImageUrl(url: unknown): string {
 
 
 // Helper function to process Sanity blocks into markdown content
-function processBlocks(blocks: any[]): { content: string; summary: string } {
+function processBlocks(blocks: SanityBlockContent[]): { content: string; summary: string } {
   let markdownContent = '';
   let textContent = '';
 
@@ -88,8 +90,8 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
     switch (block._type) {
       case 'block':
         // Handle Sanity's portable text blocks
-        if (block.children) {
-          let blockText = block.children.map((child: any) => {
+        if ('children' in block && block.children) {
+          let blockText = block.children.map((child) => {
             let text = child.text || '';
             
             // Handle marks (bold, italic, etc.)
@@ -112,7 +114,8 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
           }).join('');
 
           // Handle block styles (headings, paragraphs, etc.)
-          switch (block.style) {
+          const style = 'style' in block ? block.style : 'normal';
+          switch (style) {
             case 'h1':
               markdownContent += `# ${blockText}\n\n`;
               break;
@@ -142,23 +145,26 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
         }
         break;
       case 'image':
-        if (block.asset) {
+        if ('asset' in block && block.asset) {
           const imageUrl = urlFor(block.asset).url();
-          markdownContent += `![${block.alt || 'Image'}](${imageUrl})\n\n`;
+          const alt = 'alt' in block && block.alt ? block.alt : 'Image';
+          markdownContent += `![${alt}](${imageUrl})\n\n`;
         }
         break;
       case 'code':
-        if (block.code) {
-          const language = block.language || '';
+        if ('code' in block && block.code) {
+          const language = 'language' in block && block.language ? block.language : '';
           markdownContent += `\`\`\`${language}\n${block.code}\n\`\`\`\n\n`;
         }
         break;
       default:
         // Handle any other block types generically
-        if (block.text || block.content) {
-          const content = block.text || block.content;
-          markdownContent += content + '\n\n';
-          textContent += content.replace(/[#*_~`]/g, '') + ' ';
+        if ('text' in block && typeof block.text === 'string') {
+          markdownContent += block.text + '\n\n';
+          textContent += block.text.replace(/[#*_~`]/g, '') + ' ';
+        } else if ('content' in block && typeof block.content === 'string') {
+          markdownContent += block.content + '\n\n';
+          textContent += block.content.replace(/[#*_~`]/g, '') + ' ';
         }
         break;
     }
@@ -173,7 +179,7 @@ function processBlocks(blocks: any[]): { content: string; summary: string } {
 }
 
 // Helper function to convert Sanity post to BlogPost
-function mapSanityPostToBlogPost(post: any): BlogPost {
+function mapSanityPostToBlogPost(post: SanityPost): BlogPost {
   const { content, summary } = processBlocks(post.content || []);
 
   // Handle cover image URL
@@ -199,7 +205,7 @@ function mapSanityPostToBlogPost(post: any): BlogPost {
     : undefined;
 
   return {
-    slug: post.slug?.current || post.slug,
+    slug: post.slug.current,
     title: post.title || 'Untitled Post',
     date: post.publishedAt || post.date || post._createdAt,
     summary: post.excerpt || summary,
@@ -217,7 +223,7 @@ function mapSanityPostToBlogPost(post: any): BlogPost {
 
 
 export const getBlogPosts = async (): Promise<BlogPost[]> => {
-  console.log("Attempting to fetch blog posts from Sanity...");
+  logger.info("Attempting to fetch blog posts from Sanity...");
   try {
     const query = `*[_type == "post" && defined(publishedAt)] | order(publishedAt desc) {
       _id,
@@ -248,23 +254,23 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
     }`;
 
     const posts = await sanityClient.fetch(query);
-    console.log(`Found ${posts.length} blog post(s) from Sanity.`);
+    logger.info(`Found ${posts.length} blog post(s) from Sanity.`);
 
     if (posts.length === 0) {
-      console.log("No published posts found in Sanity. Check:");
-      console.log("1. Your Sanity project is properly configured.");
-      console.log("2. You have published posts in your Sanity studio.");
-      console.log("3. The schema is properly deployed.");
+      logger.warn("No published posts found in Sanity. Check:");
+      logger.warn("1. Your Sanity project is properly configured.");
+      logger.warn("2. You have published posts in your Sanity studio.");
+      logger.warn("3. The schema is properly deployed.");
     }
 
     const blogPosts = posts.map(mapSanityPostToBlogPost);
     return blogPosts;
 
   } catch (error) {
-    console.error("\n--- ERROR FETCHING BLOG POSTS FROM SANITY ---");
-    console.error(error);
-    console.error("Check your Sanity client configuration and project setup.");
-    console.error("-------------------------------------------------\n");
+    logger.error("\n--- ERROR FETCHING BLOG POSTS FROM SANITY ---");
+    logger.error(error);
+    logger.error("Check your Sanity client configuration and project setup.");
+    logger.error("-------------------------------------------------\n");
     return [];
   }
 };
@@ -307,10 +313,10 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | undefi
       return undefined;
     }
   } catch (error) {
-    console.error('\n--- ERROR FETCHING BLOG POST from Sanity with slug ' + slug + ' ---');
-    console.error(error);
-    console.error("Check your Sanity client configuration and project setup.");
-    console.error("-----------------------------------------------------\n");
+    logger.error('\n--- ERROR FETCHING BLOG POST from Sanity with slug ' + slug + ' ---');
+    logger.error(error);
+    logger.error("Check your Sanity client configuration and project setup.");
+    logger.error("-----------------------------------------------------\n");
     return undefined;
   }
 };
@@ -337,12 +343,12 @@ export const getCategories = async (): Promise<any[]> => {
     const categories = await sanityClient.fetch(query);
     return categories;
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    logger.error('Error fetching categories:', error);
     return [];
   }
 };
 
-export const getAuthors = async (): Promise<any[]> => {
+export const getAuthors = async (): Promise<Array<{ _id: string; firstName: string; lastName: string; picture?: { asset: SanityImageAsset; alt?: string } }>> => {
   try {
     const query = `*[_type == "person"] | order(firstName asc) {
       _id,
@@ -356,7 +362,7 @@ export const getAuthors = async (): Promise<any[]> => {
     const authors = await sanityClient.fetch(query);
     return authors;
   } catch (error) {
-    console.error('Error fetching authors:', error);
+    logger.error('Error fetching authors:', error);
     return [];
   }
 };
@@ -394,7 +400,7 @@ export const getBlogPostsByCategory = async (categorySlug: string): Promise<Blog
     const posts = await sanityClient.fetch(query, { categorySlug });
     return posts.map(mapSanityPostToBlogPost);
   } catch (error) {
-    console.error(`Error fetching posts for category ${categorySlug}:`, error);
+    logger.error(`Error fetching posts for category ${categorySlug}:`, error);
     return [];
   }
 };

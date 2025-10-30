@@ -10,6 +10,7 @@ import { TableOfContents } from "@/components/table-of-contents";
 import BlogBanner from "@/components/ui/banner";
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import type { Metadata } from 'next';
 
 type BlogPostPageProps = {
   params: Promise<{
@@ -24,14 +25,63 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'The requested blog post could not be found.',
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com';
+  const postUrl = `${siteUrl}/blog/${post.slug}`;
+
+  return {
+    title: `${post.title} | Zura's Blog`,
+    description: post.summary || post.description || 'Read this blog post by Zura',
+    authors: [{ name: post.author.name }],
+    keywords: post.category ? [post.category, 'blog', 'tech', 'programming'] : ['blog', 'tech'],
+    openGraph: {
+      title: post.title,
+      description: post.summary || post.description || 'Read this blog post by Zura',
+      type: 'article',
+      url: postUrl,
+      images: [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      publishedTime: post.date,
+      authors: [post.author.name],
+      tags: post.category ? [post.category] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary || post.description || 'Read this blog post by Zura',
+      images: [post.image],
+      creator: '@yourtwitterhandle', // Replace with your Twitter handle
+    },
+    alternates: {
+      canonical: postUrl,
+    },
+  };
+}
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   let post;
   try {
     post = await getBlogPostBySlug(slug);
   } catch (error) {
-    console.error("Failed to fetch blog post:", error);
-    return <div>Error loading post.</div>;
+    // Error will be caught by error boundary
+    throw new Error("Failed to fetch blog post");
   }
 
   if (!post) {
@@ -62,8 +112,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     };
   };
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com';
+  const postUrl = `${siteUrl}/blog/${post.slug}`;
+
+  // JSON-LD structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.summary || post.description,
+    image: post.image,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Person',
+      name: authorName,
+      image: author.avatar,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Zura',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/logo.png`, // Add your logo if available
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': postUrl,
+    },
+    articleSection: post.category,
+  };
+
   return (
     <div className="animate-in fade-in duration-500">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Blog Banner */}
       <BlogBanner
         title={post.title}
