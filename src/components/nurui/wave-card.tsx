@@ -118,7 +118,7 @@ const WaveCard = ({
           
           {/* Tags */}
           <div className="flex items-start space-x-4 mb-3 sm:mb-4">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-transparent text-xs sm:text-sm">
+            <Badge variant="default" className="text-xs sm:text-sm">
               {tags}
             </Badge>
           </div>
