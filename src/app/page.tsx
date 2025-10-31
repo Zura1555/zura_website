@@ -13,12 +13,10 @@ import { GradientBars } from '@/components/nurui';
 // Lazy load non-critical components below the fold
 const FlexibleBlogGrid = dynamicImport(() => import('@/components/flexible-blog-grid').then(mod => ({ default: mod.FlexibleBlogGrid })), {
   loading: () => <div className="h-96 animate-pulse bg-muted/20 rounded-lg" />,
-  ssr: false, // Prevent hydration mismatch
 });
 
 const SwapyDrag = dynamicImport(() => import('@/components/swapy-drag'), {
   loading: () => <div className="h-96 animate-pulse bg-muted/20 rounded-lg" />,
-  ssr: false, // Prevent hydration mismatch
 });
 
 export const dynamic = 'force-dynamic';

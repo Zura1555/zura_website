@@ -11,17 +11,8 @@ const nextConfig: NextConfig = {
   },
   // Optimize for LCP performance
   experimental: {
-    esmExternals: 'loose',
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
-    fontLoaders: [
-      {
-        loader: 'next/font/google',
-        options: {
-          subsets: ['latin'],
-        },
-      },
-    ],
   },
   images: {
     dangerouslyAllowSVG: true,
