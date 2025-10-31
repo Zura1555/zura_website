@@ -61,6 +61,8 @@ const nextConfig: NextConfig = {
   experimental: {
     esmExternals: 'loose',
     optimizeCss: true,
+    // Optimize package imports to reduce bundle size
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
   },
   webpack: (config, { dev, isServer }) => {
     // Optimize chunks for production

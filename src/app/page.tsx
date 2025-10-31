@@ -5,10 +5,15 @@ import dynamicImport from 'next/dynamic';
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
-import { FlexibleBlogGrid } from "@/components/flexible-blog-grid";
-import { GradientBars } from "@/components/nurui";
 
-// Lazy load heavy components that are below the fold
+// Lazy load ALL non-critical components to reduce initial bundle
+// These components are either below the fold or not immediately visible
+const GradientBars = dynamicImport(() => import('@/components/nurui').then(mod => ({ default: mod.GradientBars })));
+
+const FlexibleBlogGrid = dynamicImport(() => import('@/components/flexible-blog-grid').then(mod => ({ default: mod.FlexibleBlogGrid })), {
+  loading: () => <div className="h-96 animate-pulse bg-muted/20" />,
+});
+
 const SwapyDrag = dynamicImport(() => import('@/components/swapy-drag'), {
   loading: () => <div className="h-96 animate-pulse bg-muted/20" />,
 });

@@ -7,6 +7,8 @@ export default {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  // Safelist only critical classes to reduce CSS bloat
+  safelist: [],
   theme: {
     extend: {
       fontFamily: {
