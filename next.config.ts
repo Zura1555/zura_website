@@ -2,6 +2,27 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Production source maps - set via environment variable
+  productionBrowserSourceMaps: process.env.NODE_ENV === 'production' && process.env.ENABLE_SOURCE_MAPS === 'true',
+  compiler: {
+    removeConsole: process.env.NODE_ENV !== 'development' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+  // Optimize for LCP performance
+  experimental: {
+    esmExternals: 'loose',
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
+    fontLoaders: [
+      {
+        loader: 'next/font/google',
+        options: {
+          subsets: ['latin'],
+        },
+      },
+    ],
+  },
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
@@ -58,12 +79,6 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ['styled-components'],
-  experimental: {
-    esmExternals: 'loose',
-    optimizeCss: true,
-    // Optimize package imports to reduce bundle size
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
-  },
   webpack: (config, { dev, isServer }) => {
     // Optimize chunks for production
     if (!dev && !isServer) {
@@ -122,12 +137,7 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-  compiler: {
-    // Remove console.logs in production
-    removeConsole: process.env.NODE_ENV !== 'development' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
+  
 };
 
 export default nextConfig;

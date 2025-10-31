@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 
-// Lazy load ALL non-critical components to reduce initial bundle
-// These components are either below the fold or not immediately visible
-const GradientBars = dynamicImport(() => import('@/components/nurui').then(mod => ({ default: mod.GradientBars })), {
-  ssr: false, // Prevent hydration mismatch
-});
+// CRITICAL: Load GradientBars synchronously for above-the-fold content
+// It's part of the hero section and must render immediately
+import { GradientBars } from '@/components/nurui';
 
+// Lazy load non-critical components below the fold
 const FlexibleBlogGrid = dynamicImport(() => import('@/components/flexible-blog-grid').then(mod => ({ default: mod.FlexibleBlogGrid })), {
   loading: () => <div className="h-96 animate-pulse bg-muted/20 rounded-lg" />,
   ssr: false, // Prevent hydration mismatch
@@ -29,13 +28,13 @@ export default async function Home() {
   const latestPosts = posts.slice(0, 10); // Allow up to 10 posts for flexibility
   
   return (
-    <div className="overflow-x-clip animate-in fade-in duration-700">
-      <section id="home" className="px-4 relative">
-        {/* Gradient Bars Background */}
+    <div className="overflow-x-clip">
+      <section id="home" className="px-4 relative w-full">
+        {/* Gradient Bars Background - Critical for LCP */}
         <GradientBars bars={15} colors={['#3ca2faD9', 'transparent']} />
         <div className="container mx-auto max-w-5xl py-12 sm:py-16 md:py-24 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            {/* Left Column */}
+            {/* Left Column - Critical content for LCP */}
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
                   <h1 className="font-luckiest text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight">
