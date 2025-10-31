@@ -60,6 +60,43 @@ const nextConfig: NextConfig = {
   transpilePackages: ['styled-components'],
   experimental: {
     esmExternals: 'loose',
+    optimizeCss: true,
+  },
+  webpack: (config, { dev, isServer }) => {
+    // Optimize chunks for production
+    if (!dev && !isServer) {
+      // Split chunks for better caching
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          // Separate vendor libraries
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+          },
+          // Separate Framer Motion (commonly used)
+          framerMotion: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            priority: 20,
+          },
+          // Separate Lottie
+          lottie: {
+            test: /[\\/]node_modules[\\/]lottie-react[\\/]/,
+            name: 'lottie',
+            priority: 20,
+          },
+        },
+      };
+    }
+    return config;
+  },
+  compiler: {
+    // Remove console.logs in production
+    removeConsole: process.env.NODE_ENV !== 'development' ? {
+      exclude: ['error', 'warn'],
+    } : false,
   },
 };
 
