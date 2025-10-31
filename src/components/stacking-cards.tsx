@@ -1,7 +1,7 @@
 // thanks to oliver: https://www.youtube.com/@olivierlarose1
 'use client';
 import { ReactLenis } from 'lenis/react';
-import { useTransform, motion, useScroll, MotionValue } from 'motion/react';
+import { useTransform, motion, useScroll, MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 import Image from 'next/image';
 import { useIsMobile } from '@/hooks/use-mobile';

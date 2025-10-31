@@ -1,5 +1,5 @@
 import type { BlogPost, Album } from './types';
-import type { SanityBlockContent, SanityPost, SanityImageAsset } from './sanity-types';
+import type { SanityBlockContent, SanityPost, SanityImageAsset, SanityBlock } from './sanity-types';
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { logger } from './logger';
@@ -91,7 +91,7 @@ function processBlocks(blocks: SanityBlockContent[]): { content: string; summary
       case 'block':
         // Handle Sanity's portable text blocks
         if ('children' in block && block.children) {
-          let blockText = block.children.map((child) => {
+          let blockText = (block as SanityBlock).children.map((child) => {
             let text = child.text || '';
             
             // Handle marks (bold, italic, etc.)
@@ -146,7 +146,7 @@ function processBlocks(blocks: SanityBlockContent[]): { content: string; summary
         break;
       case 'image':
         if ('asset' in block && block.asset) {
-          const imageUrl = urlFor(block.asset).url();
+          const imageUrl = urlFor((block as any).asset).url();
           const alt = 'alt' in block && block.alt ? block.alt : 'Image';
           markdownContent += `![${alt}](${imageUrl})\n\n`;
         }
