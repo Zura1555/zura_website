@@ -24,7 +24,7 @@ const luckiestGuy = Luckiest_Guy({
   weight: '400',
   variable: '--font-luckiest',
   display: 'optional', // Don't block render
-  preload: false, // Not used on critical path
+  preload: true, // Used in hero section above the fold
   fallback: ['cursive', 'system-ui'],
 });
 
