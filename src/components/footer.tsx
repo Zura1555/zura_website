@@ -24,6 +24,11 @@ export default function Footer() {
             height: '1.25rem',
             margin: 0,
             padding: 0,
+            // Reserve exact text height to prevent font loading shift
+            minHeight: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           © {new Date().getFullYear()} Zura. All rights reserved.

@@ -77,7 +77,7 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
   // No posts
   if (postCount === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12" style={{ minHeight: '400px' }}>
         <p className="text-muted-foreground">
           No blog posts found. Check your Strapi connection and ensure you have published articles.
         </p>
@@ -88,7 +88,7 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
   // Single post - 1 grid
   if (postCount === 1) {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center" style={{ minHeight: '500px' }}>
         <div className="w-full max-w-md">
           <FeaturedBlogPost post={posts[0]} />
         </div>
@@ -99,7 +99,7 @@ export function FlexibleBlogGrid({ posts }: FlexibleBlogGridProps) {
   // Two posts - 2 grid container
   if (postCount === 2) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" style={{ minHeight: '600px' }}>
         {posts.map((post, index) => (
           <div key={post.slug} className="h-full">
             <FeaturedBlogPost post={post} />

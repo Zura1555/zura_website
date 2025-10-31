@@ -71,6 +71,7 @@ export const Card: React.FC<CardProps> = ({
     <div
       ref={container}
       className={`${isMobile ? 'h-[80vh]' : 'h-screen'} flex items-center justify-center sticky top-0`}
+      style={{ contain: 'layout' }} // Prevent layout shifts from child animations
     >
       <motion.div
         style={{
@@ -79,6 +80,7 @@ export const Card: React.FC<CardProps> = ({
           top: `calc(-5vh + ${i * (isMobile ? 15 : 25)}px)`,
         }}
         className={`flex ${isMobile ? 'flex-col' : 'flex-col'} relative ${isMobile ? '-top-[15%]' : '-top-[25%]'} ${isMobile ? 'h-[500px] w-[90%] p-4' : 'h-[450px] w-[70%] p-10'} rounded-md origin-top`}
+        layout // Prevent layout shifts during animations
       >
         <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} text-center font-semibold ${isMobile ? 'mb-3' : ''}`}>{title}</h2>
         <div className={`flex ${isMobile ? 'flex-col' : ''} h-full ${isMobile ? 'gap-4' : 'mt-5 gap-10'}`}>

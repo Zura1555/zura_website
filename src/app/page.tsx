@@ -8,14 +8,18 @@ import { getBlogPosts } from "@/lib/cms";
 
 // Lazy load ALL non-critical components to reduce initial bundle
 // These components are either below the fold or not immediately visible
-const GradientBars = dynamicImport(() => import('@/components/nurui').then(mod => ({ default: mod.GradientBars })));
+const GradientBars = dynamicImport(() => import('@/components/nurui').then(mod => ({ default: mod.GradientBars })), {
+  ssr: false, // Prevent hydration mismatch
+});
 
 const FlexibleBlogGrid = dynamicImport(() => import('@/components/flexible-blog-grid').then(mod => ({ default: mod.FlexibleBlogGrid })), {
-  loading: () => <div className="h-96 animate-pulse bg-muted/20" />,
+  loading: () => <div className="h-96 animate-pulse bg-muted/20 rounded-lg" />,
+  ssr: false, // Prevent hydration mismatch
 });
 
 const SwapyDrag = dynamicImport(() => import('@/components/swapy-drag'), {
-  loading: () => <div className="h-96 animate-pulse bg-muted/20" />,
+  loading: () => <div className="h-96 animate-pulse bg-muted/20 rounded-lg" />,
+  ssr: false, // Prevent hydration mismatch
 });
 
 export const dynamic = 'force-dynamic';
