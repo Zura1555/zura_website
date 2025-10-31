@@ -1,8 +1,31 @@
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border/40 bg-transparent mt-20" style={{ minHeight: '120px' }}>
-      <div className="container mx-auto flex max-w-7xl flex-col items-center justify-center gap-4" style={{ height: '120px' }}>
-        <p className="text-sm leading-[1.25rem]" style={{ height: '1.25rem', color: 'hsl(var(--muted-foreground))' }}>
+    <footer
+      className="w-full border-t border-border/40 bg-transparent"
+      style={{
+        marginTop: '5rem', // 80px - replaces mt-20
+        height: '104px', // Fixed height: 32px (py-8) * 2 + 20px (text) + 20px (gap)
+        contain: 'layout', // CSS containment prevents layout shifts
+      }}
+    >
+      <div
+        className="container mx-auto flex max-w-7xl flex-col items-center justify-center"
+        style={{
+          height: '100%',
+          paddingTop: '2rem', // 32px
+          paddingBottom: '2rem', // 32px
+        }}
+      >
+        <p
+          className="text-muted-foreground"
+          style={{
+            fontSize: '0.875rem', // 14px - replaces text-sm
+            lineHeight: '1.25rem', // 20px
+            height: '1.25rem',
+            margin: 0,
+            padding: 0,
+          }}
+        >
           © {new Date().getFullYear()} Zura. All rights reserved.
         </p>
       </div>
