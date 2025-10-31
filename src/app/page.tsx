@@ -89,7 +89,7 @@ export default async function Home() {
                   {/* Purple Background */}
                   <div className="absolute inset-0 bg-primary rounded-t-3xl rounded-bl-3xl rounded-br-[80px] sm:rounded-br-[100px] md:rounded-br-[120px]" />
                   
-                  {/* Image */}
+                  {/* Image - LCP optimization */}
                   <div className="absolute inset-3 sm:inset-4 md:inset-5">
                       <Image
                           src="https://ik.imagekit.io/zmblm08qi/Blog%20Header%20Image.png?updatedAt=1754142363015"
@@ -99,6 +99,7 @@ export default async function Home() {
                           data-ai-hint="woman portrait professional"
                           className="rounded-t-2xl rounded-bl-2xl rounded-br-[60px] sm:rounded-br-[80px] md:rounded-br-[100px] object-cover"
                           priority
+                          fetchPriority="high"
                       />
                   </div>
 
