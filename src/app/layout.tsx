@@ -8,20 +8,24 @@ import Footer from '@/components/footer';
 import PageTransition from '@/components/page-transition';
 
 // Optimize font loading with next/font
+// Using 'optional' display to prevent render blocking
 const sora = Sora({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '600'], // Only load weights we actually use
   variable: '--font-sora',
-  display: 'swap',
+  display: 'optional', // Don't block render, use fallback if font not ready
   preload: true,
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true, // Adjust fallback to match web font metrics
 });
 
 const luckiestGuy = Luckiest_Guy({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-luckiest',
-  display: 'swap',
+  display: 'optional', // Don't block render
   preload: false, // Not used on critical path
+  fallback: ['cursive', 'system-ui'],
 });
 
 export const metadata: Metadata = {
