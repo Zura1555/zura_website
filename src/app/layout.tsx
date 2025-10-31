@@ -1,10 +1,28 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Sora, Luckiest_Guy } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import PageTransition from '@/components/page-transition';
+
+// Optimize font loading with next/font
+const sora = Sora({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sora',
+  display: 'swap',
+  preload: true,
+});
+
+const luckiestGuy = Luckiest_Guy({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-luckiest',
+  display: 'swap',
+  preload: false, // Not used on critical path
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'),
@@ -55,21 +73,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        {/* Preconnect to Google Fonts for faster loading */}
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className={cn('min-h-screen font-body antialiased bg-background')}>
+    <html lang="en" className={cn("dark", sora.variable, luckiestGuy.variable)}>
+      <body className={cn('min-h-screen antialiased bg-background', sora.className)}>
         {/* Skip to content link for accessibility */}
         <a
           href="#main-content"

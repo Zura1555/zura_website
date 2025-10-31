@@ -1,12 +1,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import dynamicImport from 'next/dynamic';
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 import { FlexibleBlogGrid } from "@/components/flexible-blog-grid";
 import { GradientBars } from "@/components/nurui";
-import SwapyDrag from "@/components/swapy-drag";
+
+// Lazy load heavy components that are below the fold
+const SwapyDrag = dynamicImport(() => import('@/components/swapy-drag'), {
+  loading: () => <div className="h-96 animate-pulse bg-muted/20" />,
+});
 
 export const dynamic = 'force-dynamic';
 

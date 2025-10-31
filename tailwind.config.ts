@@ -10,9 +10,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Sora', 'sans-serif'],
-        headline: ['Sora', 'sans-serif'],
-        'luckiest': ['Luckiest Guy', 'cursive'],
+        body: ['var(--font-sora)', 'sans-serif'],
+        headline: ['var(--font-sora)', 'sans-serif'],
+        'luckiest': ['var(--font-luckiest)', 'cursive'],
         mono: ['Intel One Mono', 'monospace'],
       },
       colors: {

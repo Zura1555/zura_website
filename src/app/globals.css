@@ -1,6 +1,7 @@
-/* Preconnect to Google Fonts for faster loading */
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400&family=Luckiest+Guy&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+/*
+ * Fonts are now loaded via next/font in layout.tsx for optimal performance
+ * This eliminates unused CSS and enables automatic subsetting
+ */
 
 @tailwind base;
 @tailwind components;

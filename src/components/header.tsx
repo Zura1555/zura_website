@@ -37,14 +37,16 @@ export default function Header() {
       <Link
         href={href}
         className={cn(
-          "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+          "relative px-4 py-2 rounded-full text-sm font-medium overflow-hidden",
+          "before:absolute before:inset-0 before:rounded-full before:bg-primary before:opacity-0 before:transition-opacity before:duration-200",
+          "hover:before:opacity-10",
           isActive
-            ? 'bg-primary text-primary-foreground'
-            : 'text-muted-foreground hover:text-foreground',
+            ? 'before:opacity-100 text-primary-foreground'
+            : 'text-muted-foreground',
           isBlog && 'font-nunito-sans'
         )}
       >
-        {label}
+        <span className="relative z-10">{label}</span>
       </Link>
     );
   };
