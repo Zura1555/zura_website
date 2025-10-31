@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatFullDate } from "@/lib/date-utils";
 
 interface BlogBannerProps {
   title: string;
@@ -11,22 +12,14 @@ interface BlogBannerProps {
   readTime?: string;
 }
 
-const BlogBanner: React.FC<BlogBannerProps> = ({ 
-  title, 
-  description, 
-  author, 
-  date, 
+const BlogBanner: React.FC<BlogBannerProps> = ({
+  title,
+  description,
+  author,
+  date,
   category,
   readTime = "5 min read"
 }) => {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
-
   return (
     <section className="bg-background text-foreground py-16 px-4">
       <div className="mx-auto text-center" style={{ maxWidth: '866px' }}>
@@ -68,7 +61,7 @@ const BlogBanner: React.FC<BlogBannerProps> = ({
 
           {/* Date and Read Time */}
           <div className="text-center">
-            <div className="text-muted-foreground mb-1">Last updated: {formatDate(date)}</div>
+            <div className="text-muted-foreground mb-1">Last updated: {formatFullDate(date)}</div>
             <div className="text-yellow-500 font-medium">{readTime}</div>
           </div>
         </div>

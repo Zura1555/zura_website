@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { formatLongDate } from '@/lib/date-utils';
 
 interface WaveCardProps {
   tags: string;
@@ -137,11 +138,7 @@ const WaveCard = ({
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-auto pt-3 sm:pt-4 gap-2 sm:gap-0">
             {date && (
               <time className="block text-xs font-medium text-muted-foreground">
-                {new Date(date).toLocaleDateString("en-US", {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
+                {formatLongDate(date)}
               </time>
             )}
             <button className="w-full sm:w-auto sm:ml-auto bg-primary hover:bg-primary/90 text-primary-foreground py-2 px-3 sm:px-4 rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm">

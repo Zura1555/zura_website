@@ -9,6 +9,7 @@ import { CalendarDays, ArrowUpRight } from 'lucide-react';
 import type { BlogPost } from '@/lib/types';
 import WaveCard from '@/components/nurui/wave-card';
 import { cn } from '@/lib/utils';
+import { formatShortDate } from '@/lib/date-utils';
 
 interface FlexibleBlogGridProps {
   posts: BlogPost[];
@@ -55,7 +56,7 @@ const CompactBlogPost = ({ post }: { post: BlogPost }) => (
         {/* Date and Category */}
         <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground mt-auto">
           <CalendarDays className="h-3 w-3" />
-          <span className="text-xs">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          <span className="text-xs">{formatShortDate(post.date)}</span>
           {post.category && (
             <>
               <span>•</span>

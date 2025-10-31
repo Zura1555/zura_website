@@ -8,15 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { 
-  Search, 
-  Globe, 
+import {
+  Search,
+  Globe,
   Tag,
   CheckCircle,
   Dot,
   User,
   CalendarDays
 } from "lucide-react";
+import { formatShortDate } from "@/lib/date-utils";
 
 interface BlogClientComponentProps {
   initialPosts: BlogPost[];
@@ -159,7 +160,7 @@ export function BlogClientComponent({ initialPosts }: BlogClientComponentProps) 
                             </div>
                             <div className="flex items-center gap-1.5">
                               <CalendarDays className="h-3.5 w-3.5" />
-                              <span>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                              <span>{formatShortDate(post.date)}</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 mt-2 sm:mt-3">
