@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Sora, Luckiest_Guy } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { CSSLoader } from '@/components/css-loader';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import PageTransition from '@/components/page-transition';
@@ -193,15 +194,7 @@ export default function RootLayout({
         }} />
         
         {/* Defer full CSS loading to reduce critical path */}
-        <link
-          href="/_next/static/css/app/layout.css"
-          rel="preload"
-          as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
-        />
-        <noscript>
-          <link href="/_next/static/css/app/layout.css" rel="stylesheet" />
-        </noscript>
+        <CSSLoader href="/_next/static/css/app/layout.css" />
         
         {/* Preload critical fonts */}
         <link rel="preload" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
