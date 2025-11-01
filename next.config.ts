@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
+    // Enable inline critical CSS
+    // Note: This will inline critical CSS and defer non-critical CSS
+    // This should reduce the critical request chain significantly
   },
   images: {
     dangerouslyAllowSVG: true,
@@ -76,8 +79,8 @@ const nextConfig: NextConfig = {
       // More aggressive code splitting to reduce initial bundle
       config.optimization.splitChunks = {
         chunks: 'all',
-        maxInitialRequests: 25,
-        minSize: 20000,
+        maxInitialRequests: 30,
+        minSize: 5000, // Smaller min size for better sharing
         cacheGroups: {
           // Split vendor libraries more granularly
           defaultVendors: false,
@@ -88,36 +91,70 @@ const nextConfig: NextConfig = {
             name: 'react',
             priority: 40,
           },
-          // UI libraries
+          // UI libraries - defer these to reduce critical path
           radix: {
             test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
             name: 'radix-ui',
             priority: 30,
           },
-          // Animation libraries
+          // Icon libraries - commonly used across pages
+          icons: {
+            test: /[\\/]node_modules[\\/](lucide-react|@radix-ui\/react-icons)[\\/]/,
+            name: 'icons',
+            priority: 31, // Below UI components but above radix
+            minSize: 1000,
+            reuseExistingChunk: true,
+          },
+          // Common UI components - create shared chunk to eliminate duplication
+          uiComponents: {
+            test: /[\\/]src[\\/]components[\\/]ui[\\/]/,
+            name: 'ui-components',
+            priority: 35, // Higher than radix to ensure UI components get their own chunk
+            enforce: true,
+            minSize: 2000, // Allow smaller chunks for better sharing
+          },
+          // Shared hooks and utilities - consolidated
+          shared: {
+            test: /[\\/]src[\\/](lib|hooks)[\\/]/,
+            name: 'shared',
+            priority: 32,
+            minSize: 1000, // Allow even smaller for utilities
+            reuseExistingChunk: true,
+          },
+          // Other shared components beyond UI
+          components: {
+            test: /[\\/]src[\\/]components(?!.*ui)[\\/]/,
+            name: 'components',
+            priority: 33,
+            minSize: 2000,
+            reuseExistingChunk: true,
+          },
+          // Animation libraries - defer these to reduce critical path
           framerMotion: {
             test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
             name: 'framer-motion',
             priority: 25,
           },
-          // Lottie (heavy animation lib)
+          // Lottie (heavy animation lib) - defer these
           lottie: {
             test: /[\\/]node_modules[\\/]lottie-react[\\/]/,
             name: 'lottie',
             priority: 25,
           },
-          // Sanity CMS (only needed on certain pages)
+          // Sanity CMS (only needed on certain pages) - defer these
           sanity: {
             test: /[\\/]node_modules[\\/](sanity|@sanity)[\\/]/,
             name: 'sanity',
             priority: 20,
           },
-          // Other node_modules
+          // Other node_modules - smaller chunks to reduce CSS size
           lib: {
             test: /[\\/]node_modules[\\/]/,
             name: 'lib',
             priority: 10,
             reuseExistingChunk: true,
+            minSize: 10000, // Smaller chunks for better parallel loading
+            maxSize: 50000, // Limit max size for better caching
           },
         },
       };
@@ -125,6 +162,8 @@ const nextConfig: NextConfig = {
       // Enable tree shaking
       config.optimization.usedExports = true;
       config.optimization.sideEffects = true;
+
+      // CSS optimization handled by Next.js experimental.optimizeCss
     }
     return config;
   },

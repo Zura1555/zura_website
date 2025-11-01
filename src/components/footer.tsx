@@ -3,35 +3,42 @@ export default function Footer() {
     <footer
       className="w-full border-t border-border/40 bg-transparent"
       style={{
-        marginTop: '5rem', // 80px - replaces mt-20
-        height: '104px', // Fixed height: 32px (py-8) * 2 + 20px (text) + 20px (gap)
-        contain: 'layout', // CSS containment prevents layout shifts
+        marginTop: '5rem',
+        height: '104px',
+        contain: 'layout size style', // Enhanced containment for better CLS
       }}
     >
       <div
         className="container mx-auto flex max-w-7xl flex-col items-center justify-center"
         style={{
           height: '100%',
-          paddingTop: '2rem', // 32px
-          paddingBottom: '2rem', // 32px
+          paddingTop: '2rem',
+          paddingBottom: '2rem',
+          contain: 'layout', // Contain the inner layout
         }}
       >
         <p
-          className="text-muted-foreground"
+          className="text-muted-foreground font-loading" // Use font loading optimization class
           style={{
-            fontSize: '0.875rem', // 14px - replaces text-sm
-            lineHeight: '1.25rem', // 20px
+            fontSize: '0.875rem',
+            lineHeight: '1.25rem',
             height: '1.25rem',
             margin: 0,
             padding: 0,
-            // Reserve exact text height to prevent font loading shift
             minHeight: '1.25rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            // Font fallback metrics to prevent layout shift
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+            overflow: 'hidden', // Prevent text overflow causing layout shifts
+            whiteSpace: 'nowrap', // Prevent text wrapping causing height changes
+            letterSpacing: '0.0175em', // Exact letter spacing
           }}
         >
-          © {new Date().getFullYear()} Zura. All rights reserved.
+          <span style={{ display: 'inline-block' }}>
+            © {new Date().getFullYear()} Zura. All rights reserved.
+          </span>
         </p>
       </div>
     </footer>

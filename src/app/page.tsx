@@ -2,8 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import dynamicImport from 'next/dynamic';
-import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 
 // CRITICAL: Load GradientBars synchronously for above-the-fold content
@@ -30,20 +29,20 @@ export default async function Home() {
       <section id="home" className="px-4 relative w-full">
         {/* Gradient Bars Background - Critical for LCP */}
         <GradientBars bars={15} colors={['#3ca2faD9', 'transparent']} />
-        <div className="container mx-auto max-w-5xl py-12 sm:py-16 md:py-24 relative z-10">
+        <div className="container hero" style={{ zIndex: 10, position: 'relative', maxWidth: '80rem' }}>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left Column - Critical content for LCP */}
             <div className="flex flex-col items-start text-left">
               <div className="relative mb-4">
-                  <h1 className="font-luckiest text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight">
-                      I'm Tuan <span className="bg-primary text-primary-foreground px-2 sm:px-3 py-1 rounded-lg text-2xl sm:text-3xl md:text-4xl lg:text-5xl">(Zura)</span>
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight" style={{ fontWeight: 700, margin: 0, color: 'hsl(var(--foreground))', lineHeight: 1.1 }}>
+                      I'm Tuan <span style={{ backgroundColor: 'hsl(var(--primary))', color: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem' }}>(Zura)</span>
                   </h1>
               </div>
               
-              <p className="mt-4 sm:mt-6 max-w-md text-base sm:text-lg text-muted-foreground">
+              <p className="mt-4 sm:mt-6 max-w-md text-base sm:text-lg text-muted-foreground" style={{ textAlign: 'left', maxWidth: '600px' }}>
                 You've found my little corner of the internet.
               </p>
-              <p className="mt-3 sm:mt-4 max-w-md text-base sm:text-lg text-muted-foreground">
+              <p className="mt-3 sm:mt-4 max-w-md text-base sm:text-lg text-muted-foreground" style={{ textAlign: 'left', maxWidth: '600px' }}>
                 By day, I work as IT Project Delivery at{" "}
                 <a 
                   href="https://maisonrmi.com/" 
@@ -64,24 +63,30 @@ export default async function Home() {
                 Think of this as a collection of my findings, from project insights to project experiments.
               </p>
               <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-                <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
-                  <a href="https://github.com/Zura1555" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2" />
-                    GitHub
-                  </a>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
-                  <a href="https://www.linkedin.com/in/zuratran/" target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="mr-2" />
-                    LinkedIn
-                  </a>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-lg px-6 sm:px-8 py-3">
-                  <a href="mailto:guithutuantran@gmail.com">
-                    <Mail className="mr-2" />
-                    Gmail
-                  </a>
-                </Button>
+                <a 
+                  href="https://github.com/Zura1555" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn btn-primary rounded-full px-6 sm:px-8 py-3"
+                >
+                  GitHub
+                </a>
+                <a 
+                  href="https://www.linkedin.com/in/zuratran/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn rounded-full px-6 sm:px-8 py-3"
+                  style={{ border: '1px solid hsl(var(--border))' }}
+                >
+                  LinkedIn
+                </a>
+                <a 
+                  href="mailto:guithutuantran@gmail.com"
+                  className="btn rounded-full px-6 sm:px-8 py-3"
+                  style={{ border: '1px solid hsl(var(--border))' }}
+                >
+                  Gmail
+                </a>
               </div>
             </div>
             {/* Right Column */}

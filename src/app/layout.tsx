@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { Sora, Luckiest_Guy } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -79,6 +78,130 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("dark", sora.variable, luckiestGuy.variable)}>
       <head>
+        {/* Critical CSS inlined for immediate rendering */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Critical CSS for LCP optimization - minimal essential styles */
+            :root, .dark {
+              --background: 252 67% 8%;
+              --foreground: 0 0% 98%;
+              --card: 252 67% 11%;
+              --primary: 226 97% 65%;
+              --border: 252 67% 30%;
+              --muted-foreground: 240 5% 75%;
+            }
+            
+            body {
+              background-color: hsl(var(--background));
+              color: hsl(var(--foreground));
+              margin: 0;
+              padding: 0;
+              font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+              line-height: 1.5;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+            }
+            
+            header {
+              position: sticky;
+              top: 0;
+              z-index: 50;
+              width: 100%;
+              padding: 1rem 0;
+              background-color: hsl(var(--background) / 0.8);
+              backdrop-filter: blur(8px);
+            }
+            
+            .container {
+              margin: 0 auto;
+              padding: 0 1rem;
+              max-width: 80rem;
+            }
+            
+            .hero {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              min-height: 80vh;
+              padding: 2rem;
+            }
+            
+            .hero h1 {
+              font-size: 3.5rem;
+              font-weight: 700;
+              margin: 0;
+              color: hsl(var(--foreground));
+              line-height: 1.1;
+            }
+            
+            .hero p {
+              font-size: 1.25rem;
+              color: hsl(var(--muted-foreground));
+              margin: 1rem 0;
+              text-align: center;
+              max-width: 600px;
+            }
+            
+            footer {
+              width: 100%;
+              border-top: 1px solid hsl(var(--border) / 0.4);
+              margin-top: 5rem;
+              height: 104px;
+              contain: layout size style;
+            }
+            
+            footer p {
+              font-size: 0.875rem;
+              color: hsl(var(--muted-foreground));
+              text-align: center;
+              margin: 0;
+              height: 1.25rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .btn {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              padding: 0.75rem 1.5rem;
+              border-radius: 9999px;
+              font-weight: 500;
+              text-decoration: none;
+              transition: all 0.2s;
+              border: none;
+              cursor: pointer;
+            }
+
+            .btn-primary {
+              background-color: hsl(var(--primary));
+              color: white;
+            }
+
+            .btn-primary:hover {
+              opacity: 0.9;
+            }
+            
+            @media (max-width: 768px) {
+              .hero h1 { font-size: 2.5rem; }
+              .hero p { font-size: 1rem; }
+              .container { padding: 0 0.5rem; }
+            }
+          `
+        }} />
+        
+        {/* Defer full CSS loading to reduce critical path */}
+        <link
+          href="/_next/static/css/app/layout.css"
+          rel="preload"
+          as="style"
+          onLoad="this.onload=null;this.rel='stylesheet'"
+        />
+        <noscript>
+          <link href="/_next/static/css/app/layout.css" rel="stylesheet" />
+        </noscript>
         
         {/* Preload critical fonts */}
         <link rel="preload" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
@@ -105,9 +228,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <div className="relative flex min-h-screen flex-col" style={{ contain: 'layout' }}>
+        <div className="relative flex min-h-screen flex-col" style={{ contain: 'layout size' }}>
           <Header />
-          <main id="main-content" className="flex-1" style={{ contain: 'layout' }}>
+          <main id="main-content" className="flex-1" style={{ contain: 'layout size' }}>
             <PageTransition>
               {children}
             </PageTransition>
