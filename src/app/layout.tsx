@@ -104,9 +104,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <div className="relative flex min-h-screen flex-col" style={{ contain: 'layout size' }}>
+        <div className="relative flex min-h-screen flex-col" style={{ contain: 'layout' }}>
           <Header />
-          <main id="main-content" className="flex-1" style={{ contain: 'layout size' }}>
+          <main id="main-content" className="flex-1">
             <PageTransition>
               {children}
             </PageTransition>

@@ -376,8 +376,8 @@
       padding: 1rem;
     }
     
-    /* Prevent horizontal scrolling */
-    body {
+    /* Prevent horizontal scrolling only on specific components */
+    .prevent-horizontal-scroll {
       overflow-x: hidden;
     }
   }
