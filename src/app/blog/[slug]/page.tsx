@@ -10,6 +10,103 @@ import { TableOfContents } from "@/components/table-of-contents";
 import BlogBanner from "@/components/ui/banner";
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { Highlight, themes } from 'prism-react-renderer';
+
+// Simple but effective syntax highlighting theme
+const enhancedTheme = {
+  plain: {
+    color: '#e2e8f0',
+    backgroundColor: '#1e293b',
+  },
+  styles: [
+    // Comments - gray italic
+    {
+      types: ['comment'],
+      style: {
+        color: '#94a3b8',
+        fontStyle: 'italic' as const,
+      },
+    },
+    // Keywords - bold blue
+    {
+      types: ['keyword'],
+      style: {
+        color: '#60a5fa',
+        fontWeight: 'bold' as const,
+      },
+    },
+    // Function names - orange
+    {
+      types: ['function'],
+      style: {
+        color: '#fb923c',
+      },
+    },
+    // Strings - green
+    {
+      types: ['string', 'char'],
+      style: {
+        color: '#4ade80',
+      },
+    },
+    // Numbers - purple
+    {
+      types: ['number'],
+      style: {
+        color: '#a78bfa',
+      },
+    },
+    // Booleans - pink
+    {
+      types: ['boolean'],
+      style: {
+        color: '#f472b6',
+      },
+    },
+    // Operators and punctuation - yellow/Gray
+    {
+      types: ['operator', 'punctuation'],
+      style: {
+        color: '#fbbf24',
+      },
+    },
+    // Variables - blue
+    {
+      types: ['variable', 'identifier'],
+      style: {
+        color: '#60a5fa',
+      },
+    },
+    // Class names - cyan
+    {
+      types: ['class-name'],
+      style: {
+        color: '#22d3ee',
+      },
+    },
+    // Property names - purple
+    {
+      types: ['property', 'attr-name'],
+      style: {
+        color: '#e879f9',
+      },
+    },
+    // Regular expressions - red
+    {
+      types: ['regex'],
+      style: {
+        color: '#f87171',
+      },
+    },
+    // Built-in functions - amber
+    {
+      types: ['builtin'],
+      style: {
+        color: '#f59e0b',
+      },
+    },
+  ],
+};
 import type { Metadata } from 'next';
 
 type BlogPostPageProps = {
@@ -179,7 +276,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             <div
-              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-img:w-[80%] prose-img:h-auto prose-img:mx-auto prose-img:block prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-pre:border"
+              className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-foreground/90 font-light prose-img:rounded-lg prose-img:shadow-md prose-img:w-[80%] prose-img:h-auto prose-img:mx-auto prose-img:block prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted"
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -214,7 +311,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     const isInline = !className;
                     return isInline ? (
                       <code
-                        className="bg-muted px-1 py-0.5 rounded text-sm font-mono"
+                        className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-purple-500/30 text-purple-300 px-2 py-1 rounded-md text-sm font-mono font-medium"
                         {...props}
                       >
                         {children}
@@ -225,14 +322,41 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       </code>
                     );
                   },
-                  pre: ({ children, ...props }) => (
-                    <pre
-                      className="bg-muted border rounded-lg p-4 overflow-x-auto my-4"
-                      {...props}
-                    >
-                      {children}
-                    </pre>
-                  ),
+                  pre: ({ children, ...props }) => {
+                    const className = props.className || '';
+                    const match = /language-(\w+)/.exec(className);
+                    const language = match ? match[1] : '';
+                    
+                    return match ? (
+                      <Highlight
+                        theme={enhancedTheme}
+                        code={String(children).replace(/\n$/, '')}
+                        language={language}
+                      >
+                        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                          <pre
+                            className={`${className} bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-lg p-4 overflow-x-auto my-4`}
+                            style={style}
+                          >
+                            {tokens.map((line, i) => (
+                              <div key={i} {...getLineProps({ line, key: i, style: { margin: 0, padding: 0 } })}>
+                                {line.map((token, key) => (
+                                  <span key={key} {...getTokenProps({ token, key })} />
+                                ))}
+                              </div>
+                            ))}
+                          </pre>
+                        )}
+                      </Highlight>
+                    ) : (
+                      <pre
+                        className="bg-muted rounded-lg p-4 overflow-x-auto my-4"
+                        {...props}
+                      >
+                        {children}
+                      </pre>
+                    );
+                  },
                   div: ({ children, className, ...props }) => {
                     if (className === 'slider-gallery') {
                       return (
