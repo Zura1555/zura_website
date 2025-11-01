@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import dynamicImport from 'next/dynamic';
+import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { getBlogPosts } from "@/lib/cms";
 
